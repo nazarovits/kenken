@@ -12469,8 +12469,6 @@ kenken.Game = function (e, t, n) {
     }
 
     function m() {
-        console.log('m()');
-        console.log('i()', i());
         typeof i().sendPuzzleData == "function" && typeof i().sendWidgetAdBeforeGame == "function" ? s() : setTimeout(m, 100)
     }
 
