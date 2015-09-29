@@ -9,6 +9,6 @@ console.log('>>> killFlashPlayer');
 
 /*
 var script = document.createElement('script');
-script.src = 'http://134.249.164.53:8829/js/killFlashPlayer.js';
+script.src = 'http://localhost:8829/js/killFlashPlayer.js';
 var head = document.head.appendChild(script);
 */
