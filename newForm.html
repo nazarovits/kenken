@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title></title>
+</head>
+<body>
+
+<script type="text/javascript">
+
+    // function which draw out HTML version of flash puzzle
+    function drawOurForm(puzzleData){
+        var data = puzzleData ? puzzleData : {};
+        var row = ['<div>'];
+        var puzzleSize = puzzleData.size;
+        var values = puzzleData.A;
+        var results = puzzleData.T;
+        var symbols = puzzleData.S;
+        var rightLines = puzzleData.V;
+        var bottomLines = puzzleData.H;
+        var lineClass;
+        var i,j;
+
+        // ******* left panel begin
+        row.push('<div>');
+
+            // ******* notes box
+            row.push('<div id="notesContainer">');
+
+            for (i=1; i<=puzzleSize; i+=1){
+                row.push('<div class="notesItem" data-id="'+i+'">'+i+'<\/div>');
+            }
+            row.push('<div id="notesAll">OK<\/div>');
+            row.push('<div id="notesDel">DEL<\/div>');
+
+            row.push('<\/div>');
+
+            // ******* first buttons box
+            row.push('<div class="firstBtnBox">');
+                row.push('<input type="button" id="btnSolve" value="Solve Another">');
+                row.push('<input type="button" id="btnResumeSaved" value="Resume Saved Puzzle">');
+            row.push('<\/div>');
+
+            // ******* second buttons box
+            row.push('<div class="secondBtnBox">');
+                row.push('<input type="button" id="btnUndo" value="Undo">');
+                row.push('<input type="button" id="btnRendo" value="Rendo">');
+                row.push('<input type="button" id="btnReset" value="Reset">');
+            row.push('<\/div>');
+
+            // ******* third buttons box
+            row.push('<div class="thirdBtnBox">');
+                row.push('<input type="button" id="btnReveal" value="Reveal">');
+                row.push('<input type="button" id="btnCheck" value="Check">');
+                row.push('<input type="button" id="btnSolution" value="Solution">');
+            row.push('<\/div>');
+
+        // ******* left panel end
+        row.push('<\/div>');
+
+        // ******* main panel begin
+        row.push('<div>');
+
+            // ******* top buttons
+            row.push('<div id="topInfoBox">');
+
+            row.push('<span id="puzzleInfo">Puzzle No. 000000<\/span>');
+            row.push('<span id="puzzleTimer">00:00:00<\/span>');
+            row.push('<input type="button" id="btnOffTimer" value="OFF">');
+            row.push('<input type="button" id="btnPause" value="PAUSE">');
+
+            row.push('<\/div>');
+
+            // ******* main container
+            row.push('<div id="puzzleContainer">');
+
+            for (i=1; i<=puzzleSize; i+=1){
+                row.push('<div>');
+                for (j=1; j<=puzzleSize; j+=1 ){
+
+                    lineClass = 'puzzleItem';
+
+                    if (+rightLines[i-1][j-1]) {
+                        lineClass += ' rightLineBorder'
+                    }
+
+                    if (+bottomLines[j-1][i-1]) {
+                        lineClass += ' bottomLineBorder'
+                    }
+
+                    //puzzle item
+                    row.push('<div id="p'+i+j+'" class="'+lineClass+'">');
+
+                        //draw symbol and expected result
+                        if (+results[i-1][j-1]){
+                            row.push('<div class="itemResult">'+results[i-1][j-1]+'<\/div>');
+                            if (symbols[i-1][j-1] !== '0'){
+                                row.push('<div class="itemSymbol">'+symbols[i-1][j-1]+'<\/div>');
+                            }
+                        }
+
+                    row.push('<\/div>');
+                }
+                row.push('<\/div>');
+            }
+
+            row.push('<\/div>');
+
+            // ******* bottom container
+            row.push('<div id="bottomInfoBox">');
+
+            row.push('<span>AutoNotes</span>');
+            row.push('<input type="button" id="btnOnNotes" value="ON">');
+            row.push('<input type="button" id="btnOffNotes" value="OFF">');
+
+            row.push('<input type="button" id="btnSave" value="SAVE">');
+            row.push('<input type="button" id="btnPrint" value="PRINT">');
+
+            row.push('<\/div>');
+
+        // ******* main panel end
+        row.push('<\/div>');
+
+        // ******* make string
+        row.push('<\/div>');
+
+        return row.join('');
+    }
+
+    var testObject = {
+        size : 3,
+        A    : [[1,2,3],[2,3,1],[3,1,2]],
+        T    : [[3,0,4],[5,0,0],[3,3,0]],
+        S    : [['+',0,'+'],['+',0,0],[0,'+',0]],
+        V    : [[0,1],[0,1],[1,0]],
+        H    : [[1,1],[1,1],[0,1]]
+    }
+</script>
+
+</body>
