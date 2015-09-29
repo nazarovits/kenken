@@ -76,7 +76,7 @@
             row.push('<div id="puzzleContainer">');
 
             for (i=1; i<=puzzleSize; i+=1){
-                row.push('<div>');
+                row.push('<div class="puzzleRow">');
                 for (j=1; j<=puzzleSize; j+=1 ){
 
                     lineClass = 'puzzleItem';
@@ -136,6 +136,8 @@
         V    : [[0,1],[0,1],[1,0]],
         H    : [[1,1],[1,1],[0,1]]
     }
+
+    document.body.innerHTML= drawOurForm(testObject);
 </script>
 
 </body>

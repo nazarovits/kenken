@@ -9,10 +9,14 @@
 
 .bottomLineBorder {
     border-bottom-width: 5px;
-    border-bottom-color: red;
+    border-bottom-color: #000000;
 }
 
 .rightLineBorder {
     border-right-width: 5px;
-    border-right-color: red;
+    border-right-color: #000000;
+}
+
+.puzzleRow {
+    display: table;
 }
