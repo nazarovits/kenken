@@ -26,6 +26,7 @@
         var rightLines = puzzleData.V;
         var bottomLines = puzzleData.H;
         var lineClass;
+        var result;
         var i,j;
 
         // ******* left panel begin
@@ -128,9 +129,13 @@
         // ******* main panel end
         row.push('<\/div>');
 
-        // ******* make string
 
-        return row.join('');
+
+        result = document.createElement('div');
+        result.className = 'mainContainer';
+        result.innerHTML = row.join('');
+
+        document.querySelector('.box-inner-main').appendChild(result)
     }
 
     var testObject = {
@@ -142,12 +147,7 @@
         H    : [[1,1],[1,1],[0,1]]
     };
 
-    var ourPuzzle = document.createElement('div');
-
-    ourPuzzle.className = 'mainContainer';
-    ourPuzzle.innerHTML = drawOurForm(testObject);
-
-    document.querySelector('.box-inner-main').appendChild(ourPuzzle)
+    drawOurForm(testObject)
 </script>
 
 </body>
