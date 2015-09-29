@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="en" xmlns:fb="http://ogp.me/ns/fb#">
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=EmulateIE8">
+  <meta charset="UTF-8">
+  <title>KenKen Puzzle Official Site - Free Math Puzzles That Make You Smarter!</title>
+  <link href="assets/screen-c96bf1d0a3a216329ac0eecbe57e3e33.css" media="screen" rel="stylesheet" type="text/css">
+  <link href="assets/print-a3cb39a4181d720e4cadbc522b1f94bd.css" media="print" rel="stylesheet" type="text/css">
+  <link href="assets/dd-b33c30d0a91f718b5f28e129ab6cea2b.css" media="screen" rel="stylesheet" type="text/css">
+  
+  <script async="" src="//www.google-analytics.com/analytics.js"></script>
+
+    <script type="text/javascript" async="" src="https://d31qbv1cthcecs.cloudfront.net/atrk.js"></script>
+    <script src="assets/application-46ff1d85b5a49c36e4ba2c20ea1dd4da.js" type="text/javascript"></script>
+    <script src="http://www.kenkenpuzzle.com/assets/json2-44021642f65657f14781d43a155d1cc0.js" type="text/javascript"></script>
+    <script src="http://www.kenkenpuzzle.com/assets/ads-4fdf2881113bc048e429f21908ac5a77.js" type="text/javascript"></script>
+
+    <meta property="og:image" content="http://www.kenkenpuzzle.com//assets/kenken_social-a9b3b9c02f053a9547a6e7e9d177d652.jpg">
+
+  <meta content="authenticity_token" name="csrf-param">
+<meta content="AeZdaE6HHDF/pfLQH6ns6KXnh3/A5RBzPSmAopSRJJ8=" name="csrf-token">
+    <script type="text/javascript" src="http://ox-d.kenkenpuzzle.com/w/1.0/jstag"></script>
+
+        <!-- OpenX header script -->
+  <script type="text/javascript" src="http://ox-d.kenkenpuzzle.com/w/1.0/jstag"></script>
+  <script type="text/javascript">
+  var OX_8f9b3c6c6c = OX();
+  OX_8f9b3c6c6c.addPage("537064410");
+  OX_8f9b3c6c6c.fetchAds();
+  </script><script type="text/javascript" id="ox_acj_2940244059_1" src="http://ox-d.kenkenpuzzle.com/w/1.0/acj?o=2940244059&amp;callback=OX_2940244059&amp;ju=http%3A//www.kenkenpuzzle.com/game&amp;jr=http%3A//www.kenkenpuzzle.com/play_now&amp;pgid=537064410&amp;rd=60&amp;rm=150&amp;rc=1&amp;res=1366x768x24&amp;plg=swf%2Cshk%2Cpm&amp;ch=UTF-8&amp;tz=-120&amp;ws=1366x667&amp;bi=8f6fa21e-f46b-40cf-b926-dcf2b6a0b041&amp;sd=9"></script><iframe src="http://us-u.openx.net/w/1.0/pd?plm=6&amp;ph=ac9fd113-1bf7-4d94-87ac-64c283bb1181" width="0" height="0" style="display:none;"></iframe>
+  <!-- end generated tag -->
+
+  
+  <script type="text/javascript" xmlns="http://www.w3.org/1999/html">
+    function widgetStartGame() {
+    }
+    function socialFlexAfterClose() {
+    }
+    function socialAdClosed() {
+    }
+
+    function socialFlexAfterClose() {
+      kenken.game.resetPuzzle();
+      kenken.adWatched();
+    }
+    function socialAdClosed() {
+      kenken.adWatched();
+    }
+    $(document).ready(function () {
+        if( window.canRunAds === undefined ){
+          $('#KenKen').remove();
+          // adblocker detected, show fallback
+          // window.location.assign("/membership")
+          // $.get( "/ad_block", function( data ) {});
+          $('#ads-modal').reveal({
+               animation: 'fade',                   //fade, fadeAndPop, none
+               animationspeed: 500,                       //how fast animtions are
+               closeonbackgroundclick: false,              //if you click background will modal close?
+               dismissmodalclass: 'close-reveal-modal',     //the class of a button or element that will close an open modal
+               "closed": function () { 
+                 window.location.replace("/");
+               }
+          });
+          $('#ads-moadl').bind('closed', function() {
+            console.log("myModal opened");
+          });
+        } 
+      var puzzle_data = jQuery.parseJSON(base64_decode('eyJpZCI6MjgsImRhdGEiOiJBXHJcbjEgMyAyIFxyXG4zIDIgMSBcclxuMiAxIDMgXHJcblRcclxuICA3ICAgMCAgIDVcclxuICAwICAgMCAgIDBcclxuICAyICAgNCAgIDBcclxuU1xyXG4rIDAgK1xyXG4wIDAgMFxyXG4xICsgMFxyXG5WXHJcbjAgMVxyXG4xIDBcclxuMSAwXHJcbkhcclxuMCAxXHJcbjEgMVxyXG4wIDFcclxuXHJcbiIsInNpemUiOjMsImxldmVsIjoiZWFzaWVzdCIsIm9wZXJhdGlvbnMiOiJhIiwibm8iOjI4LCJndWVzdCI6ZmFsc2UsImRhaWx5IjpmYWxzZSwic3RhdGUiOm51bGwsInVfbGV2ZWwiOiJCIn0='));
+      var leave_msg = 'You are about to leave the puzzle, are you sure?';
+      kenken.game = new kenken.Game(puzzle_data, leave_msg);
+
+      $('#KenKen').tabIndex = 0;
+      $('#KenKen').focus();
+
+      $(".choose-box > div").each(function (idx, elem) {
+        var $elem = $(elem);
+        var chooser = new jQueryCollapse($elem, {
+          open: function () {
+            this.slideDown(150);
+          },
+          close: function () {
+            this.slideUp(150);
+          }
+        });
+        $elem.find('.apply').click(function () {
+          chooser.close();
+        })
+      });
+    	if (navigator.mimeTypes ["application/x-shockwave-flash"] == undefined)
+          $("#flash_warn").show ();
+
+
+    });
+  </script>
+
+
+</head>
+      
+      
+<body class="solve grid game index">
+  <!-- Start Alexa Certify Javascript -->
+  <script type="text/javascript">
+  _atrk_opts = { atrk_acct:"UOqfj1a4ZP00UF", domain:"kenken.com",dynamic: true};
+  (function() { var as = document.createElement('script'); as.type = 'text/javascript'; as.async = true; as.src = "https://d31qbv1cthcecs.cloudfront.net/atrk.js"; var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(as, s); })();
+  </script>
+  <noscript><img src="https://d5nxst8fruw4z.cloudfront.net/atrk.gif?account=UOqfj1a4ZP00UF" style="display:none" height="1" width="1" alt="" /></noscript>
+  <!-- End Alexa Certify Javascript -->
+  
+<div id="container">
+  <div id="leaderboard-container">
+      <!-- OpenX body script -->
+  <script type="text/javascript">
+  OX_8f9b3c6c6c.showAdUnit("337362");
+  </script><noscript><iframe id="8f9b3c6c6c" name="8f9b3c6c6c" src="http://ox-d.kenkenpuzzle.com/w/1.0/afr?auid=337362&cb=122" frameBorder="0" frameSpacing="0" scrolling="no" width="728" height="90"><a href="http://ox-d.kenkenpuzzle.com/w/1.0/rc?cs=8f9b3c6c6c&cb=87"><img src="http://ox-d.kenkenpuzzle.com/w/1.0/ai?auid=337362&cs=8f9b3c6c6c&cb=499" border="0" alt=""></a></iframe></noscript>
+
+
+  <p>Want KenKen Ad-Free? &mdash; <a href="/membership">FIND OUT MORE</a>&nbsp;&nbsp;&nbsp;
+    <a href="/game#%23" class="why_ads" data-reveal-id="why-ads-popup">Why do we have ads?</a></p>
+</div>
+<div id="why-ads-popup" class="reveal-modal medium">
+  <h2>Why are there ads?</h2>
+
+  <p>We would love to provide everyone an ad-free experience, but we do need to generate revenue to cover at least some
+    of our overhead. We're trying to be as reasonable as possible, and it also allows us to continue to offer you an
+    option to access KenKen puzzles for free. For those who prefer an Ad-Free playing experience, we have
+    an <a href="/membership">option</a> for
+    just pennies-a-day and it can be canceled anytime. BONUS! KenKen Premium also allows you to Track Your Progress,
+    Join The Leaderboard, Save Puzzles, and more. Please consider this option for the best experience.</p>
+
+  <p>In addition, we continue to offer -- pro bono -- our <a href="/teachers/classroom">KenKen Classroom
+    Program</a> which provides free KenKen puzzles
+    and lessons to over 1 million students weekly. Revenue we raise from advertisements and subscription sales allow us
+    to keep the program going, plain and simple. So thank you for supporting these teachers and students by supporting
+    us. We all appreciate it.</p>
+
+  <!-- the close box top right -->
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+  <div id="header">
+    <div class="header-inner">
+      <div class="logo"><a href="/"><img alt="Ken Ken Logo" src="/assets/kenken-logo-2386ad2c11ade12e9a394e2e12570d72.png" /></a></div>
+        <div class="login">
+          <span class="center">Premium Members:</span>
+          <a href="/users/sign_in"><img alt="Btn-new-log_in-sm" src="/assets/btn-new-log_in-sm-5df2094227855cf157cfa9f7edd2e0bf.gif" /></a>
+          </div>
+      <div id="menu">
+  <ul class="nav">
+    <li class="">
+      <a href="/">Home</a>
+    </li>
+    <li class="active">
+      <a href="/play_now">Play</a>
+      <ul class="submenu">
+        <li><a href="/">PLAY TODAY&#x27;S PUZZLES</a></li>
+        <li><a href="/play_now">CUSTOMIZE PUZZLE TYPE/DIFFICULTY</a></li>
+        <li><a href="/puzzle/leaderboard">LEADERBOARD</a></li>
+      </ul>
+    </li>
+    <li class=""><a href="/howto/solve">How to Play</a></li>
+    <li class="">
+      <a href="/teachers">Education</a>
+      <ul class="submenu">
+        <li><a href="/teachers">Teachers</a></li>
+        <li><a href="/parents">Parents</a></li>
+      </ul>
+    </li>
+    <li class="">
+      <a href="/about">About</a>
+      <ul class="submenu">
+        <li><a href="/about/what">About Us</a></li>
+        <li><a href="http://www.youtube.com/user/KenKenPuzzle" target="_blank">KenKen Videos</a></li>
+        <li><a href="/about/news">KenKen News</a></li>
+      </ul>
+    </li>
+    <li class="">
+      <a href="/store">Products</a>
+
+      <ul class="submenu">
+        <li><a href="/store/books">KenKen Books</a></li>
+        <li><a href="http://www.cafepress.com/kenkenpuzzle">KenKen Goodies</a></li>
+        <li><a href="/store/mobile">Mobile Apps</a></li>
+        <li><a href="/store/kindle">KenKen Kindle</a></li>
+      </ul>
+    </li>
+    <li class=""><a href="/membership">Premium</a></li>
+    <li class="">
+      <a href="/2048"><div class='try'>Try</div>2048</a>
+    </li>
+  </ul>
+</div>
+    </div>
+  </div>
+
+  <div id="content">
+
+    
+
+
+
+
+
+
+
+
+<div class="row">
+  <div class="box-inner-main signed-in ">
+
+    <div id="choose-puzzle-box" class="choose-box">
+  <div>
+    <h3>
+      Select Puzzle Type & Difficulty
+    </h3>
+
+    <div>
+      <form accept-charset="UTF-8" action="http://www.kenkenpuzzle.com/find_puzzle.html" class="puzzle-change-form" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="AeZdaE6HHDF/pfLQH6ns6KXnh3/A5RBzPSmAopSRJJ8=" /></div>
+  <!-- box contents -->
+  <div class="step">
+    <h2 class="step-title">Step 1: Select Puzzle Size</h2>
+    <ul class="choices">
+        <li>
+          <a href="#" data-value="3" class="selectable size size-3">3</a>
+        </li>
+        <li>
+          <a href="#" data-value="4" class="selectable size size-4">4</a>
+        </li>
+        <li>
+          <a href="#" data-value="5" class="selectable size size-5">5</a>
+        </li>
+        <li>
+          <a href="#" data-value="6" class="selectable size size-6">6</a>
+        </li>
+        <li>
+          <a href="#" data-value="7" class="selectable size size-7">7</a>
+        </li>
+        <li>
+          <a href="#" data-value="8" class="selectable size size-8">8</a>
+        </li>
+        <li>
+          <a href="#" data-value="9" class="selectable size size-9">9</a>
+        </li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h2 class="step-title">Step 2: Select Operation(s) </h2>
+    <ul class="choices">
+      <li><a href="#" data-value="a" class="selectable op a">plus</a></li>
+      <li><a href="#" data-value="as" class="selectable op as">plusminus</a></li>
+      <li><a href="#" data-value="dm" class="selectable op dm">multidivide</a></li>
+      <li><a href="#" data-value="adms" class="selectable op adms">allmath</a></li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h2 class="step-title-special">Step 3: Select Difficulty</h2>
+    <ul class="choices">
+      <li><a href="#" data-value="easiest" class="selectable level easiest">easiest</a></li>
+      <li><a href="#" data-value="easy" class="selectable level easy">easy</a></li>
+      <li><a href="#" data-value="medium" class="selectable level medium">medium</a></li>
+      <li><a href="#" data-value="hard" class="selectable level hard">hard</a></li>
+        <li><a class="selectable level expert-premium">expert</a></li>
+    </ul>
+  </div>
+
+  <div class="step last">
+    <p><input class="apply" id="play_now" src="/assets/chooser/btn-play-now-1d142dac86cc40e1cb597927910fa945.png" type="image" /></p>
+    <p><a href="/puzzle/saved" class="nav">Resume a saved puzzle</a></p>
+  </div>
+  <input id="level_field" name="level" type="hidden" value="easiest" />
+  <input id="size_field" name="size" type="hidden" value="3" />
+  <input id="ops_field" name="operations" type="hidden" value="a" />
+  <!-- end box contents -->
+</form>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('.expert-premium').click(function () {
+      $('#expert-modal').reveal({
+           animation: 'fadeAndPop',                   //fade, fadeAndPop, none
+           animationspeed: 300,                       //how fast animtions are
+           closeonbackgroundclick: true,              //if you click background will modal close?
+           dismissmodalclass: 'close-reveal-modal'    //the class of a button or element that will close an open modal
+      });
+    });
+    var $level_field = $('#level_field');
+    var $ops_field = $('#ops_field');
+    var $size_field = $('#size_field');
+    var level = $level_field.val();
+    var ops = $ops_field.val();
+    var size = $size_field.val();
+    if (size) {
+      $('a.selectable.size-' + size).addClass('selected');
+    }
+    if (ops) {
+      $('a.selectable.op.' + ops).addClass('selected');
+    }
+    if (level) {
+      $('a.selectable.level.' + level).addClass('selected');
+    }
+
+    var $form = $('form.puzzle-change-form');
+
+    $form.find('a.selectable').click(function (evt) {
+      evt.preventDefault();
+
+      var is_level = $(this).hasClass("level");
+      var is_op = $(this).hasClass("op");
+      var is_size = $(this).hasClass("size");
+
+      var value = $(this).data('value');
+      var $field = null;
+      if (is_level) {
+        if (!$(this).hasClass("expert-premium")) {
+          $form.find('a.level.selectable.selected').removeClass('selected');
+          $field = $level_field;
+        }
+      } else if (is_op) {
+        $form.find('a.op.selectable.selected').removeClass('selected');
+        $field = $ops_field;
+      } else if (is_size) {
+        $form.find('a.size.selectable.selected').removeClass('selected');
+        $field = $size_field;
+      }
+      if ($field != '') {
+        $field.val(value);
+        $(this).addClass('selected');
+      }
+    });
+  });
+  
+  kenken.limitAvaialbleDifficulties();
+  kenken.validatePuzzleSelection();
+</script>
+
+    </div>
+  </div>
+</div>
+    <div id="puzzle-num-box">
+  <form accept-charset="UTF-8" action="http://www.kenkenpuzzle.com/find_puzzle.html" class="change-box" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="AeZdaE6HHDF/pfLQH6ns6KXnh3/A5RBzPSmAopSRJJ8=" /></div>
+    Enter puzzle No.: <input type="text" name="puzzle_id" id="puzzle_id" size="6" maxlength="6">
+    
+    <input src="/assets/go-a80b955f0c27c1564e44d4cc8a09bcbc.png" type="image" />
+</form></div>
+
+
+    <div id="save-ok" class="message">
+        <p>Puzzle Saved!</p>
+        <p>Do you want to save more than one? <a href="/membership">CLICK HERE</a></p>
+    </div>
+
+    <!--<div style="z-index:-1;">
+      <div id="flash_warn">
+				<h1>This product requires Adobe Flash</h1>
+				<p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
+			</div>
+      <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+              width="740" height="600" id="KenKen" align="middle"
+              codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab"
+      >
+
+        <param name="movie" value="/puzzle/NewKenKen.swf"/>
+        <param name="quality" value="high"/>
+        <param name="bgcolor" value="#ffffff"/>
+        <param name="play" value="true"/>
+        <param name="loop" value="true"/>
+        <param name="wmode" value="opaque"/>
+        <param name="scale" value="showall"/>
+        <param name="menu" value="false"/>
+        <param name="devicefont" value="true"/>
+        <param name="salign" value=""/>
+        <param name="allowScriptAccess" value="always"/>
+
+        <embed src="/puzzle/NewKenKen.swf?cb=210"
+               quality="high" bgcolor="#ffffff" width="740" height="600"
+               name="KenKen" align="middle" allowScriptAccess="always"
+               allowFullScreen="false"
+               type="application/x-shockwave-flash"
+               pluginspage="http://www.adobe.com/go/getflashplayer"
+               wmode="opaque">
+        </embed>
+      </object>
+    </div>-->
+      <div class="ll-links">
+  <a href="#" data-reveal-id="tips-modal"><img alt="Btn-tips-tricks" src="/assets/btn-tips-tricks-17beadf9dd0177109b91b7c589cc8408.png" /></a>
+  <a href="/faq"><img alt="Btn-faq" src="/assets/btn-faq-fe90ad1941366de34a5721c03f394cbb.png" /></a>
+</div>
+  </div>
+  <div class="stack">
+    <div class="sky-ad ">
+  <p class="ad-free">
+    Want KenKen Ad Free?<br>
+    <a href="/membership">Click here</a>
+  </p>
+
+
+      <!-- OpenX body script -->
+  <script type="text/javascript">
+  OX_8f9b3c6c6c.showAdUnit("337366");
+  </script><noscript><iframe id="8f9b3c6c6c" name="8f9b3c6c6c" src="http://ox-d.kenkenpuzzle.com/w/1.0/afr?auid=337366&cb=334" frameBorder="0" frameSpacing="0" scrolling="no" width="160" height="600"><a href="http://ox-d.kenkenpuzzle.com/w/1.0/rc?cs=8f9b3c6c6c&cb=515"><img src="http://ox-d.kenkenpuzzle.com/w/1.0/ai?auid=337366&cs=8f9b3c6c6c&cb=550" border="0" alt=""></a></iframe></noscript>
+
+</div>
+
+  </div>
+</div><!-- end content -->
+
+  <div id="crtoTextBanner" class="ad_tall">
+  <script type='text/javascript'>
+    <!--//<![CDATA[
+       document.MAX_ct0 ='';
+       var m3_u = (location.protocol=='https:'?'https://cas.criteo.com/delivery/ajs.php?':'http://cas.criteo.com/delivery/ajs.php?');
+       var m3_r = Math.floor(Math.random()*99999999999);
+       document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+       document.write ("zoneid=249991");document.write("&amp;nodis=1");
+       document.write ('&amp;cb=' + m3_r);
+       if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+       document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+       document.write ("&amp;loc=" + escape(window.location).substring(0,1600));
+       if (document.context) document.write ("&context=" + escape(document.context));
+       if ((typeof(document.MAX_ct0) != 'undefined') && (document.MAX_ct0.substring(0,4) == 'http')) {
+           document.write ("&amp;ct0=" + escape(document.MAX_ct0));
+       }
+       if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+       document.write ("'></scr"+"ipt>");
+    //]]>--></script>
+  </div>
+
+
+<div id="rules-modal" class="reveal-modal medium">
+  <h2>Rules For Playing KenKen&reg;</h2>
+  <p>The numbers you use in a KenKen puzzle depend on the size of the grid you choose. A 3 x 3 grid (3 squares across, 3 squares down) means you use the numbers 1, 2, and 3. In a 4 x 4 grid, use numbers 1 to 4. A 5x5 grid requires you use the numbers 1 to 5, and so on.</p>
+  <p>The numbers in each heavily outlined set of squares, called cages, must combine (in any order) to produce the target number in the top corner using the mathematic operation indicated (+, -, &times;, &divide;).</p>
+
+  <div class="heres-how">
+    <p>Here's how you play:</p>
+    <ol>
+      <li>Use each number only once per row, once per column.</li>
+      <li>Cages with just one square should be filled in with the target number in the top corner.</li>
+      <li>A number can be repeated within a cage as long as it is not in the same row or column.</li>
+    </ol>
+  </div>
+
+  <!-- the close box top right -->
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+
+<div id="rules-modal-english" class="reveal-modal medium">
+  <h2>Rules For Playing KenKen&reg;</h2>
+  <p>The numbers you use in a KenKen puzzle depend on the size of the grid you choose. A 3 x 3 grid (3 squares across, 3 squares down) means you use the numbers 1, 2, and 3. In a 4 x 4 grid, use numbers 1 to 4. A 5x5 grid requires you use the numbers 1 to 5, and so on.</p>
+  <p>The numbers in each heavily outlined set of squares, called cages, must combine (in any order) to produce the target number in the top corner using the mathematic operation indicated (+, -, &times;, &divide;).</p>
+
+  <div class="heres-how">
+    <p>Here's how you play:</p>
+    <ol>
+      <li>Use each number only once per row, once per column.</li>
+      <li>Cages with just one square should be filled in with the target number in the top corner.</li>
+      <li>A number can be repeated within a cage as long as it is not in the same row or column.</li>
+    </ol>
+  </div>
+
+  <!-- the close box top right -->
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+
+<div id="rules-modal-arabic" class="reveal-modal medium" data-reveal-ajax="http://www.google.ca">
+  <p lang="he" style="text-align: right;">
+  ®KenKen قواعد لعبة
+<br><br>
+  إختر حجم الشبكة.
+<br><br>
+  إملأ الأرقام من 1 حتى رقم حجم الشبكة.
+<br><br>
+  لا تكرّر الرقم ذاته في أي صف أو عامود.
+   إن الأرقام الموجودة في كل مجموعة من المربعات المسطرة بشكل متقطع والتي تدعى أقفاصا، يجب أن تجمع (بأي ترتيب كان) لتعطي الرقم الهدف المذكور في الزاوية عبر استخدام العملية الحسابية المذكورة.<br><br>
+  يجب ملء الأقفاص التي تحتوي على مربع واحد فقط بالرقم الهدف الموجود في الزاوية.
+<br><br>
+  يمكن تكرار الرقم ذاته في قفص واحد طالما أنه ليس مذكورا في الصف أو العامود ذاته.
+<br><br>
+  انقر مصطلح "التحقق" في أي وقت للتأكد من صحة الحلّ.
+<br><br>
+</p>
+
+  <!-- the close box top right -->
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+
+<div id="rules-modal-chinese" class="reveal-modal medium">
+  KENKEN®的游戏规则 <br><br>
+  1) 选择方格大小。 <br><br>
+  2) 填入一个数字(最小为 1,最大不超过方格大小)。 <br><br>
+  3) 任何一行或一列不要有相同的数字。 <br><br>
+  4) 粗线框(称为笼子)内所有格子中的数字用标明的运算符号计算后(按照任何 顺序),应当得到上角的目标数字。 <br><br>
+  5) 若笼子内只有一个格子,则应当填入上角的目标数字。<br><br>
+  6) 笼子内的数字可以重复,只要相同的数字不在同一行或者同一列。 <br><br>
+  7) 可以随时按“检查”以查看答案是否正确。 <br><br>
+  
+  <!-- the close box top right -->
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+
+<div id="rules-modal-french" class="reveal-modal medium">
+  Règles du jeu de KENKEN®<br><br>
+  1) Choisissez une taille de grille.<br><br>
+  2) Remplissez la grille de chiffres de 1 à la taille de la grille.<br><br>
+  3) Chaque chiffre ne peut être présent qu’une et une seule fois dans n’importe quelle ligne ou colonne.<br><br>
+  4) Il est nécessaire de combiner les chiffres (dans n’importe quel ordre) dans chaque ensemble de cases, appelé « région », délimité par des lignes en gras, de façon à obtenir le chiffre cible dans l’angle supérieur de la région, en effectuant l’opération mathématique avec l’opérateur indiqué.<br><br>
+  5) Vous devez utiliser le chiffre cible dans l’angle supérieur pour remplir les régions à une seule case.<br><br>
+  6) Il est possible d’utiliser un chiffre plusieurs fois dans une région tant qu’il ne se trouve pas dans la même ligne ou la même colonne.<br><br>
+  7) Appuyez sur Vérifier à n’importe quel moment pour voir si votre solution est bonne.<br><br>
+  
+
+  <!-- the close box top right -->
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+
+<div id="rules-modal-german" class="reveal-modal medium">
+  KENKEN®-Spielregeln<br><br>
+  1) Spielfeld auswählen.<br><br>
+  2) Zahlen von 1 bis n (n = Größe des Spielfelds) eintragen.<br><br>
+  3) Jede Zahl darf pro Zeile und Spalte nur einmal vorkommen.<br><br>
+  4) Die Zahlen in jedem fett umrandeten Kästchenblock müssen zusammen (in beliebiger Reihenfolge) durch Addieren, Subtrahieren, Multiplizieren oder Dividieren die Zahl ergeben, die oben links im Kästchenblock steht. Die Rechenart wird durch das Rechenzeichen im Kästchen angezeigt.<br><br>
+  5) Wenn ein Kästchenblock aus nur einem Kästchen besteht, muss in das Kästchen die Zahl eingetragen werden, die oben links im Kästchen steht.<br><br>
+  6) Eine Zahl kann in einem Kästchenblock wiederholt werden, solange sie sich nicht in der gleichen Zeile oder Spalte befindet.<br><br>
+  7) Um zu kontrollieren, ob die Lösung richtig ist, kann jederzeit auf "Kontrollieren" geklickt werden.<br><br>
+
+  <!-- the close box top right -->
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+
+<div id="rules-modal-hebrew" class="reveal-modal medium">
+  <p lang="he" style="text-align: right;">כללי משחק KENKEN®
+<br><br>
+א. בחר את גודל הלוח.
+<br><br>
+ב. מלא את המספרים מ-1 ועד לגודל הלוח.
+<br><br>
+ג. אסור למספר לחזור על עצמו באותה שורה או עמודה.
+<br><br>
+ד. המספרים בכל קבוצת משבצות המוקפת בקו עבה, הנקראת "כלוב", חייבים להצטרף (בסדר כלשהו) כך שיתקבל מספר המטרה המופיע בפינה העליונה תוך שימוש בפעולת החשבון הנקובה.
+<br><br>
+ה. בכלובים בעלי משבצת אחת בלבד ימולא מספר המטרה המופיע בפינה העליונה.
+<br><br>
+ו. ניתן לחזור על אותו מספר בתוך כלוב כל עוד הוא לא חוזר על עצמו באותה שורה או עמודה.
+<br><br>
+ז. הקש על בדוק בכל עת כדי לראות האם פתרונך נכון.
+
+  <br><br></p>
+  <!-- the close box top right -->
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+
+<div id="rules-modal-italian" class="reveal-modal medium">
+  Regole del gioco KENKEN®<br><br>
+  1) Scegliere una grandezza di griglia.<br><br>
+  2) Inserire i numeri da 1 alla grandezza della griglia.<br><br>
+  3) Non inserire lo stesso numero in una fila o colonna.<br><br>
+  4) I numeri che si trovano all’interno di una serie di caselle dal bordo più annerito, dette gabbie, devono, insieme (in qualsiasi ordine), dare il risultato indicato nell’angolo superiore utilizzando l’operazione matematica indicata.<br><br>
+  5) Le gabbie composte da una singola casella devono essere riempite con il risultato da ottenere, indicato nell’angolo superiore.<br><br>
+  6) È possibile inserire lo stesso numero all’interno di una gabbia purché non si trovi nella medesima fila o colonna.<br><br>
+  7) Premere Controlla in qualsiasi momento per verificare se la soluzione prescelta è esatta.<br><br>
+
+  <!-- the close box top right -->
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+
+<div id="rules-modal-japanese" class="reveal-modal medium">
+  「KenKen®」パズル ルール<br><br>
+  1) パズルのサイズを選択する<br><br>
+  2)１からパズルのマス数までの数をマスに入れていく<br><br>
+  3) 縦列、横列ともに、同一列内に同じ数字を入れることはできない<br><br>
+  4) 太線で区切られた枠内をケージ（ブロック）という。ケージ左上の隅にあるのが計算記号とターゲット数字。この計算記号で計算して、答えがターゲット数字となるように、ケージの中のマスに数字を入れていく。（数字の順番はどんな順番でもかまわない）<br><br>
+  5) ケージにマスがひとつしかない場合は、ターゲット数字をそのまま入れる<br><br>
+  6) ケージ内に同じ数字があってもかまわないが、縦列、横列ともに同一列内に同じ数字を入れることはできない<br><br>
+  7) 入れた数字が正しいかどうかは、「チェック」ボタンで確認できる<br><br>
+
+  <!-- the close box top right -->
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+
+<div id="rules-modal-korean" class="reveal-modal medium">
+  <h2>KENKEN® 플레이 규칙</h2>
+  <br><br>
+
+  1) 먼저 퍼즐 사이즈를 선택합니다.<br>
+  2) 1부터 퍼즐 사이즈까지 숫자를 입력합니다.<br><br>
+  3) 가로 세로 같은 줄에는 같은 숫자를 반복할 수 없습니다.<br><br>
+  4) 한 개나 여러 개의 칸이 굵은 검은 테로 둘러싸여 있는 것을 케이지라고 부르며, 각 케이지의 상단 왼쪽 코너에 숫자와 수학 기호가 나와 있습니다. 그 수학 계산법을 사용해서 그 타깃 수치가 나오도록 해당 케이지 내에 있는 칸 속에 숫자를 입력해야 합니다.<br><br>
+  5) 칸이 하나 뿐인 케이지에는 상단 왼쪽 코너에 나온 타깃 숫자를 그대로 입력해야 합니다.<br><br>
+  6) 한 케이지 속에 같은 숫자를 반복할 수 있지만, 가로나 세로로 같은 줄에 있는 칸에는 같은 숫자를 반복할 수 없습니다.<br><br>
+  7) 언제든지 <확인>을 클릭하면 답이 맞았는 지 확인할 수 있습니다.
+
+  <!-- the close box top right -->
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+
+<div id="rules-modal-portugese" class="reveal-modal medium">
+  Regras do jogo KENKEN®<br><br>
+  1) Escolher o tamanho da grelha.<br><br>
+  2) Inserir os números de 1 até ao tamanho da grelha.<br><br>
+  3) Não se pode repetir nenhum número na mesma fila ou coluna.<br><br>
+  4) Os números dentro de cada conjunto de quadrados demarcados com linhas carregadas, chamados jaulas, devem combinar (em qualquer ordem) de forma a produzir o número pretendido, indicado no canto superior, usando a operação matemática indicada.<br><br>
+  5) As jaulas com apenas um quadrado devem ser preenchidas com o número pretendido, indicado no canto superior.<br><br>
+  6) Pode repetir-se um número na mesma jaula, desde que não se repita na mesma fila ou coluna.  <br><br>
+  7) Sempre que deseje ver se a sua solução é a correcta, prima Verificar.<br><br>
+  
+  <!-- the close box top right -->
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+
+<div id="rules-modal-russian" class="reveal-modal medium">
+  <h2>Russian&reg;</h2>
+
+  <!-- the close box top right -->
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+
+<div id="rules-modal-slovenian" class="reveal-modal medium">
+  Pravila igre KenKen®<br><br>
+  1) odaberite veličinu zagonetke.<br><br>
+  2) Upišite brojeve izmedu 1 I odabrane veličine zagonetke.<br><br>
+  3) upisani broj ne smije biti ponovljen u istom retku ili stupcu.<br><br>
+  4) Brojevi unutar kvadrata opisanih debljom linijon (kavezi) moraju dati rezultat naznačen u gornjem lijevom kutu korištenjem naznačene mathematičke operacije.<br><br>
+  5) U kaveze koji se sastoje od samo jednog kvadrata potrebno je upisati broj naznačen u gornjem lijevom kutu tog kvadrata.<br><br>
+  6) Unutar jednog kaveza brojevi se mogu ponavljati ukoliko nisu u istom retku ili stupcu. <br><br>
+  7) pritisnite provjera u bilo kojem trenutku vidjeti ispravnost vaše rješenje.
+  
+
+  <!-- the close box top right -->
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+
+<div id="rules-modal-spanish" class="reveal-modal medium">
+  Las reglas para jugar con KENKEN®<br><br>
+  1) Escoger un tamaño de cuadrícula.<br><br>
+  2) Rellenar los números desde el 1 hasta el tamaño de la cuadrícula.<br><br>
+  3) No repetir ningún número en ninguna fila ni columna.<br><br>
+  4) Los números en cada grupo de casillas con borde grueso, llamadas jaulas, tienen que combinarse (en cualquier orden) para producir el número proyectado en la esquina superior usando la operación matemática indicada.<br><br>
+  5) Las jaulas con solo una casilla deben ser rellenadas con el número proyectado en la esquina superior.<br><br>
+  6) Un número puede ser repetido dentro de una jaula en tanto que no esté en la misma fila o columna.<br><br>
+  7) Pulsas Comprobar en cualquier momento para ver si tu solución es correcta.<br><br>
+  
+
+  <!-- the close box top right -->
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+
+<div id="rules-modal-taiwanese" class="reveal-modal medium">
+  KenKen®的游戏规则<br><br>
+  玩KenKen 游戏时，您填写的数字将取决于方格之数目。<br><br>
+  3x3方格（3横排方格，3竖列方格）意味着您要填写数字1、2和3。<br><br>
+  在4x4方格的游戏中，请使用1到4；5x5方格请填写1到5，依此类推。<br><br>
+
+  粗线框（称为笼子）内所有格子中的数字用标明的运算符号计算后（按照任何顺序），应当得到上角的目标数字（+, -, x, ÷）。<br>
+  如何玩游戏：<br><br>
+  1)	选择方格的数目和困难程度（最容易、容易、中等、困难、专家）。<br><br>
+  2)	任何一行或一列不要有相同的数字。<br><br>
+  3)	若笼子内只有一个格子，则应当填入上角的目标数字。<br><br>
+  4)	笼子内的数字可以重复，只要相同的数字不在同一行或者同一列。<br><br>
+  5)	您可以随时按“检查”以查看答案是否正确！<br><br>
+
+  <!-- the close box top right -->
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+
+<div id="rules-modal-thai" class="reveal-modal medium">
+  กติกาสำหรับการเล่น KENKEN®<br><br>
+  1. เลือกขนาดของตารางเกม<br><br>
+  2. ใส่ตัวเลขจาก 1 ถึงเลขสูงสุดตามขนาดของตารางที่เลือก<br><br>
+  3. ห้ามใส่ตัวเลขซ้ำซ้อนในแถวเดียวกันไม่ว่าจะแถวแนวนอนหรือแถวแนวตั้ง<br><br>
+  4. พื้นที่ในกรอบเส้นหนาแต่ละกรอบเรียกว่า กรง ตัวเลขที่จะใส่ในช่องของแต่ละกรงเมื่อนำมาคำนวณกันแล้วจะต้องได้ผลลัพธ์ตามที่ตั้งเอาไว้ที่มุมบนซ้ายของแต่ละกรง ทั้งนี้การคำนวณจะต้องคำนวณตามเครื่องหมายบวกลบคูณหารที่ให้ไว้หลังตัวเลขผลลัพธ์<br><br>
+  5. กรงที่มีช่องสำหรับใส่ตัวเลขเพียงช่องเดียวควรใส่ตัวเลขตามผลลัพท์ที่ตั้งเอาไว้ในมุมบนซ้ายของช่องนั้น ๆ<br><br>
+  6. ตัวเลขภายในกรงสามารถใช้ซ้ำกันได้หากไม่ได้อยู่ในแถวเดียวกันไม่ว่าจะเป็นแถวแนวนอนหรือแถวแนวตั้ง<br><br>
+  7. เมื่อใดต้องการดูว่าเลขตัวที่ใส่ลงไปถูกหรือไม่ให้กดที่คำว่า ดูผล   <br><br>
+  
+  <!-- the close box top right -->
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+
+<div id="tips-modal" class="reveal-modal medium">
+  <ol>
+  <li>To start, click on any square. A "number ring" appears with that grid's possible numbers. These numbers will also
+    show up on the left side above the grid as the "Notes" box.
+  </li>
+  <li>Ready to fill a number in that square? Just click the one you want in the number ring. It will then appear in the
+    middle of the square.
+  </li>
+  <li>Narrowed it down to a couple of numbers but still not totally sure? Click the numbers you want from the Notes box. They'll show up smaller in the square.
+    <br>
+    <br>
+    Hints: Also in the candidates bar are <img alt="Tips-check" src="/assets/tips-check-6c315f6ab6221a19beedfc7677da3e58.png" />, <img alt="Tips-x" src="/assets/tips-x-b2641ebce09053073cd230cda094eba6.png" />:
+    <ul>
+      <li>Clicking <img alt="Tips-check" src="/assets/tips-check-6c315f6ab6221a19beedfc7677da3e58.png" /> will place all possible Notes in the square.</li>
+      <li>Clicking <img alt="Tips-x" src="/assets/tips-x-b2641ebce09053073cd230cda094eba6.png" /> will get rid of all the Notes in the square.</li>
+      <li>If you'd like to repeat a note (notes) in another square, simply drag the number from the original square
+        to the new one. Click <a href="http://youtu.be/DsWo8EfBIks" target="_blank">here</a> to see the video of how it works.
+      </li>
+    </ul>
+  </li>
+
+  <li>When you've ruled out one of your notes, click on it again in the Notes box. The number will
+    disappear from the square.
+  </li>
+  <li>When you fill in a number in a square (by selecting from the number ring), any notes in that square
+    will disappear.
+  </li>
+  <li>Changed your mind about a number? In the number ring, click the red eraser icon to clear the square.</li>
+  <li>To hide the number ring, click the red "X."</li>
+  <li>How to Use the Keyboard: You can enter numbers and notes by using the keyboard. Once you’ve selected a square, you can press shift and a number key to enter (or delete) that number as a note. Or, to just enter a number in a square, press that number on the keyboard (no shift). To delete a number or note, press C.</li>
+</ol>
+
+
+  <!-- the close box top right -->
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+<div id="ads-modal" class="reveal-modal medium">
+  <h1>OH NO…</h1>
+  <h1>AD BLOCKING SOFTWARE IS PREVENTING</h1>
+  <h1>KENKEN FROM LOADING!</h1>
+   <p>Ad blocking software is interfering with your KenKen puzzles.  To continue using KenKen, please disable your ad blocker for this site. The ad blocker icon can usually be found on the upper right of your browser’s toolbar. </p>
+
+  <p class="red"><a href="/game" class="large-link">CLICK HERE</a>
+  <br>(after disabling ad blocker)</p>
+  
+  <p class="small"><i>NOTE:  KenKen can be enjoyed online AD FREE without an ad blocker by purchasing a <a href="/membership">subscription</a>.</i></p>
+
+  <p>To contact us, email us at info@kenken.com</p>
+  <!-- the close box top right -->
+  <p class="small">If you're a premium subscriber, please return to the Home Page to <a href="/users/sign_in"> "Log In"</a></p>
+  <a class="close-reveal-modal x">&#215;</a>
+</div>
+<div id="expert-modal" class="reveal-modal">
+  <span class="float-right">  <a class="close-reveal-modal">&#215;</a></span>
+  <h2>For Premium Members Only</h2>
+  <br/>
+  <a href="/membership">
+    <img alt="More_info" src="/assets/chooser/more_info-ac47cb7e9404ed73a7ca5d93be44d13a.png" />
+</a>  <p class="small">Already a premium member? <a href="/users/sign_in">Log In</a></p>
+</div>
+
+<div id="no-expert-puzzle-modal" class="reveal-modal">
+  <span class="float-right">  <a class="close-reveal-modal">&#215;</a></span>
+  <h2>Expert puzzles of this type are not available.</h2>
+  <h2>Please select different math operations.</h2>
+</div>
+
+<div id="no-hard-puzzle-modal" class="reveal-modal">
+  <span class="float-right">  <a class="close-reveal-modal">&#215;</a></span>
+  <br>
+  <h2>Hard puzzles of this type are not available.</h2>
+  <h2>Please select different math operations.</h2>
+</div>
+
+    <div class="ad">
+      <!-- OpenX body script -->
+  <script type="text/javascript">
+  OX_8f9b3c6c6c.showAdUnit("337342");
+  </script><noscript><iframe id="8f9b3c6c6c" name="8f9b3c6c6c" src="http://ox-d.kenkenpuzzle.com/w/1.0/afr?auid=337342&cb=156" frameBorder="0" frameSpacing="0" scrolling="no" width="728" height="90"><a href="http://ox-d.kenkenpuzzle.com/w/1.0/rc?cs=8f9b3c6c6c&cb=642"><img src="http://ox-d.kenkenpuzzle.com/w/1.0/ai?auid=337342&cs=8f9b3c6c6c&cb=433" border="0" alt=""></a></iframe></noscript>
+
+</div>
+
+    <div class="row bottom">
+      <div class="box-contact">
+  <h2>JOIN US</h2>
+  <ul>
+    <li><a href="https://twitter.com/kenkenpuzzle" target="_blank"><img alt="Twitter" src="/assets/social-twitter-79c22eef0b9ccea51a73ca40bac49767.png" /></a></li>
+    <li><a href="https://plus.google.com/109506696446093070586/posts" target="_blank"><img alt="Google+" src="/assets/social-g+-3ed81e47ff44047b0713b7d15f288cf8.png" /></a></li>
+    <li><a href="http://www.facebook.com/KenKenPuzzles" target="_blank"><img alt="Facebook" src="/assets/social-fb-c9666232cf8247343cba5cca5dabd300.png" /></a></li>
+    <li><a href="/store/mobile"><img alt="KenKen" src="/assets/social-kenken-44a28b1123f7b076ca1efdada7ed5e4d.png" /></a></li>
+  </ul>
+  <h2 class="second">CONTACT US</h2>
+
+  <p>General questions &amp; Concerns:
+    <a href="mailto:customercare@kenken.com">customercare@kenken.com</a></p>
+
+  <p>KENKEN Classroom Program:<br>
+    <a href="mailto:classroom@kenken.com">classroom@kenken.com</a></p>
+
+  <p>Licensing:<br>
+    <a href="mailto:rights@kenken.com">rights@kenken.com</a></p>
+
+  <p>International inquiries:<br>
+    <a href="mailto:international@kenken.com">international@kenken.com</a></p>
+
+
+</div>
+      <div class="box-seo">
+  <h2>Welcome to <b>KENKEN!</b></h2>
+
+  <p>No matter what you're looking for &mdash; learning or fun &mdash; KenKen.com has it! Free online puzzles.
+    Cool math games. Number games. (More addictive than Sudoku or Kakuro? You decide!) Educational games for kids.
+    Visit our For Teachers section for math teacher resources, our free KenKen Classroom program, and a message
+    from Tetsuya Miyamoto, the Japanese educator behind KenKen. Miyamoto, chess master David Levy, and the rest of
+    Team KenKen have crafted these math puzzles into great games for learning and brain training. Need even more
+    KenKen? Check out our Will Shortz Presents books. Try our mobile app on iPhone and iPad or our Kindle version.
+    Play on the New York Times puzzle page and NCTM website. Regardless of why, how, or where you play, KenKen are
+    the math puzzles that make you smarter!</p>
+
+  <p class="red"><em>Sincerely, <br/>Team KenKen</em></p>
+</div>
+      <div class="box-mrec last">
+      <!-- OpenX body script -->
+  <script type="text/javascript">
+  OX_8f9b3c6c6c.showAdUnit("337368");
+  </script><noscript><iframe id="8f9b3c6c6c" name="8f9b3c6c6c" src="http://ox-d.kenkenpuzzle.com/w/1.0/afr?auid=337368&cb=120" frameBorder="0" frameSpacing="0" scrolling="no" width="300" height="250"><a href="http://ox-d.kenkenpuzzle.com/w/1.0/rc?cs=8f9b3c6c6c&cb=504"><img src="http://ox-d.kenkenpuzzle.com/w/1.0/ai?auid=337368&cs=8f9b3c6c6c&cb=495" border="0" alt=""></a></iframe></noscript>
+
+</div>
+      
+    </div>
+
+    <div id="footer" class="row ">
+            <!-- OpenX body script -->
+  <script type="text/javascript">
+  OX_8f9b3c6c6c.showAdUnit("337381");
+  </script><noscript><iframe id="8f9b3c6c6c" name="8f9b3c6c6c" src="http://ox-d.kenkenpuzzle.com/w/1.0/afr?auid=337381&cb=409" frameBorder="0" frameSpacing="0" scrolling="no" width="728" height="90"><a href="http://ox-d.kenkenpuzzle.com/w/1.0/rc?cs=8f9b3c6c6c&cb=287"><img src="http://ox-d.kenkenpuzzle.com/w/1.0/ai?auid=337381&cs=8f9b3c6c6c&cb=218" border="0" alt=""></a></iframe></noscript>
+
+
+      <div class="footer_text footie">
+        <div class="txt left">KenKen&reg; is a registered trademark of <a href="http://nextoy.com" target="_blank">Nextoy, LLC</a>. Puzzle content &copy2015 KenKen Puzzle LLC. All rights reserved.</div>
+        <div class="txt right"><a href="/support">Contact</a> | <a href="/privacy_policy">Privacy Policy</a> | <a href="/terms_and_conditions">Terms &amp; Conditions</a> | <a href="/faq">FAQs</a></div>
+      </div>
+    </div>
+  </div>
+  <!-- end content -->
+</div>
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-5627971-1', 'auto');
+  ga('send', 'pageview');
+  
+
+  $(document).ready(function() {
+    kenken.mobile_redirect();
+    kenken.load_email_form();
+  });
+</script>
+
+
+
+
+
+<div id="myModal" class="reveal-modal email-reveal-modal">
+  <div id="modal-shadow-box">
+    <div id="modal-title"><img alt="Gift_logo" src="/assets/gift_logo-59f70a13f16d72fa407043288b62ca08.png" /></div>
+    <form accept-charset="UTF-8" action="/email_addresses/" class="one-click-form" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="AeZdaE6HHDF/pfLQH6ns6KXnh3/A5RBzPSmAopSRJJ8=" /></div>
+    <div id="modal-form">
+      <h3>Register now to receive free, printable, monthly sets of one-of-a-kind KenKen puzzles -- handcrafted by its inventor!</h3>
+      <input class="oversize-email" id="email_" name="email[]" placeholder="Email" size="30" tabindex="1" type="text" />
+      <p>This one-time offer is being made EXCLUSIVELY to KenKen customers.</p>
+      <a href="#" onClick="window.open('http://www.kenkenpuzzle.com/gift_read_more.html', 'KenKen Gift - Read More', 'height=500,width=400')" id="giveaway-rules" class="small_link" tabindex=2>Read More</a>
+      <a href="#" onClick="window.open('http://www.kenkenpuzzle.com/basic_terms_and_conditions.html', 'KenKen Giveaway Terms and coniditions', 'height=700,width=800')" id="giveaway-rules" class="small_link dark" tabindex=2>Terms &amp; Conditions</a
+    </div>
+    <div id="modal-actions">
+      <div class="inline">
+        <input class="modal-button" id="email-submit-button" name="commit" tabindex="3" type="submit" value="Submit" />
+      </div>
+      <div class="inline">
+        <span class="dismiss-button"><a href="#" class="modal-button-dismiss close-reveal-modal" id="dismiss-email-modal-short">Maybe Later</a></span>
+      </div>
+      <div class="inline">
+        <span class="dismiss-button"><a href="#" class="modal-button-dismiss close-reveal-modal" id="dismiss-email-modal-long">No Thanks</a></span>
+      </div>
+    </div>
+</form>  </div>
+</div>
+</body>
+</html>
