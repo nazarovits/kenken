@@ -12149,226 +12149,278 @@ function () {
 
 // <editor-fold desc="Game">
 var KenKenGame = function () {
+    function normalizeData(e) {
+        var str = e.data;
+        var newline = '\r\n';
+        var arr = str.split(newline);
+        var arrLength = arr.length - 2; // without /r/n/r/n
+        var keys = ['A', 'T', 'S', 'V', 'H'];
+        var keysLength = keys.length;
+        var obj = {};
+        var arrOfArr;
+        var item;
+        var key;
+
+        for (var i = 0; i < arrLength; i++) {
+            item = arr[i].replace(/ /g, '');
+
+            if (keys.indexOf(item) !== -1) {
+                key = item;
+                continue;
+            }
+
+            arrOfArr = obj[key];
+
+            if (!arrOfArr) {
+                arrOfArr = [];
+                obj[key] = arrOfArr;
+            }
+
+            arrOfArr.push(item.split(''));
+        }
+
+        e.dataObj = obj;
+
+        //console.log('normalizeData');
+        //console.log(e);
+
+        return e;
+    }
 
     this.loadPuzzleState = function (state) {
         console.log('KenKen.loadPuzzleState');
         console.log(state);
     };
 
+    this.sendPuzzleData = function (puzzleData) {
+        var e = JSON.parse(puzzleData);
+        var data = normalizeData(e);
+        var dataObj = data.dataObj;
+
+        console.log('KenKenGame.sendPuzzleData');
+        console.log(data.dataObj);
+    };
+
+    this.sendWidgetAdBeforeGame = function (puzzleData) {
+        console.log('KenKenGame.sendWidgetAdBeforeGame');
+        console.log(puzzleData);
+    };
+
+
 };
 
 // </editor-fold>
 
-KenKen = new KenKenGame();
+var _KenKen = new KenKenGame();
+KenKen = _KenKen;
 
 var kenken = kenken || {};
 // <editor-fold desc="kenken.limitAvaialbleDifficulties">
 kenken.limitAvaialbleDifficulties = function () {
-    $("a.size").click(function () {
-        $("a.level").removeClass("notAvailable");
-        switch ($(this).data("value")) {
-        case 3:
-            $("a.level.easy").addClass("notAvailable"), $("a.level.medium").addClass("notAvailable"), $("a.level.hard").addClass("notAvailable"), $("a.level.expert-premium").addClass("notAvailable"), $("a.level.expert").addClass("notAvailable");
-            break;
-        case 5:
-            $("a.op.selected").data("value") == "dm" && $("a.level.expert").addClass("notAvailable");
-            break;
-        case 8:
-            $("a.op.selected").data("value") == "dm" && ($("a.level.hard").addClass("notAvailable"), $("a.level.expert").addClass("notAvailable"));
-            break;
-        case 9:
-            $("a.op.selected").data("value") == "dm" && ($("a.level.hard").addClass("notAvailable"), $("a.level.expert").addClass("notAvailable"))
-        }
-    }), $("a.op").click(function () {
-        $("a.level").removeClass("notAvailable"), $("a.size.selected").data("value") == 3 && ($("a.level.easy").addClass("notAvailable"), $("a.level.medium").addClass("notAvailable"), $("a.level.hard").addClass("notAvailable"), $("a.level.expert-premium").addClass("notAvailable"), $("a.level.expert").addClass("notAvailable"));
-        if ($(this).data("value") == "dm") switch ($("a.size.selected").data("value")) {
-        case 8:
-        case 9:
-            $("a.level.hard").addClass("notAvailable");
-        case 5:
-        case 7:
-            $("a.level.expert").addClass("notAvailable")
-        }
-        $("a.size.selected").data("value") == 8 && ($(this).data("value") == "dm" ? $("a.level.hard").addClass("notAvailable") : $("a.level.hard").removeClass("notAvailable"))
-    }), $("a.level").click(function () {
-        $(this).hasClass("notAvailable") == 1 && ($(this).hasClass("hard") == 1 ? $("#no-hard-puzzle-modal").reveal({
-            animation: "fadeAndPop",
-            animationspeed: 300,
-            closeonbackgroundclick: !0,
-            dismissmodalclass: "close-reveal-modal"
-        }) : $(this).hasClass("expert") == 1 && $("#no-expert-puzzle-modal").reveal({
-            animation: "fadeAndPop",
-            animationspeed: 300,
-            closeonbackgroundclick: !0,
-            dismissmodalclass: "close-reveal-modal"
-        }))
-    }), $(document).ready(function () {
-        switch ($("a.size.selected").data("value")) {
-        case 3:
-            $("a.level.easy").addClass("notAvailable"), $("a.level.medium").addClass("notAvailable"), $("a.level.hard").addClass("notAvailable"), $("a.level.expert-premium").addClass("notAvailable"), $("a.level.expert").addClass("notAvailable");
-            break;
-        case 5:
-            $("a.op.selected").data("value") == "dm" && $("a.level.expert").addClass("notAvailable");
-            break;
-        case 8:
-            $("a.op.selected").data("value") == "dm" && ($("a.level.hard").addClass("notAvailable"), $("a.level.expert").addClass("notAvailable"));
-            break;
-        case 9:
-            $("a.op.selected").data("value") == "dm" && ($("a.level.hard").addClass("notAvailable"), $("a.level.expert").addClass("notAvailable"))
-        }
-    })
-}, kenken.validatePuzzleSelection = function () {
-    $("#play_now").click(function (e) {
-        $("a.size.selected").data("value") == 8 && $("a.level.selected").data("value") == "hard" && $("a.op.selected").data("value") == "dm" ? ($("#no-hard-puzzle-modal").reveal({
-            animation: "fadeAndPop",
-            animationspeed: 300,
-            closeonbackgroundclick: !0,
-            dismissmodalclass: "close-reveal-modal"
-        }), e.preventDefault()) : $("a.size.selected").data("value") == 9 && $("a.level.selected").data("value") == "hard" && $("a.op.selected").data("value") == "dm" ? ($("#no-hard-puzzle-modal").reveal({
-            animation: "fadeAndPop",
-            animationspeed: 300,
-            closeonbackgroundclick: !0,
-            dismissmodalclass: "close-reveal-modal"
-        }), e.preventDefault()) : $("a.level.selected").data("value") == "expert" && $("a.op.selected").data("value") == "dm" && ($("a.size.selected").data("value") == 3 || $("a.size.selected").data("value") == 5 || $("a.size.selected").data("value") == 7 || $("a.size.selected").data("value") == 8 || $("a.size.selected").data("value") == 9) && ($("#no-expert-puzzle-modal").reveal({
-            animation: "fadeAndPop",
-            animationspeed: 300,
-            closeonbackgroundclick: !0,
-            dismissmodalclass: "close-reveal-modal"
-        }), e.preventDefault())
-    })
-},
-// </editor-fold>
-
-// <editor-fold desc="kenken.play">
-kenken.play = function (e, t) {
-    function s() {
-        c().click(function (e) {
-            var t = $(e.target);
-            if (t.hasClass("disabled")) return;
-            var r = t.attr("kk_key"),
-                i = t.attr("kk_value");
-            n[r] = n[r] == i ? null : i, n.size == 3 && (n.level = "easiest"), a()
-        }), $(document).ready(function () {
-            a()
-        }), $("#club_advanced_button").click(function (e) {
-            u()
-        }), $("div[free_daily_size]").click(function (e) {
-            var t = $(e.target);
-            $("div[free_daily_size]").removeClass("selected"), t.addClass("selected"), i = t.attr("free_daily_size"), $("#free_daily_play").attr("href", "/free_daily?size=" + i), $("#free_daily_play").html("Play Now!")
-        }), u(!1), o()
-    }
-
-    function o() {
-        u(n.level != null || n.operations != null)
-    }
-
-    function u(e) {
-        e == undefined ? r = !r : r = e, r ? ($("#club_advanced_button").html("hide"), $("#club_advanced_container").addClass("advanced")) : ($("#club_advanced_button").html("advanced options"), $("#club_advanced_container").removeClass("advanced"))
-    }
-
-    function a() {
-        g(), f(), m(), p(), d()
-    }
-
-    function f() {
-        for (var e in n) l(e, n[e]).removeClass("disabled").addClass("selected")
-    }
-
-    function l(e, t) {
-        return $("div[kk_key=" + e + "][kk_value=" + t + "]")
-    }
-
-    function c() {
-        return $("div[kk_key]")
-    }
-
-    function h() {
-        return n.size != null
-    }
-
-    function p() {
-        var e = h();
-        $("#btn_submit").prop("disabled", !e).addClass("disabled"), e && $("#btn_submit").removeClass("disabled"), e ? $("#btn_submit").attr("value", "Play Now!") : $("#btn_submit").attr("value", "Select size above")
-    }
-
-    function d() {
-        $.each(n, function (e, t) {
-            $("input[name=" + e + "]").val(t)
-        })
-    }
-
-    function v(t) {
-        return $(e.paths).is(function (e, n) {
-            return !!t.size && t.size != n.size || !!t.operations && t.operations != n.operations || !!t.level && t.level != n.level ? !1 : !0
-        })
-    }
-
-    function m(e) {
-        c().each(function (e, t) {
-            t = $(t);
-            var r = t.attr("kk_key"),
-                i = t.attr("kk_value"),
-                s = {
-                    level: n.level,
-                    size: n.size,
-                    operations: n.operations
-                };
-            s[r] = i, v(s) && t.removeClass("disabled")
-        })
-    }
-
-    function g() {
-        c().addClass("disabled").removeClass("selected"), l("size", "3").removeClass("disabled")
-    }
-
-    function y(e) {
-        $.each(e, function (e, t) {
-            l(e, t).removeClass("disabled")
-        })
-    }
-
-    function b() {
-        var e = function () {
-            typeof socialFlex.socialFlex == "function" ? socialFlex.socialFlex() : setTimeout(e, 100)
-        };
-        setTimeout(e, 100)
-    }
-
-    function w() {
         $("a.size").click(function () {
             $("a.level").removeClass("notAvailable");
             switch ($(this).data("value")) {
             case 3:
                 $("a.level.easy").addClass("notAvailable"), $("a.level.medium").addClass("notAvailable"), $("a.level.hard").addClass("notAvailable"), $("a.level.expert-premium").addClass("notAvailable"), $("a.level.expert").addClass("notAvailable");
                 break;
-            case 4:
-                $("a.level.medium").addClass("notAvailable"), $("a.level.hard").addClass("notAvailable"), $("a.level.expert-premium").addClass("notAvailable"), $("a.level.expert").addClass("notAvailable")
+            case 5:
+                $("a.op.selected").data("value") == "dm" && $("a.level.expert").addClass("notAvailable");
+                break;
+            case 8:
+                $("a.op.selected").data("value") == "dm" && ($("a.level.hard").addClass("notAvailable"), $("a.level.expert").addClass("notAvailable"));
+                break;
+            case 9:
+                $("a.op.selected").data("value") == "dm" && ($("a.level.hard").addClass("notAvailable"), $("a.level.expert").addClass("notAvailable"))
+            }
+        }), $("a.op").click(function () {
+            $("a.level").removeClass("notAvailable"), $("a.size.selected").data("value") == 3 && ($("a.level.easy").addClass("notAvailable"), $("a.level.medium").addClass("notAvailable"), $("a.level.hard").addClass("notAvailable"), $("a.level.expert-premium").addClass("notAvailable"), $("a.level.expert").addClass("notAvailable"));
+            if ($(this).data("value") == "dm") switch ($("a.size.selected").data("value")) {
+            case 8:
+            case 9:
+                $("a.level.hard").addClass("notAvailable");
+            case 5:
+            case 7:
+                $("a.level.expert").addClass("notAvailable")
+            }
+            $("a.size.selected").data("value") == 8 && ($(this).data("value") == "dm" ? $("a.level.hard").addClass("notAvailable") : $("a.level.hard").removeClass("notAvailable"))
+        }), $("a.level").click(function () {
+            $(this).hasClass("notAvailable") == 1 && ($(this).hasClass("hard") == 1 ? $("#no-hard-puzzle-modal").reveal({
+                animation: "fadeAndPop",
+                animationspeed: 300,
+                closeonbackgroundclick: !0,
+                dismissmodalclass: "close-reveal-modal"
+            }) : $(this).hasClass("expert") == 1 && $("#no-expert-puzzle-modal").reveal({
+                animation: "fadeAndPop",
+                animationspeed: 300,
+                closeonbackgroundclick: !0,
+                dismissmodalclass: "close-reveal-modal"
+            }))
+        }), $(document).ready(function () {
+            switch ($("a.size.selected").data("value")) {
+            case 3:
+                $("a.level.easy").addClass("notAvailable"), $("a.level.medium").addClass("notAvailable"), $("a.level.hard").addClass("notAvailable"), $("a.level.expert-premium").addClass("notAvailable"), $("a.level.expert").addClass("notAvailable");
+                break;
+            case 5:
+                $("a.op.selected").data("value") == "dm" && $("a.level.expert").addClass("notAvailable");
+                break;
+            case 8:
+                $("a.op.selected").data("value") == "dm" && ($("a.level.hard").addClass("notAvailable"), $("a.level.expert").addClass("notAvailable"));
+                break;
+            case 9:
+                $("a.op.selected").data("value") == "dm" && ($("a.level.hard").addClass("notAvailable"), $("a.level.expert").addClass("notAvailable"))
             }
         })
-    }
-    var n = e.selection,
-        r = !1,
-        i = null;
-    s()
-};
+    }, kenken.validatePuzzleSelection = function () {
+        $("#play_now").click(function (e) {
+            $("a.size.selected").data("value") == 8 && $("a.level.selected").data("value") == "hard" && $("a.op.selected").data("value") == "dm" ? ($("#no-hard-puzzle-modal").reveal({
+                animation: "fadeAndPop",
+                animationspeed: 300,
+                closeonbackgroundclick: !0,
+                dismissmodalclass: "close-reveal-modal"
+            }), e.preventDefault()) : $("a.size.selected").data("value") == 9 && $("a.level.selected").data("value") == "hard" && $("a.op.selected").data("value") == "dm" ? ($("#no-hard-puzzle-modal").reveal({
+                animation: "fadeAndPop",
+                animationspeed: 300,
+                closeonbackgroundclick: !0,
+                dismissmodalclass: "close-reveal-modal"
+            }), e.preventDefault()) : $("a.level.selected").data("value") == "expert" && $("a.op.selected").data("value") == "dm" && ($("a.size.selected").data("value") == 3 || $("a.size.selected").data("value") == 5 || $("a.size.selected").data("value") == 7 || $("a.size.selected").data("value") == 8 || $("a.size.selected").data("value") == 9) && ($("#no-expert-puzzle-modal").reveal({
+                animation: "fadeAndPop",
+                animationspeed: 300,
+                closeonbackgroundclick: !0,
+                dismissmodalclass: "close-reveal-modal"
+            }), e.preventDefault())
+        })
+    },
+    // </editor-fold>
+
+    // <editor-fold desc="kenken.play">
+    kenken.play = function (e, t) {
+        function s() {
+            c().click(function (e) {
+                var t = $(e.target);
+                if (t.hasClass("disabled")) return;
+                var r = t.attr("kk_key"),
+                    i = t.attr("kk_value");
+                n[r] = n[r] == i ? null : i, n.size == 3 && (n.level = "easiest"), a()
+            }), $(document).ready(function () {
+                a()
+            }), $("#club_advanced_button").click(function (e) {
+                u()
+            }), $("div[free_daily_size]").click(function (e) {
+                var t = $(e.target);
+                $("div[free_daily_size]").removeClass("selected"), t.addClass("selected"), i = t.attr("free_daily_size"), $("#free_daily_play").attr("href", "/free_daily?size=" + i), $("#free_daily_play").html("Play Now!")
+            }), u(!1), o()
+        }
+
+        function o() {
+            u(n.level != null || n.operations != null)
+        }
+
+        function u(e) {
+            e == undefined ? r = !r : r = e, r ? ($("#club_advanced_button").html("hide"), $("#club_advanced_container").addClass("advanced")) : ($("#club_advanced_button").html("advanced options"), $("#club_advanced_container").removeClass("advanced"))
+        }
+
+        function a() {
+            g(), f(), m(), p(), d()
+        }
+
+        function f() {
+            for (var e in n) l(e, n[e]).removeClass("disabled").addClass("selected")
+        }
+
+        function l(e, t) {
+            return $("div[kk_key=" + e + "][kk_value=" + t + "]")
+        }
+
+        function c() {
+            return $("div[kk_key]")
+        }
+
+        function h() {
+            return n.size != null
+        }
+
+        function p() {
+            var e = h();
+            $("#btn_submit").prop("disabled", !e).addClass("disabled"), e && $("#btn_submit").removeClass("disabled"), e ? $("#btn_submit").attr("value", "Play Now!") : $("#btn_submit").attr("value", "Select size above")
+        }
+
+        function d() {
+            $.each(n, function (e, t) {
+                $("input[name=" + e + "]").val(t)
+            })
+        }
+
+        function v(t) {
+            return $(e.paths).is(function (e, n) {
+                return !!t.size && t.size != n.size || !!t.operations && t.operations != n.operations || !!t.level && t.level != n.level ? !1 : !0
+            })
+        }
+
+        function m(e) {
+            c().each(function (e, t) {
+                t = $(t);
+                var r = t.attr("kk_key"),
+                    i = t.attr("kk_value"),
+                    s = {
+                        level: n.level,
+                        size: n.size,
+                        operations: n.operations
+                    };
+                s[r] = i, v(s) && t.removeClass("disabled")
+            })
+        }
+
+        function g() {
+            c().addClass("disabled").removeClass("selected"), l("size", "3").removeClass("disabled")
+        }
+
+        function y(e) {
+            $.each(e, function (e, t) {
+                l(e, t).removeClass("disabled")
+            })
+        }
+
+        function b() {
+            var e = function () {
+                typeof socialFlex.socialFlex == "function" ? socialFlex.socialFlex() : setTimeout(e, 100)
+            };
+            setTimeout(e, 100)
+        }
+
+        function w() {
+            $("a.size").click(function () {
+                $("a.level").removeClass("notAvailable");
+                switch ($(this).data("value")) {
+                case 3:
+                    $("a.level.easy").addClass("notAvailable"), $("a.level.medium").addClass("notAvailable"), $("a.level.hard").addClass("notAvailable"), $("a.level.expert-premium").addClass("notAvailable"), $("a.level.expert").addClass("notAvailable");
+                    break;
+                case 4:
+                    $("a.level.medium").addClass("notAvailable"), $("a.level.hard").addClass("notAvailable"), $("a.level.expert-premium").addClass("notAvailable"), $("a.level.expert").addClass("notAvailable")
+                }
+            })
+        }
+        var n = e.selection,
+            r = !1,
+            i = null;
+        s()
+    };
 // </editor-fold>
 
 var kenken = kenken || {};
 // <editor-fold desc="kenken.Game">
 kenken.Game = function (e, t, n) {
-    function i() {
-        var e = navigator.appName.indexOf("Microsoft") != -1;
-        console.log('e', e);
-        console.log('window.KenKen', window.KenKen);
-        console.log('document.KenKen', document.KenKen);
-        console.log('KenKen', KenKen);
-        console.log('document', document);
 
-        return e ? window.KenKen : document.KenKen
+    function i() {
+        //var e = navigator.appName.indexOf("Microsoft") != -1;
+        var _kenken = window.KenKen || document.KenKen || _KenKen;
+
+        //return e ? window.KenKen : document.KenKen
+        return _kenken;
     }
 
-    function s() {
+    function s() { //***
         i().sendPuzzleData(JSON.stringify(e))
+            //i().sendPuzzleData(e)
     }
 
     function o(e) {
@@ -12427,83 +12479,129 @@ kenken.Game = function (e, t, n) {
     }
     var r = !1;
     this.chooseAnother = function () {
-        document.location.href = document.location.protocol + "//" + document.location.host + "/play_now"
-    }, this.getPuzzle = function () {
-        s()
-    }, this.resetPuzzle = function () {
-        s(), $.get("/request_check", {
-            id: e.id
-        })
-    }, this.solveAnother = function () {
-        window.document.location = "/game?solve_another=true"
-    }, this.widgetAdBeforeGame = function () {
-        $.get("/game/widget_ad_before_game", null, o)
-    }, this.widgetAdBeforePause = function () {
-        $.get("/game/widget_ad_before_pause", null, a)
-    }, this.widgetAdBeforePrint = function () {
-        $.get("/game/widget_ad_before_print", null, u)
-    }, this.widgetAdBeforeSolution = function () {
-        $.get("/game/widget_ad_before_solution", null, f)
-    }, this.widgetAdOnKengratulations = function () {
-        $.get("/game/widget_ad_on_kengratulations", null, l)
-    }, this.puzzleSolved = function () {}, this.autoSave = function (t) {
-        $.post("/save_state", {
-            id: e.id,
-            state: t,
-            autosave: 1
-        }), e.state = t
-    }, this.saveState = function (t) {
-        $.get("/request_check", {
-            id: e.id
-        }), $.post("/save_state", {
-            id: e.id,
-            state: t
-        }, function (e, t, n) {
-            e == "ok" && $("#save-ok").fadeIn(150).delay(5e3).fadeOut(150)
-        }), e.state = t
-    }, this.readState = function (t) {
-        $.get("/read_state", {
-            id: e.id
-        }, function (t) {
-            e.state = t, c()
-        })
-    }, this.callMbrix = function () {
-        socialFlex.socialFlex(), _gaq.push(["_trackEvent", "MediaBrix", "GamePage", "CallVideoAd", 1, !0])
-    }, this.onReveal = function () {
-        $.get("/request_reveal", {
-            id: e.id
-        })
-    }, this.onCheck = function () {
-        $.get("/request_check", {
-            id: e.id
-        })
-    }, this.onPrint = function () {
-        $.get("/show_ad_on_print", {}, v), $.get("/request_check", {
-            id: e.id
-        })
-    }, this.onPause = function () {
-        $.get("/show_ad_on_pause", {}, v), $.get("/request_check", {
-            id: e.id
-        })
-    }, this.onSolution = function () {
-        $.get("/show_ad_on_solution", {}, v), $.get("/request_check", {
-            id: e.id
-        })
-    }, this.puzzleStarted = function () {
-        $.get("/puzzle_started", {
-            id: e.id
-        })
-    }, this.puzzleReset = function () {
-        $.get("/puzzle_started", {
-            id: e.id,
-            reset: !0
-        })
-    }, this.puzzleFinished = function (t) {
-        $.get("/puzzle_finished", {
-            id: e.id,
-            time: t
-        }), e.solved = !0, h()
-    }, setTimeout(m, 500)
+            document.location.href = document.location.protocol + "//" + document.location.host + "/play_now"
+        },
+
+        this.getPuzzle = function () {
+            s()
+        },
+
+        this.resetPuzzle = function () {
+            s(), $.get("/request_check", {
+                id: e.id
+            })
+        },
+
+        this.solveAnother = function () {
+            window.document.location = "/game?solve_another=true"
+        },
+
+        this.widgetAdBeforeGame = function () {
+            $.get("/game/widget_ad_before_game", null, o)
+        },
+
+        this.widgetAdBeforePause = function () {
+            $.get("/game/widget_ad_before_pause", null, a)
+        },
+
+        this.widgetAdBeforePrint = function () {
+            $.get("/game/widget_ad_before_print", null, u)
+        },
+
+        this.widgetAdBeforeSolution = function () {
+            $.get("/game/widget_ad_before_solution", null, f)
+        },
+
+        this.widgetAdOnKengratulations = function () {
+            $.get("/game/widget_ad_on_kengratulations", null, l)
+        },
+
+        this.puzzleSolved = function () {}, this.autoSave = function (t) {
+            $.post("/save_state", {
+                id: e.id,
+                state: t,
+                autosave: 1
+            }), e.state = t
+        },
+
+        this.saveState = function (t) {
+            $.get("/request_check", {
+                    id: e.id
+                }),
+
+                $.post("/save_state", {
+                    id: e.id,
+                    state: t
+                }, function (e, t, n) {
+                    e == "ok" && $("#save-ok").fadeIn(150).delay(5e3).fadeOut(150)
+                }),
+
+                e.state = t
+        },
+
+        this.readState = function (t) {
+            $.get("/read_state", {
+                id: e.id
+            }, function (t) {
+                e.state = t, c()
+            })
+        },
+
+        this.callMbrix = function () {
+            socialFlex.socialFlex(), _gaq.push(["_trackEvent", "MediaBrix", "GamePage", "CallVideoAd", 1, !0])
+        },
+
+        this.onReveal = function () {
+            $.get("/request_reveal", {
+                id: e.id
+            })
+        },
+
+        this.onCheck = function () {
+            $.get("/request_check", {
+                id: e.id
+            })
+        },
+
+        this.onPrint = function () {
+            $.get("/show_ad_on_print", {}, v), $.get("/request_check", {
+                id: e.id
+            })
+        },
+
+        this.onPause = function () {
+            $.get("/show_ad_on_pause", {}, v), $.get("/request_check", {
+                id: e.id
+            })
+        },
+
+        this.onSolution = function () {
+            $.get("/show_ad_on_solution", {}, v), $.get("/request_check", {
+                id: e.id
+            })
+        },
+
+        this.puzzleStarted = function () {
+            $.get("/puzzle_started", {
+                id: e.id
+            })
+        },
+
+        this.puzzleReset = function () {
+            $.get("/puzzle_started", {
+                id: e.id,
+                reset: !0
+            })
+        },
+
+        this.puzzleFinished = function (t) {
+            $.get("/puzzle_finished", {
+                id: e.id,
+                time: t
+            }), e.solved = !0, h()
+        },
+
+        setTimeout(m, 500)
 };
 
 // </editor-fold>
@@ -12589,7 +12687,7 @@ kenken.showHideTeacherAttributes = function () {
                 document.cookie = "saw_gift_form=true; expires=" + t.toGMTString()
             }
         }))
-    },// </editor-fold>
+    }, // </editor-fold>
     function (e, t, n) {
         "use strict";
         var r = e(document),
