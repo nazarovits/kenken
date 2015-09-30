@@ -3,16 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
     <title></title>
 </head>
 <body>
+
+<div class="box-inner-main">
+    <div id="trash1"></div>
+    <div id="trash2"></div>
+</div>
+
 
 <script type="text/javascript">
 
     // function which draw out HTML version of flash puzzle
     function drawOurForm(puzzleData){
         var data = puzzleData ? puzzleData : {};
-        var row = ['<div>'];
+        var row = [];
         var puzzleSize = puzzleData.size;
         var values = puzzleData.A;
         var results = puzzleData.T;
@@ -20,6 +27,7 @@
         var rightLines = puzzleData.V;
         var bottomLines = puzzleData.H;
         var lineClass;
+        var result;
         var i,j;
 
         // ******* left panel begin
@@ -122,22 +130,36 @@
         // ******* main panel end
         row.push('<\/div>');
 
-        // ******* make string
-        row.push('<\/div>');
+        result = document.createElement('div');
+        result.className = 'mainContainer';
+        result.innerHTML = row.join('');
 
-        return row.join('');
+        document.querySelector('.box-inner-main').appendChild(result);
+
+        /*$('.puzzleItem').on('click', function(event) {
+            var target = $(event.target).closest('.puzzleItem');
+            var positionInfo = {
+                top   : target.get('offsetTop'),
+                left  : target.offsetLeft,
+                width : target.offsetWidth
+            };
+
+            console.dir(target);
+        })*/
     }
 
+    // *************************************
     var testObject = {
         size : 3,
-        A    : [[1,2,3],[2,3,1],[3,1,2]],
-        T    : [[3,0,4],[5,0,0],[3,3,0]],
-        S    : [['+',0,'+'],['+',0,0],[0,'+',0]],
-        V    : [[0,1],[0,1],[1,0]],
-        H    : [[1,1],[1,1],[0,1]]
-    }
+        A    : [['1','2','3'],['2','3','1'],['3','1','2']],
+        T    : [['3','0','4'],['5','0','0'],['3','3','0']],
+        S    : [['+','0','+'],['+','0','0'],['0','+','0']],
+        V    : [['0','1'],['0','1'],['1','0']],
+        H    : [['1','1'],['1','1'],['0','1']]
+    };
 
-    document.body.innerHTML= drawOurForm(testObject);
+    drawOurForm(testObject);
+    // *************************************
 </script>
 
 </body>
