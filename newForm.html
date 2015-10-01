@@ -155,7 +155,7 @@
 
         document.querySelector('.box-inner-main').appendChild(result);
 
-        drawOurCircle();
+        drawOurCircles();
 
         $('.puzzleItem').on('click', function(event) {
             var target = $(event.target).closest('.puzzleItem');
@@ -191,7 +191,7 @@
         circleDiv.css('display', 'block');
     };
 
-    function drawOurCircle (){
+    function drawOurCircles (){
         var count = testObject.size + 2;
         var coordinates = calculateCircleButtons(60, count);
         var arrayCircles = $('.ltlCrcl');
