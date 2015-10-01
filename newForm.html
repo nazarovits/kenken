@@ -16,8 +16,20 @@
 
 <script type="text/javascript">
 
+    // *************************************
+    var testObject = {
+        size    : 3,
+        dataObj : {
+            A: [['1', '2', '3'], ['2', '3', '1'], ['3', '1', '2']],
+            T: [['3', '0', '4'], ['5', '0', '0'], ['3', '3', '0']],
+            S: [['+', '0', '+'], ['+', '0', '0'], ['0', '+', '0']],
+            V: [['0', '1'],      ['0', '1'],      ['1', '0']],
+            H: [['1', '1'],      ['1', '1'],      ['0', '1']]
+        }
+    };
+    // *************************************
 
-
+    var currentStateObject = new CurrentStateConstructor(testObject);
 
     // function which draw out HTML version of flash puzzle
     function drawOurForm(puzzleData){
@@ -49,22 +61,22 @@
 
             // ******* first buttons box
             row.push('<div class="firstBtnBox">');
-                row.push('<input type="button" id="btnSolve" value="Solve Another">');
-                row.push('<input type="button" id="btnResumeSaved" value="Resume Saved Puzzle">');
+                row.push('<button id="btnSolve"><span>Solve Another<\/span><\/button>');
+                row.push('<button id="btnResumeSaved"><span>Resume Saved Puzzle<\/span><\/button>');
             row.push('<\/div>');
 
             // ******* second buttons box
             row.push('<div class="secondBtnBox">');
-                row.push('<input type="button" id="btnUndo" value="Undo">');
-                row.push('<input type="button" id="btnRedo" value="Redo">');
-                row.push('<input type="button" id="btnReset" value="Reset">');
+                row.push('<button id="btnUndo"><span>Undo<\/span><\/button>');
+                row.push('<button id="btnRedo"><span>Redo<\/span><\/button>');
+                row.push('<button id="btnReset"><span>Reset<\/span><\/button>');
             row.push('<\/div>');
 
             // ******* third buttons box
             row.push('<div class="thirdBtnBox">');
-                row.push('<input type="button" id="btnReveal" value="Reveal">');
-                row.push('<input type="button" id="btnCheck" value="Check">');
-                row.push('<input type="button" id="btnSolution" value="Solution">');
+                row.push('<button id="btnReveal"><span>Reveal<\/span><\/button>');
+                row.push('<button id="btnCheck"><span>Check<\/span><\/button>');
+                row.push('<button id="btnSolution"><span>Solution<\/span><\/button>');
             row.push('<\/div>');
 
         // ******* left panel end
@@ -78,8 +90,8 @@
 
             row.push('<span id="puzzleInfo">Puzzle No. 000000<\/span>');
             row.push('<span id="puzzleTimer">00:00:00<\/span>');
-            row.push('<input type="button" id="btnOffTimer" value="OFF">');
-            row.push('<input type="button" id="btnPause" value="PAUSE">');
+            row.push('<button id="btnOffTimer"><span>OFF<\/span><\/button>');
+            row.push('<button id="btnPause"><span>PAUSE<\/span><\/button>');
 
             row.push('<\/div>');
 
@@ -124,11 +136,12 @@
             row.push('<div id="bottomInfoBox">');
 
             row.push('<span>AutoNotes</span>');
-            row.push('<input type="button" id="btnOnNotes" value="ON">');
-            row.push('<input type="button" id="btnOffNotes" value="OFF">');
 
-            row.push('<input type="button" id="btnSave" value="SAVE">');
-            row.push('<input type="button" id="btnPrint" value="PRINT">');
+            row.push('<button id="btnOnNotes"><span>ON<\/span><\/button>');
+            row.push('<button id="btnOffNotes"><span>OFF<\/span><\/button>');
+
+            row.push('<button id="btnSave"><span>SAVE<\/span><\/button>');
+            row.push('<button id="btnPrint"><span>PRINT<\/span><\/button>');
 
             row.push('<\/div>');
 
@@ -164,33 +177,27 @@
 
     function CurrentStateConstructor(puzzleData) {
         var size = puzzleData.size;
-        var values = [];
-        var notes = [];
         var notesItem;
-        var i = size;
+        var i = size*size;
         var j;
 
+        this.values = [];
+        this.notes = [];
+        this.size = size;
 
         while (i > 0){
-            j = size;
+            j = size*size;
             notesItem = [];
-            values.push(0);
+            this.values.push(0);
             while (j > 0){
                 notesItem.push(false);
                 j -= 1;
             }
-            notes.push(notesItem);
+            this.notes.push(notesItem);
             i -= 1;
         }
 
-//        for (var i=1; i<=size; i+=1){
-//
-//            for (var j=1; i<=size; i+=1){
-//            notes.push(false);
-//        }
-        //this.values =
-
-
+        return this;
     };
 
     function puzzleEvents() {
@@ -208,10 +215,14 @@
             var target = $(event.target).closest('.ltlCrcl');
             var value = target.attr('data-id');
             var circle = target.closest('#testCircle');
+            var currentItem = $('.puzzleItem.active');
+            var currentId = currentItem.attr('id');
+            var valueIndex = (currentId[1] - 1)* currentStateObject.size + +currentId[2];
 
             if (value !== 'cX') {
                 if (value === 'cC'){value = ''}
-                $('.puzzleItem.active').find('.itemValue').text(value);
+                currentItem.find('.itemValue').text(value);
+                currentStateObject.values[valueIndex-1] = value ? +value : 0;
             }
             circle.hide();
         });
@@ -272,16 +283,6 @@
     }
 
     // *************************************
-    var testObject = {
-        size    : 3,
-        dataObj : {
-            A: [['1', '2', '3'], ['2', '3', '1'], ['3', '1', '2']],
-            T: [['3', '0', '4'], ['5', '0', '0'], ['3', '3', '0']],
-            S: [['+', '0', '+'], ['+', '0', '0'], ['0', '+', '0']],
-            V: [['0', '1'],      ['0', '1'],      ['1', '0']],
-            H: [['1', '1'],      ['1', '1'],      ['0', '1']]
-        }
-    };
 
     drawOurForm(testObject);
     // *************************************
