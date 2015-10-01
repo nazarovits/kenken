@@ -7,4 +7,12 @@ router.get('/', function(req, res, next) {
     res.sendfile('index.html');
 });
 
+router.get('/testError', function (req, res, next) {
+    if (req.query.err) {
+        throw new Error(req.query.err);
+    } else {
+        res.send('all right');
+    }
+});
+
 module.exports = router;
