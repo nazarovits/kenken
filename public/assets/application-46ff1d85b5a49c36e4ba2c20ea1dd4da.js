@@ -138,6 +138,68 @@ var KenKenGame = function () {
         }
     };
 
+    function changeCirclePosition (){
+        var circleDiv = $('#testCircle');
+        var circlePos = findCirclePosition(60);
+
+        circleDiv.css('top', circlePos.y);
+        circleDiv.css('left', circlePos.x);
+        circleDiv.css('display', 'block');
+    };
+
+    function drawOurCircles (puzzleData){
+        var count = puzzleData.size + 2;
+        var coordinates = calculateCircleButtons(60, count);
+        var arrayCircles = $('.ltlCrcl');
+        var top, left;
+
+        for (var i=1; i<=count; i+=1){
+            top = coordinates[i-1].y - 15;
+            left = coordinates[i-1].x - 15;
+            $(arrayCircles[i-1]).css({top: top, left: left})
+        }
+    };
+
+    function calculateCircleButtons(argRadius, argCount) {
+        var radius = argRadius;
+        var count = argCount;
+        var coordinatesArray = [];
+        var x;
+        var y;
+
+        for (var i = 0; i < count; i++){
+            x = radius + radius * Math.sin(2 / count * Math.PI * i);
+            y = radius - radius * Math.cos(2 / count * Math.PI * i);
+
+            coordinatesArray.push({x: x, y : y});
+        }
+
+        return coordinatesArray;
+
+    };
+
+    function findCirclePosition (circleRadius) {
+        var activeSquare = $('.puzzleItem.active')[0];
+        var squareWidth = activeSquare.offsetWidth;
+        var squareLeft = activeSquare.offsetLeft;
+        var squareTop = activeSquare.offsetTop;
+
+        return {
+            x: squareLeft + (squareWidth/2) - circleRadius,
+            y: squareTop + (squareWidth/2) - circleRadius
+        };
+    }
+
+    function pauseOrResume(event) {
+        var puzzleContainer = $("#puzzleContainer");
+
+        kenken.game.onPause();
+        kenken.game.widgetAdBeforePause();
+
+        isPaused = !isPaused;
+        puzzleContainer.toggleClass('paused');
+    }
+
     function handleEvents() {
 
         /* --- Undo | Redo | Reset --- */
@@ -152,7 +214,31 @@ var KenKenGame = function () {
 
         /* --- Timer --- */
         $('#btnOffTimer').click(changeTimerState);           // OFF - ON timer
-        $('#btnPause').click(function () {console.log('Pause is not implemented yet');});           // Pause
+        $('#puzzleContainer.paused').click(pauseOrResume);
+        $('#btnPause').click(pauseOrResume);           // Pause
+
+
+        $('.puzzleItem').click(function(event) {
+            var target = $(event.target).closest('.puzzleItem');
+            var container = target.closest('#puzzleContainer');
+
+            container.find('.active').removeClass('active');
+            target.addClass('active');
+
+            changeCirclePosition ();
+        });
+
+        $('.ltlCrcl').click( function(event){
+            var target = $(event.target).closest('.ltlCrcl');
+            var value = target.attr('data-id');
+            var circle = target.closest('#testCircle');
+
+            if (value !== 'cX') {
+                if (value === 'cC'){value = ''}
+                $('.puzzleItem.active').find('.itemValue').text(value);
+            }
+            circle.hide();
+        });
     };
 
     function drawOurForm(puzzleData){
@@ -242,11 +328,13 @@ var KenKenGame = function () {
 
                 //draw symbol and expected result
                 if (+results[i-1][j-1]){
-                    row.push('<div class="itemResult">'+results[i-1][j-1]+'<\/div>');
-                    if (symbols[i-1][j-1] !== '0'){
-                        row.push('<div class="itemSymbol">'+symbols[i-1][j-1]+'<\/div>');
+                    row.push('<span class="itemResult">'+results[i-1][j-1]+'<\/span>');
+                    if (symbols[i-1][j-1] !== '0' && symbols[i-1][j-1] !== '1'){
+                        row.push('<span class="itemSymbol">'+symbols[i-1][j-1]+'<\/span>');
                     }
                 }
+
+                row.push('<span class="itemValue"><\/span>');
 
                 row.push('<\/div>');
             }
@@ -270,28 +358,35 @@ var KenKenGame = function () {
         // ******* main panel end
         row.push('<\/div>');
 
+        // +++++++ test circle
+
+        row.push('<div id="testCircle">');
+
+        for (i=1; i<=puzzleSize; i+=1){
+            row.push('<div data-id="'+i+'" class="ltlCrcl">');
+            row.push('<span>'+i+'<\/span>');
+            row.push('<\/div>');
+        }
+
+        row.push('<div data-id="cC" class="ltlCrcl"><span>C<\/span><\/div>');
+        row.push('<div data-id="cX" class="ltlCrcl"><span>X<\/span><\/div>');
+
+        row.push('<\/div>');
+
+        // +++++++ test circle
+
         result = document.createElement('div');
         result.className = 'mainContainer';
         result.innerHTML = row.join('');
 
         document.querySelector('.box-inner-main').appendChild(result);
 
-        /*$('.puzzleItem').on('click', function(event) {
-         var target = $(event.target).closest('.puzzleItem');
-         var positionInfo = {
-         top   : target.get('offsetTop'),
-         left  : target.offsetLeft,
-         width : target.offsetWidth
-         };
-
-         console.dir(target);
-         })*/
-
-
+        drawOurCircles(puzzleData);
     }
 
     var defaultTimer = '00:00:00';
     var timerState = 'ON';
+    var isPaused;
     var self = this;
 
     this.loadPuzzleState = function (state) {
@@ -619,7 +714,8 @@ kenken.Game = function (e, t, n) {
         },
 
         this.widgetAdBeforePause = function () {
-            $.get("/game/widget_ad_before_pause", null, a)
+            $.get("http://www.kenkenpuzzle.com/game/widget_ad_before_pause", null, a)
+            //$.get("/game/widget_ad_before_pause", null, a) //TODO: ...
         },
 
         this.widgetAdBeforePrint = function () {
@@ -688,7 +784,8 @@ kenken.Game = function (e, t, n) {
         },
 
         this.onPause = function () {
-            $.get("/show_ad_on_pause", {}, v), $.get("/request_check", {
+            $.get("http://www.kenkenpuzzle.com/show_ad_on_pause", {}, v), $.get("http://www.kenkenpuzzle.com/request_check", {
+            //$.get("/show_ad_on_pause", {}, v), $.get("/request_check", { //TODO: ...
                 id: e.id
             })
         },

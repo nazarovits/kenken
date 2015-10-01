@@ -64,3 +64,15 @@
     font-size: -webkit-xxx-large;
 }
 
+#puzzleContainer.paused {
+    display: block;
+    background-image: url(clickToResume.png);
+    height:480px;
+    width:480px;
+    cursor: pointer;
+}
+
+#puzzleContainer.paused .puzzleRow,
+#puzzleContainer.paused #testCircle{
+    display: none;
+}

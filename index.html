@@ -12,19 +12,25 @@
 
     <script async="" src="//www.google-analytics.com/analytics.js"></script>
 
-    <script type="text/javascript" async="" src="https://d31qbv1cthcecs.cloudfront.net/atrk.js"></script>
-    <script src="assets/application-46ff1d85b5a49c36e4ba2c20ea1dd4da.js" type="text/javascript"></script>
     <script src="assets/custom.js" type="text/javascript"></script> <!--decode_base64, jQuery, JSON.parse, ... -->
-    <script src="http://www.kenkenpuzzle.com/assets/json2-44021642f65657f14781d43a155d1cc0.js" type="text/javascript"></script>
-    <script src="http://www.kenkenpuzzle.com/assets/ads-4fdf2881113bc048e429f21908ac5a77.js" type="text/javascript"></script>
 
+    <script src="assets/application-46ff1d85b5a49c36e4ba2c20ea1dd4da.js" type="text/javascript"></script>
+    <script src="http://www.kenkenpuzzle.com/assets/ads-4fdf2881113bc048e429f21908ac5a77.js" type="text/javascript"></script>
+    <!-- //TODO: uncomment
+    <script type="text/javascript" async="" src="https://d31qbv1cthcecs.cloudfront.net/atrk.js"></script>
+    <script src="http://www.kenkenpuzzle.com/assets/json2-44021642f65657f14781d43a155d1cc0.js" type="text/javascript"></script>
+    -->
     <meta property="og:image" content="http://www.kenkenpuzzle.com//assets/kenken_social-a9b3b9c02f053a9547a6e7e9d177d652.jpg">
 
     <meta content="authenticity_token" name="csrf-param">
     <meta content="AeZdaE6HHDF/pfLQH6ns6KXnh3/A5RBzPSmAopSRJJ8=" name="csrf-token">
+
+    <!-- //TODO: uncomment
     <script type="text/javascript" src="http://ox-d.kenkenpuzzle.com/w/1.0/jstag"></script>
+    -->
 
     <!-- OpenX header script -->
+    <!-- //TODO: uncomment
     <script type="text/javascript" src="http://ox-d.kenkenpuzzle.com/w/1.0/jstag"></script>
     <script type="text/javascript">
         var OX_8f9b3c6c6c = OX();
@@ -33,6 +39,8 @@
     </script>
     <script type="text/javascript" id="ox_acj_2940244059_1" src="http://ox-d.kenkenpuzzle.com/w/1.0/acj?o=2940244059&amp;callback=OX_2940244059&amp;ju=http%3A//www.kenkenpuzzle.com/game&amp;jr=http%3A//www.kenkenpuzzle.com/play_now&amp;pgid=537064410&amp;rd=60&amp;rm=150&amp;rc=1&amp;res=1366x768x24&amp;plg=swf%2Cshk%2Cpm&amp;ch=UTF-8&amp;tz=-120&amp;ws=1366x667&amp;bi=8f6fa21e-f46b-40cf-b926-dcf2b6a0b041&amp;sd=9"></script>
     <iframe src="http://us-u.openx.net/w/1.0/pd?plm=6&amp;ph=ac9fd113-1bf7-4d94-87ac-64c283bb1181" width="0" height="0" style="display:none;"></iframe>
+    -->
+
     <!-- end generated tag -->
 
 
@@ -57,6 +65,10 @@
                 // adblocker detected, show fallback
                 // window.location.assign("/membership")
                 // $.get( "/ad_block", function( data ) {});
+
+
+                //TODO: uncomment
+                /*
                 $('#ads-modal').reveal({
                     animation: 'fade', //fade, fadeAndPop, none
                     animationspeed: 500, //how fast animtions are
@@ -69,6 +81,7 @@
                 $('#ads-moadl').bind('closed', function () {
                     console.log("myModal opened");
                 });
+                */
             }
             var puzzle_data = jQuery.parseJSON(base64_decode('eyJpZCI6MjgsImRhdGEiOiJBXHJcbjEgMyAyIFxyXG4zIDIgMSBcclxuMiAxIDMgXHJcblRcclxuICA3ICAgMCAgIDVcclxuICAwICAgMCAgIDBcclxuICAyICAgNCAgIDBcclxuU1xyXG4rIDAgK1xyXG4wIDAgMFxyXG4xICsgMFxyXG5WXHJcbjAgMVxyXG4xIDBcclxuMSAwXHJcbkhcclxuMCAxXHJcbjEgMVxyXG4wIDFcclxuXHJcbiIsInNpemUiOjMsImxldmVsIjoiZWFzaWVzdCIsIm9wZXJhdGlvbnMiOiJhIiwibm8iOjI4LCJndWVzdCI6ZmFsc2UsImRhaWx5IjpmYWxzZSwic3RhdGUiOm51bGwsInVfbGV2ZWwiOiJCIn0='));
             var leave_msg = 'You are about to leave the puzzle, are you sure?';
