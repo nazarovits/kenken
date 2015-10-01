@@ -177,6 +177,7 @@ th {
     border-radius: 5px;
     width: 110px;
     padding: 20px;
+    overflow: hidden;
 }
 .notesItem{
     float: left;
@@ -189,7 +190,9 @@ th {
 .notesItem:nth-child(3n){
     padding-right: 0;
 }
-.notesItem span{
+.notesItem span,
+#notesAll span,
+#notesDel span{
     display: inline-block;
     border: 1px solid #000;
     -webkit-border-radius: 10px;
@@ -205,13 +208,31 @@ th {
     -o-transition: all 0.3s ease-out 0.1s;
     transition: all 0.3s ease-out 0.1s;
 }
-.notesItem span:hover{
+.notesItem span:hover,
+#notesAll span:hover,
+#notesDel span:hover{
     width: 28px;
     height: 28px;
     border-radius: 13px;
     cursor: pointer;
     font: bold 19px/28px Arial;
 }
+#notesAll,
+#notesDel{
+    float: left;
+    width: 28px;
+    height: 28px;
+    text-align: center;
+    line-height: 28px;
+}
+#notesAll{
+    margin-right: 54px;
+}
+
+
+
+
+
 .firstBtnBox,
 .secondBtnBox,
 .thirdBtnBox{
