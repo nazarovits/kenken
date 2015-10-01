@@ -16,6 +16,9 @@
 
 <script type="text/javascript">
 
+
+
+
     // function which draw out HTML version of flash puzzle
     function drawOurForm(puzzleData){
         var data = (puzzleData && puzzleData.dataObj) ? puzzleData.dataObj : {};
@@ -53,7 +56,7 @@
             // ******* second buttons box
             row.push('<div class="secondBtnBox">');
                 row.push('<input type="button" id="btnUndo" value="Undo">');
-                row.push('<input type="button" id="btnRendo" value="Rendo">');
+                row.push('<input type="button" id="btnRedo" value="Redo">');
                 row.push('<input type="button" id="btnReset" value="Reset">');
             row.push('<\/div>');
 
@@ -155,12 +158,14 @@
 
         document.querySelector('.box-inner-main').appendChild(result);
 
-        drawOurCircle();
+        drawOurCircles();
+        puzzleEvents();
+    }
 
-        $('.puzzleItem').on('click', function(event) {
+    function puzzleEvents() {
+        $('.puzzleItem').click(function(event) {
             var target = $(event.target).closest('.puzzleItem');
             var container = target.closest('#puzzleContainer');
-            var circlePos;
 
             container.find('.active').removeClass('active');
             target.addClass('active');
@@ -168,7 +173,7 @@
             changeCirclePosition ();
         });
 
-        $('.ltlCrcl').on('click', function(event){
+        $('.ltlCrcl').click( function(event){
             var target = $(event.target).closest('.ltlCrcl');
             var value = target.attr('data-id');
             var circle = target.closest('#testCircle');
@@ -179,8 +184,7 @@
             }
             circle.hide();
         });
-
-    }
+    };
 
     function changeCirclePosition (){
         var circleDiv = $('#testCircle');
@@ -191,7 +195,7 @@
         circleDiv.css('display', 'block');
     };
 
-    function drawOurCircle (){
+    function drawOurCircles (){
         var count = testObject.size + 2;
         var coordinates = calculateCircleButtons(60, count);
         var arrayCircles = $('.ltlCrcl');
