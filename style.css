@@ -1,3 +1,118 @@
+/* Main Block */
+.mainContainer{}
+.mainContainer > div:first-child{
+    width: 110px;
+    float: left;
+}
+.mainContainer > div:first-child+div{
+    width: 70%;
+    float: right;
+}
+
+#notesContainer{
+    background: #d7f4de;
+    border: 2px solid #000;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    width: 110px;
+    padding: 20px;
+}
+.notesItem{
+    float: left;
+    width: 24px;
+    height: 24px;
+    border: 1px solid #000;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-align: center;
+    font: bold 16px/24px Arial;
+    background-color: #fff;
+    margin-right: 16px;
+    -webkit-transition: all 1s ease-out 0.5s;
+    -moz-transition: all 1s ease-out 0.5s;
+    -o-transition: all 1s ease-out 0.5s;
+    transition: all 1s ease-out 0.5s;
+}
+.notesItem:nth-child(3n){
+    margin-right: 0;
+}
+.notesItem:hover{
+    width: 28px;
+    height: 28px;
+    border-radius: 14px;
+    cursor: pointer;
+    font: bold 19px/28px Arial;
+}
+
+
+.puzzleItem {
+    display: block;
+    background-color: beige;
+    width: 100px;
+    height: 100px;
+    float: left;
+    border: solid 1px grey;
+    cursor: pointer;
+}
+
+.puzzleItem:hover{
+    background-color: rgba(185, 96, 245, 0.55);
+}
+
+.puzzleItem.active {
+    background-color: #ffc99c;
+}
+
+.bottomLineBorder {
+    border-bottom-width: 5px;
+    border-bottom-color: #000000;
+}
+
+.rightLineBorder {
+    border-right-width: 5px;
+    border-right-color: #000000;
+}
+
+.puzzleRow {
+    display: table;
+}
+
+#testCircle {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    /*border: solid 1px black;*/
+    border-radius: 50%;
+    /*opacity: 0.3;*/
+    display: none;
+}
+
+.ltlCrcl {
+    text-align: center;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+    background-color: black;
+    line-height: 30px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 0 5px blue;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.itemValue {
+    height: 50px;
+    width: 50px;
+    text-align: -webkit-right;
+    display: block;
+    font-size: -webkit-xxx-large;
+}
+
 .puzzleItem {
     display: block;
     background-color: beige;
