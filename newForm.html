@@ -40,7 +40,7 @@
             row.push('<div id="notesContainer">');
 
             for (i=1; i<=puzzleSize; i+=1){
-                row.push('<div class="notesItem" data-id="'+i+'">'+i+'<\/div>');
+                row.push('<div class="notesItem" data-id="'+i+'"><span>'+i+'<\/span><\/div>');
             }
             row.push('<div id="notesAll">OK<\/div>');
             row.push('<div id="notesDel">DEL<\/div>');
@@ -161,6 +161,37 @@
         drawOurCircles();
         puzzleEvents();
     }
+
+    function CurrentStateConstructor(puzzleData) {
+        var size = puzzleData.size;
+        var values = [];
+        var notes = [];
+        var notesItem;
+        var i = size;
+        var j;
+
+
+        while (i > 0){
+            j = size;
+            notesItem = [];
+            values.push(0);
+            while (j > 0){
+                notesItem.push(false);
+                j -= 1;
+            }
+            notes.push(notesItem);
+            i -= 1;
+        }
+
+//        for (var i=1; i<=size; i+=1){
+//
+//            for (var j=1; i<=size; i+=1){
+//            notes.push(false);
+//        }
+        //this.values =
+
+
+    };
 
     function puzzleEvents() {
         $('.puzzleItem').click(function(event) {
