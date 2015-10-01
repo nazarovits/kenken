@@ -228,12 +228,20 @@ th {
     cursor: pointer;
     color: #fff;
     font: bold 11px Arial;
-    padding: 7px 10px 7px 40px;
+    padding: 7px 10px 7px 10px;
     text-decoration: none;
     width: 100%;
     border: none;
     text-align: left;
     outline: none;
+}
+.firstBtnBox button span,
+.secondBtnBox button span,
+.thirdBtnBox button span{
+    display: block;
+    padding-left: 30px;
+    background-position: center left;
+    background-repeat: no-repeat;
 }
 .firstBtnBox button{
     -moz-box-shadow: inset 0px 3px 3px 0px #c0ebca;
@@ -306,6 +314,30 @@ th {
     background:linear-gradient(to bottom, #0051a8 5%, #0065d1 100%);
     filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#0051a8', endColorstr='#0065d1',GradientType=0);
     background-color:#0051a8;
+}
+#btnSolve span{
+    background-image: url('./public/img/icn_solve-another.png');
+}
+#btnResumeSaved span{
+    background-image: url('./public/img/icn_resume-saved.png');
+}
+#btnUndo span{
+    background-image: url('./public/img/icn_undo.png');
+}
+#btnRedo span{
+    background-image: url('./public/img/icn_redo.png');
+}
+#btnReset span{
+    background-image: url('./public/img/icn_reset.png');
+}
+#btnReveal span{
+    background-image: url('./public/img/icn_reveal.png');
+}
+#btnCheck span{
+    background-image: url('./public/img/icn_check_eye.png');
+}
+#btnSolution span{
+    background-image: url('./public/img/icn_solution.png');
 }
 
 
