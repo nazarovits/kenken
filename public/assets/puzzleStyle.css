@@ -5,6 +5,15 @@
     height: 100px;
     float: left;
     border: solid 1px grey;
+    cursor: pointer;
+}
+
+.puzzleItem:hover{
+    background-color: rgba(185, 96, 245, 0.55);
+}
+
+.puzzleItem.active {
+    background-color: #ffc99c;
 }
 
 .bottomLineBorder {
@@ -20,3 +29,38 @@
 .puzzleRow {
     display: table;
 }
+
+#testCircle {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    /*border: solid 1px black;*/
+    border-radius: 50%;
+    /*opacity: 0.3;*/
+    display: none;
+}
+
+.ltlCrcl {
+    text-align: center;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+    background-color: black;
+    line-height: 30px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 0 5px blue;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.itemValue {
+    height: 50px;
+    width: 50px;
+    text-align: -webkit-right;
+    display: block;
+    font-size: -webkit-xxx-large;
+}
+

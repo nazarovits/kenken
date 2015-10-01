@@ -139,7 +139,20 @@ var KenKenGame = function () {
     };
 
     function handleEvents() {
-        $('#btnOffTimer').click(changeTimerState); // OFF - ON timer
+
+        /* --- Undo | Redo | Reset --- */
+        $('#btnUndo').click(function () {console.log('Undo is not implemented yet');});       //Undo
+        $('#btnRendo').click(function () {console.log('Redo is not implemented yet');});       //Redo
+        $('#btnReset').click(kenken.game.puzzleReset);       //Reset
+
+        /* --- Reveal | Check | Solution --- */
+        $('#btnReveal').click(kenken.game.onReveal);         //Reveal
+        $('#btnCheck').click(kenken.game.onCheck);           //Check
+        $('#btnSolution').click(kenken.game.onSolution);     //Solution
+
+        /* --- Timer --- */
+        $('#btnOffTimer').click(changeTimerState);           // OFF - ON timer
+        $('#btnPause').click(function () {console.log('Pause is not implemented yet');});           // Pause
     };
 
     function drawOurForm(puzzleData){
@@ -181,14 +194,14 @@ var KenKenGame = function () {
         row.push('<div class="secondBtnBox">');
         row.push('<input type="button" id="btnUndo" value="Undo">');
         row.push('<input type="button" id="btnRendo" value="Rendo">');
-        row.push('<input type="button" id="btnReset" value="Reset" onclick="kenken.game.puzzleReset()">');
+        row.push('<input type="button" id="btnReset" value="Reset">');
         row.push('<\/div>');
 
         // ******* third buttons box
         row.push('<div class="thirdBtnBox">');
-        row.push('<input type="button" id="btnReveal" value="Reveal" onclick="kenken.game.onReveal()">');
-        row.push('<input type="button" id="btnCheck" value="Check" onclick="kenken.game.onCheck()">');
-        row.push('<input type="button" id="btnSolution" value="Solution" onclick="kenken.game.onSolution()">');
+        row.push('<input type="button" id="btnReveal" value="Reveal">');
+        row.push('<input type="button" id="btnCheck" value="Check">');
+        row.push('<input type="button" id="btnSolution" value="Solution">');
         row.push('<\/div>');
 
         // ******* left panel end
