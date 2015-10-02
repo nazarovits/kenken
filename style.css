@@ -458,6 +458,26 @@ th {
     height: 100%;
 }
 
+.puzzleContainer4 .puzzleItem{
+    width: calc(25% - 2px);
+}
+.puzzleContainer5 .puzzleItem{
+    width: calc(20% - 2px);
+}
+.puzzleContainer6 .puzzleItem{
+    width: calc(16% - 2px);
+}
+.puzzleContainer7 .puzzleItem{
+    width: calc(14% - 2px);
+}
+.puzzleContainer8 .puzzleItem{
+    width: calc(12.5% - 2px);
+}
+.puzzleContainer9 .puzzleItem{
+    width: calc(11% - 2px);
+}
+
+
 .puzzleItem:hover{
     background-color: #b3b3ff;
 }
