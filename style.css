@@ -184,6 +184,7 @@ th {
     width: 28px;
     height: 28px;
     padding-right: 13px;
+    padding-bottom: 12px;
     text-align: center;
     line-height: 28px;
 }
@@ -365,7 +366,6 @@ th {
 .puzzleRow {
     display: table;
 }
-
 .itemValue {
     height: 50px;
     width: 50px;
@@ -373,7 +373,6 @@ th {
     display: block;
     font-size: 16px;
 }
-
 .puzzleItem {
     display: block;
     background-color: beige;
@@ -393,11 +392,17 @@ th {
 }
 
 .bottomLineBorder {
-    border-bottom: 5px solid #000000;
+    border-bottom: 1px solid #000000;
+    box-shadow: inset 0px -4px 0 #000000;
 }
 
 .rightLineBorder {
-    border-right: 5px solid #000000;
+    border-right: 1px solid #000000;
+    box-shadow: inset -4px 0 0 #000000;
+}
+.bottomLineBorder+.rightLineBorder{
+    border: 1px solid #000000;
+    box-shadow: inset -4px -4px 0 #000000;
 }
 
 #testCircle {
