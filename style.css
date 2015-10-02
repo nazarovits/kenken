@@ -417,13 +417,35 @@ th {
     position: absolute;
     width: 30px;
     height: 30px;
-    border-radius: 50px;
-    background-color: black;
-    line-height: 30px;
+    border-radius: 50%;
+    background-color: #000;
     color: white;
     box-shadow: 0 0 5px blue;
-    font-size: 18px;
-    font-weight: bold;
+    font: bold 18px/30px Arial;
     cursor: pointer;
+    -webkit-transition: all 0.3s ease-out 0.1s;
+    -moz-transition: all 0.3s ease-out 0.1s;
+    -o-transition: all 0.3s ease-out 0.1s;
+    transition: all 0.3s ease-out 0.1s;
+}
+.ltlCrcl img{
+    display: inline-block;
+    margin-top: 2px;
+    -webkit-transition: all 0.3s ease-out 0.1s;
+    -moz-transition: all 0.3s ease-out 0.1s;
+    -o-transition: all 0.3s ease-out 0.1s;
+    transition: all 0.3s ease-out 0.1s;
+}
+.ltlCrcl:hover{
+    height: 36px;
+    width: 36px;
+    font: bold 20px/35px Arial;
+}
+.ltlCrcl:hover img{
+    margin-top: 5px;
+}
+.ltlCrcl[data-id="cX"],
+.ltlCrcl[data-id="cC"]{
+    background-color: #fff;
 }
 
