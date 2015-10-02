@@ -165,8 +165,9 @@ th {
     float: left;
 }
 .mainContainer > div:first-child+div{
-    width: 70%;
-    float: right;
+    width: 475px;
+    float: left;
+    margin-left: 30px;
 }
 
 #notesContainer{
@@ -187,6 +188,10 @@ th {
     padding-bottom: 12px;
     text-align: center;
     line-height: 28px;
+    -webkit-transition: all 0.3s ease-out 0.1s;
+    -moz-transition: all 0.3s ease-out 0.1s;
+    -o-transition: all 0.3s ease-out 0.1s;
+    transition: all 0.3s ease-out 0.1s;
 }
 .notesItem:nth-child(3n){
     padding-right: 0;
@@ -256,6 +261,10 @@ th {
     border: none;
     text-align: left;
     outline: none;
+    -webkit-transition: all 0.3s ease-out 0.1s;
+    -moz-transition: all 0.3s ease-out 0.1s;
+    -o-transition: all 0.3s ease-out 0.1s;
+    transition: all 0.3s ease-out 0.1s;
 }
 .firstBtnBox button span,
 .secondBtnBox button span,
@@ -362,33 +371,115 @@ th {
     background-image: url('./public/img/icn_solution.png');
 }
 
+#topInfoBox{
+    overflow: hidden;
+}
+#topInfoBox span#puzzleInfo{
+    font: normal 10px/12px Arial;
+}
+#topInfoBox span#puzzleTimer{
+    font: bold 13px/12px Arial;
+}
+.timerBox{
+    float: right;
+    margin-right: 100px;
+}
+#btnOffTimer{
+    border: 1px solid #000;
+    background: #fff;
+    margin-left: 5px;
+}
+#btnPause{
+    float: right;
+    border: 1px solid #000;
+    background: #fff;
+}
+#btnPause span{
+    background: no-repeat left center url('./public/img/icn_pause.png');
+    display: block;
+    padding-left: 25px;
+}
+#btnPause:hover span{
+    background: no-repeat left center url('./public/img/icn_play.png');
+}
 
-.puzzleRow {
+#bottomInfoBox{
+    overflow: hidden;
+}
+.autoNotesBox{
+    float: left;
+}
+.autoNotesBox > span{
+    font: bold 13px/12px Arial;
+    margin-right: 5px;
+}
+.autoNotesBox > button{
+    border: 1px solid #000;
+    background: #fff;
+}
+.autoNotesBox > button:hover{
+    background-color: beige;
+}
+.savePrintBox{
+    float: right;
+}
+.savePrintBox > button{
+    border: 1px solid #000;
+    background: #fff;
+}
+.savePrintBox > button > span{
+    display: block;
+    padding-right: 25px;
+}
+#btnSave > span{
+    background: no-repeat right center url('./public/img/icn_save.png');
+}
+#btnPrint > span{
+    background: no-repeat right center url('./public/img/icn_print.png');
+}
+
+
+#puzzleContainer {
     display: table;
+    width: 480px;
+    height: 480px;
+}
+.puzzleRow{
+    display: table-row;
 }
 .itemValue {
-    height: 50px;
-    width: 50px;
-    text-align: -webkit-right;
     display: block;
-    font-size: 16px;
+    font: 700 55px Arial;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -30px;
+    margin-left: -15px;
+}
+.itemResult{
+    margin-left: 20px;
+}
+.itemResult,
+.itemSymbol{
+    font: 400 28px/40px Arial;
 }
 .puzzleItem {
-    display: block;
-    background-color: beige;
-    width: 100px;
-    height: 100px;
+    display: table-cell;
+    position: relative;
+    background-color: #ffffff;
     float: left;
     border: solid 1px grey;
     cursor: pointer;
+    width: calc(33% - 2px);
+    height: 100%;
 }
 
 .puzzleItem:hover{
-    background-color: rgba(185, 96, 245, 0.55);
+    background-color: #b3b3ff;
 }
 
 .puzzleItem.active {
-    background-color: #ffc99c;
+    background-color: #ffffb3;
 }
 
 .bottomLineBorder {
