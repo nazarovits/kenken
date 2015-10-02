@@ -447,22 +447,6 @@ th {
 .puzzleRow{
     display: table-row;
 }
-.itemValue {
-    display: block;
-    font: 700 55px Arial;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin-top: -30px;
-    margin-left: -15px;
-}
-.itemResult{
-    margin-left: 20px;
-}
-.itemResult,
-.itemSymbol{
-    font: 400 28px/40px Arial;
-}
 .puzzleItem {
     display: table-cell;
     position: relative;
@@ -480,6 +464,23 @@ th {
 
 .puzzleItem.active {
     background-color: #ffffb3;
+}
+
+.itemValue {
+    display: block;
+    font: 700 55px Arial;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -30px;
+    margin-left: -15px;
+}
+.itemResult{
+    margin-left: 20px;
+}
+.itemResult,
+.itemSymbol{
+    font: 400 28px/40px Arial;
 }
 
 .bottomLineBorder {
