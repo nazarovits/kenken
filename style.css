@@ -443,6 +443,7 @@ th {
     display: table;
     width: 480px;
     height: 480px;
+    border: 4px solid #000;
 }
 .puzzleRow{
     display: table-row;
@@ -454,27 +455,27 @@ th {
     float: left;
     border: solid 1px grey;
     cursor: pointer;
-    width: calc(33% - 2px);
+    width: calc(33% - 1.9px);
     height: 100%;
 }
 
 .puzzleContainer4 .puzzleItem{
-    width: calc(25% - 2px);
+    width: calc(25% - 1.9px);
 }
 .puzzleContainer5 .puzzleItem{
-    width: calc(20% - 2px);
+    width: calc(20% - 1.9px);
 }
 .puzzleContainer6 .puzzleItem{
-    width: calc(16% - 2px);
+    width: calc(16% - 1.9px);
 }
 .puzzleContainer7 .puzzleItem{
-    width: calc(14% - 2px);
+    width: calc(14% - 1.9px);
 }
 .puzzleContainer8 .puzzleItem{
-    width: calc(12.5% - 2px);
+    width: calc(12.5% - 1.9px);
 }
 .puzzleContainer9 .puzzleItem{
-    width: calc(11% - 2px);
+    width: calc(11% - 1.9px);
 }
 
 
