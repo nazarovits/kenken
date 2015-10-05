@@ -198,6 +198,12 @@ var KenKenGame = function () {
 
         isPaused = !isPaused;
         puzzleContainer.toggleClass('paused');
+
+        if (isPaused) {
+            puzzleContainer.click(pauseOrResume);
+        } else {
+            puzzleContainer.unbind('click');
+        }
     }
 
     function handleEvents() {
@@ -214,9 +220,7 @@ var KenKenGame = function () {
 
         /* --- Timer --- */
         $('#btnOffTimer').click(changeTimerState);           // OFF - ON timer
-        $('#puzzleContainer.paused').click(pauseOrResume);
-        $('#btnPause').click(pauseOrResume);           // Pause
-
+        $('#btnPause').click(pauseOrResume);                 // Pause
 
         $('.puzzleItem').click(function(event) {
             var target = $(event.target).closest('.puzzleItem');
@@ -259,11 +263,12 @@ var KenKenGame = function () {
 
         // ******* left panel begin
         row.push('<div>');
+
         // ******* notes box
         row.push('<div id="notesContainer">');
 
         for (i=1; i<=puzzleSize; i+=1){
-            row.push('<div class="notesItem" data-id="'+i+'">'+i+'<\/div>');
+            row.push('<div class="notesItem" data-id="'+i+'"><span>'+i+'<\/span><\/div>');
         }
         row.push('<div id="notesAll">OK<\/div>');
         row.push('<div id="notesDel">DEL<\/div>');
@@ -272,22 +277,22 @@ var KenKenGame = function () {
 
         // ******* first buttons box
         row.push('<div class="firstBtnBox">');
-        row.push('<input type="button" id="btnSolve" value="Solve Another" onclick="kenken.game.solveAnother()">');
-        row.push('<input type="button" id="btnResumeSaved" value="Resume Saved Puzzle" onclick="kenken.game.resumeSavedPuzzle()">');
+            row.push('<button id="btnSolve"><span>Solve Another<\/span><\/button>');
+            row.push('<button id="btnResumeSaved"><span>Resume Saved Puzzle<\/span><\/button>');
         row.push('<\/div>');
 
         // ******* second buttons box
         row.push('<div class="secondBtnBox">');
-        row.push('<input type="button" id="btnUndo" value="Undo">');
-        row.push('<input type="button" id="btnRendo" value="Rendo">');
-        row.push('<input type="button" id="btnReset" value="Reset">');
+            row.push('<button id="btnUndo"><span>Undo<\/span><\/button>');
+            row.push('<button id="btnRedo"><span>Redo<\/span><\/button>');
+            row.push('<button id="btnReset"><span>Reset<\/span><\/button>');
         row.push('<\/div>');
 
         // ******* third buttons box
         row.push('<div class="thirdBtnBox">');
-        row.push('<input type="button" id="btnReveal" value="Reveal">');
-        row.push('<input type="button" id="btnCheck" value="Check">');
-        row.push('<input type="button" id="btnSolution" value="Solution">');
+            row.push('<button id="btnReveal"><span>Reveal<\/span><\/button>');
+            row.push('<button id="btnCheck"><span>Check<\/span><\/button>');
+            row.push('<button id="btnSolution"><span>Solution<\/span><\/button>');
         row.push('<\/div>');
 
         // ******* left panel end
@@ -306,7 +311,7 @@ var KenKenGame = function () {
 
         row.push('<\/div>');
 
-        // ******* main container
+// ******* main container
         row.push('<div id="puzzleContainer">');
 
         for (i=1; i<=puzzleSize; i+=1){
@@ -347,11 +352,12 @@ var KenKenGame = function () {
         row.push('<div id="bottomInfoBox">');
 
         row.push('<span>AutoNotes</span>');
-        row.push('<input type="button" id="btnOnNotes" value="ON">');
-        row.push('<input type="button" id="btnOffNotes" value="OFF">');
 
-        row.push('<input type="button" id="btnSave" value="SAVE">');
-        row.push('<input type="button" id="btnPrint" value="PRINT">');
+        row.push('<button id="btnOnNotes"><span>ON<\/span><\/button>');
+        row.push('<button id="btnOffNotes"><span>OFF<\/span><\/button>');
+
+        row.push('<button id="btnSave"><span>SAVE<\/span><\/button>');
+        row.push('<button id="btnPrint"><span>PRINT<\/span><\/button>');
 
         row.push('<\/div>');
 
@@ -386,7 +392,7 @@ var KenKenGame = function () {
 
     var defaultTimer = '00:00:00';
     var timerState = 'ON';
-    var isPaused;
+    var isPaused = false;
     var self = this;
 
     this.loadPuzzleState = function (state) {
