@@ -165,8 +165,9 @@ th {
     float: left;
 }
 .mainContainer > div:first-child+div{
-    width: 70%;
-    float: right;
+    width: 475px;
+    float: left;
+    margin-left: 30px;
 }
 
 #notesContainer{
@@ -177,19 +178,27 @@ th {
     border-radius: 5px;
     width: 110px;
     padding: 20px;
+    overflow: hidden;
 }
 .notesItem{
     float: left;
     width: 28px;
     height: 28px;
     padding-right: 13px;
+    padding-bottom: 12px;
     text-align: center;
     line-height: 28px;
+    -webkit-transition: all 0.3s ease-out 0.1s;
+    -moz-transition: all 0.3s ease-out 0.1s;
+    -o-transition: all 0.3s ease-out 0.1s;
+    transition: all 0.3s ease-out 0.1s;
 }
 .notesItem:nth-child(3n){
     padding-right: 0;
 }
-.notesItem span{
+.notesItem span,
+#notesAll span,
+#notesDel span{
     display: inline-block;
     border: 1px solid #000;
     -webkit-border-radius: 10px;
@@ -205,13 +214,31 @@ th {
     -o-transition: all 0.3s ease-out 0.1s;
     transition: all 0.3s ease-out 0.1s;
 }
-.notesItem span:hover{
+.notesItem span:hover,
+#notesAll span:hover,
+#notesDel span:hover{
     width: 28px;
     height: 28px;
     border-radius: 13px;
     cursor: pointer;
     font: bold 19px/28px Arial;
 }
+#notesAll,
+#notesDel{
+    float: left;
+    width: 28px;
+    height: 28px;
+    text-align: center;
+    line-height: 28px;
+}
+#notesAll{
+    margin-right: 54px;
+}
+
+
+
+
+
 .firstBtnBox,
 .secondBtnBox,
 .thirdBtnBox{
@@ -228,12 +255,24 @@ th {
     cursor: pointer;
     color: #fff;
     font: bold 11px Arial;
-    padding: 7px 10px 7px 40px;
+    padding: 7px 10px 7px 10px;
     text-decoration: none;
     width: 100%;
     border: none;
     text-align: left;
     outline: none;
+    -webkit-transition: all 0.3s ease-out 0.1s;
+    -moz-transition: all 0.3s ease-out 0.1s;
+    -o-transition: all 0.3s ease-out 0.1s;
+    transition: all 0.3s ease-out 0.1s;
+}
+.firstBtnBox button span,
+.secondBtnBox button span,
+.thirdBtnBox button span{
+    display: block;
+    padding-left: 30px;
+    background-position: center left;
+    background-repeat: no-repeat;
 }
 .firstBtnBox button{
     -moz-box-shadow: inset 0px 3px 3px 0px #c0ebca;
@@ -307,44 +346,176 @@ th {
     filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#0051a8', endColorstr='#0065d1',GradientType=0);
     background-color:#0051a8;
 }
-
-
-.puzzleRow {
-    display: table;
+#btnSolve span{
+    background-image: url('./public/img/icn_solve-another.png');
+}
+#btnResumeSaved span{
+    background-image: url('./public/img/icn_resume-saved.png');
+}
+#btnUndo span{
+    background-image: url('./public/img/icn_undo.png');
+}
+#btnRedo span{
+    background-image: url('./public/img/icn_redo.png');
+}
+#btnReset span{
+    background-image: url('./public/img/icn_reset.png');
+}
+#btnReveal span{
+    background-image: url('./public/img/icn_reveal.png');
+}
+#btnCheck span{
+    background-image: url('./public/img/icn_check_eye.png');
+}
+#btnSolution span{
+    background-image: url('./public/img/icn_solution.png');
 }
 
-.itemValue {
-    height: 50px;
-    width: 50px;
-    text-align: -webkit-right;
+#topInfoBox{
+    overflow: hidden;
+}
+#topInfoBox span#puzzleInfo{
+    font: normal 10px/12px Arial;
+}
+#topInfoBox span#puzzleTimer{
+    font: bold 13px/12px Arial;
+}
+.timerBox{
+    float: right;
+    margin-right: 100px;
+}
+#btnOffTimer{
+    border: 1px solid #000;
+    background: #fff;
+    margin-left: 5px;
+}
+#btnPause{
+    float: right;
+    border: 1px solid #000;
+    background: #fff;
+}
+#btnPause span{
+    background: no-repeat left center url('./public/img/icn_pause.png');
     display: block;
-    font-size: 16px;
+    padding-left: 25px;
+}
+#btnPause:hover span{
+    background: no-repeat left center url('./public/img/icn_play.png');
 }
 
-.puzzleItem {
-    display: block;
+#bottomInfoBox{
+    overflow: hidden;
+}
+.autoNotesBox{
+    float: left;
+}
+.autoNotesBox > span{
+    font: bold 13px/12px Arial;
+    margin-right: 5px;
+}
+.autoNotesBox > button{
+    border: 1px solid #000;
+    background: #fff;
+}
+.autoNotesBox > button:hover{
     background-color: beige;
-    width: 100px;
-    height: 100px;
+}
+.savePrintBox{
+    float: right;
+}
+.savePrintBox > button{
+    border: 1px solid #000;
+    background: #fff;
+}
+.savePrintBox > button > span{
+    display: block;
+    padding-right: 25px;
+}
+#btnSave > span{
+    background: no-repeat right center url('./public/img/icn_save.png');
+}
+#btnPrint > span{
+    background: no-repeat right center url('./public/img/icn_print.png');
+}
+
+
+#puzzleContainer {
+    display: table;
+    width: 480px;
+    height: 480px;
+    border: 4px solid #000;
+}
+.puzzleRow{
+    display: table-row;
+}
+.puzzleItem {
+    display: table-cell;
+    position: relative;
+    background-color: #ffffff;
     float: left;
     border: solid 1px grey;
     cursor: pointer;
+    width: calc(33.3% - 1.9px);
+    height: 100%;
 }
 
+.puzzleContainer4 .puzzleItem{
+    width: calc(25% - 2px);
+}
+.puzzleContainer5 .puzzleItem{
+    width: calc(20% - 1.9px);
+}
+.puzzleContainer6 .puzzleItem{
+    width: calc(16% - 1.9px);
+}
+.puzzleContainer7 .puzzleItem{
+    width: calc(14% - 1.9px);
+}
+.puzzleContainer8 .puzzleItem{
+    width: calc(12.5% - 1.9px);
+}
+.puzzleContainer9 .puzzleItem{
+    width: calc(11% - 1.9px);
+}
+
+
 .puzzleItem:hover{
-    background-color: rgba(185, 96, 245, 0.55);
+    background-color: #b3b3ff;
 }
 
 .puzzleItem.active {
-    background-color: #ffc99c;
+    background-color: #ffffb3;
+}
+
+.itemValue {
+    display: block;
+    font: 700 55px Arial;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -30px;
+    margin-left: -15px;
+}
+.itemResult{
+    margin-left: 20px;
+}
+.itemResult,
+.itemSymbol{
+    font: 400 28px/40px Arial;
 }
 
 .bottomLineBorder {
-    border-bottom: 5px solid #000000;
+    border-bottom: 1px solid #000000;
+    box-shadow: inset 0px -4px 0 #000000;
 }
 
 .rightLineBorder {
-    border-right: 5px solid #000000;
+    border-right: 1px solid #000000;
+    box-shadow: inset -4px 0 0 #000000;
+}
+.bottomLineBorder+.rightLineBorder{
+    border: 1px solid #000000;
+    box-shadow: inset -4px -4px 0 #000000;
 }
 
 #testCircle {
@@ -359,13 +530,35 @@ th {
     position: absolute;
     width: 30px;
     height: 30px;
-    border-radius: 50px;
-    background-color: black;
-    line-height: 30px;
+    border-radius: 50%;
+    background-color: #000;
     color: white;
     box-shadow: 0 0 5px blue;
-    font-size: 18px;
-    font-weight: bold;
+    font: bold 18px/30px Arial;
     cursor: pointer;
+    -webkit-transition: all 0.3s ease-out 0.1s;
+    -moz-transition: all 0.3s ease-out 0.1s;
+    -o-transition: all 0.3s ease-out 0.1s;
+    transition: all 0.3s ease-out 0.1s;
+}
+.ltlCrcl img{
+    display: inline-block;
+    margin-top: 2px;
+    -webkit-transition: all 0.3s ease-out 0.1s;
+    -moz-transition: all 0.3s ease-out 0.1s;
+    -o-transition: all 0.3s ease-out 0.1s;
+    transition: all 0.3s ease-out 0.1s;
+}
+.ltlCrcl:hover{
+    height: 36px;
+    width: 36px;
+    font: bold 20px/35px Arial;
+}
+.ltlCrcl:hover img{
+    margin-top: 5px;
+}
+.ltlCrcl[data-id="cX"],
+.ltlCrcl[data-id="cC"]{
+    background-color: #fff;
 }
 
