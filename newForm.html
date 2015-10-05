@@ -236,6 +236,25 @@
             return result;
         };
 
+        var drawActiveNotes = function(){
+            var indexValue = activePuzzleItem.indexValue;
+            var notesArray = currentStateObject.notes[indexValue-1];
+            var domArray = $('.notesItem');
+            var size = currentStateObject.size;
+            var i=1;
+            var currentNote;
+
+            while (i<= size){
+                currentNote = $(domArray[i-1]);
+                if (notesArray[i-1]){
+                    currentNote.addClass('active');
+                } else {
+                    currentNote.removeClass('active');
+                }
+                i += 1;
+            }
+        };
+
         $('.puzzleItem').click(function(event) {
             var target = $(event.target).closest('.puzzleItem');
             var targetId = target.attr('id');
@@ -245,6 +264,8 @@
             activePuzzleItem.indexX = +targetId[1];
             activePuzzleItem.indexY = +targetId[2];
             activePuzzleItem.indexValue = (activePuzzleItem.indexX - 1)* currentStateObject.size + activePuzzleItem.indexY;
+
+            drawActiveNotes();
 
             container.find('.active').removeClass('active');
             target.addClass('active');
@@ -277,8 +298,20 @@
             var notesValue = +target.attr('data-id');
             var x = activePuzzleItem.indexX;
             var y = activePuzzleItem.indexY;
-            var wrongValArray;
+            var size = currentStateObject.size;
             var stringResult;
+            var i=1;
+
+            while (i <= size){
+                if (valuesArray[(x-1)*size+i-1] === notesValue){
+                    return;
+                } else {
+                    if (valuesArray[(i-1)*size+y-1] === notesValue){
+                        return;
+                    }
+                }
+                i += 1;
+            }
 
             notesArray[notesValue-1] = !notesArray[notesValue-1];
             target.toggleClass('active');
@@ -309,7 +342,6 @@
         }
 
     };
-
 
     function calculateCircleButtons(argRadius, argCount) {
         var radius = argRadius;
