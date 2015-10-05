@@ -504,16 +504,16 @@ th {
     font: 400 28px/40px Arial;
 }
 
-.bottomLineBorder {
+.puzzleRow .bottomLineBorder {
     border-bottom: 1px solid #000000;
-    box-shadow: inset 0px -4px 0 #000000;
+    box-shadow: inset 0 -4px 0 #000000;
 }
 
-.rightLineBorder {
+.puzzleRow .rightLineBorder {
     border-right: 1px solid #000000;
     box-shadow: inset -4px 0 0 #000000;
 }
-.bottomLineBorder+.rightLineBorder{
+.puzzleRow .rightLineBorder.bottomLineBorder{
     border: 1px solid #000000;
     box-shadow: inset -4px -4px 0 #000000;
 }
