@@ -230,7 +230,7 @@
             var target = $(event.target).closest('.ltlCrcl');
             var value = target.attr('data-id');
             var circle = target.closest('#testCircle');
-            var currentItem = $('.puzzleItem.active');
+            var currentItem = $('.puzzleItem.active'); // todo make global
             var currentId = currentItem.attr('id');
             var valueIndex = (currentId[1] - 1)* currentStateObject.size + +currentId[2];
 
@@ -240,6 +240,13 @@
                 currentStateObject.values[valueIndex-1] = value ? +value : 0;
             }
             circle.hide();
+        });
+
+        $('.notesItem').click(function(event){
+            var target = $(event.target).closest('.notesItem');
+            var notesValue = target.attr('data-id');
+            var currentItem = $('.puzzleItem.active'); // todo make global
+
         });
     };
 
