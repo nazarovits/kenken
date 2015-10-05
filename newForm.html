@@ -41,6 +41,7 @@
     // *************************************
 
     var currentStateObject = new CurrentStateConstructor(testObject2);
+    var activePuzzleItem = {};
 
     // function which draw out HTML version of flash puzzle
     function drawOurForm(puzzleData){
@@ -138,6 +139,8 @@
 
                         row.push('<span class="itemValue"><\/span>');
 
+                        row.push('<span class="itemNotes"><\/span>');
+
                     row.push('<\/div>');
                 }
                 row.push('<\/div>');
@@ -201,7 +204,7 @@
         this.size = size;
 
         while (i > 0){
-            j = size*size;
+            j = size;
             notesItem = [];
             this.values.push(0);
             while (j > 0){
@@ -216,9 +219,32 @@
     };
 
     function puzzleEvents() {
+
+        var booleanArrayToSting = function(argArray){
+            var currentArray = argArray;
+            var currentLength = currentArray.length;
+            var result='';
+            var i=0;
+
+            while (i<currentLength){
+                if (currentArray[i]){
+                    result += (i+1)+' ';
+                }
+                i+= 1;
+            }
+
+            return result;
+        };
+
         $('.puzzleItem').click(function(event) {
             var target = $(event.target).closest('.puzzleItem');
+            var targetId = target.attr('id');
             var container = target.closest('#puzzleContainer');
+
+            activePuzzleItem.item = target;
+            activePuzzleItem.indexX = +targetId[1];
+            activePuzzleItem.indexY = +targetId[2];
+            activePuzzleItem.indexValue = (activePuzzleItem.indexX - 1)* currentStateObject.size + activePuzzleItem.indexY;
 
             container.find('.active').removeClass('active');
             target.addClass('active');
@@ -230,23 +256,34 @@
             var target = $(event.target).closest('.ltlCrcl');
             var value = target.attr('data-id');
             var circle = target.closest('#testCircle');
-            var currentItem = $('.puzzleItem.active'); // todo make global
-            var currentId = currentItem.attr('id');
-            var valueIndex = (currentId[1] - 1)* currentStateObject.size + +currentId[2];
+            var currentItem = activePuzzleItem.item;
+            var stateObject = currentStateObject;
+            var valueIndex = activePuzzleItem.indexValue;
 
             if (value !== 'cX') {
                 if (value === 'cC'){value = ''}
                 currentItem.find('.itemValue').text(value);
-                currentStateObject.values[valueIndex-1] = value ? +value : 0;
+                stateObject.values[valueIndex-1] = value ? +value : 0;
             }
             circle.hide();
         });
 
         $('.notesItem').click(function(event){
+            var currentItem = activePuzzleItem.item;
+            var currentIndex = activePuzzleItem.indexValue;
+            var notesArray = currentStateObject.notes[currentIndex-1];
+            var valuesArray = currentStateObject.values;
             var target = $(event.target).closest('.notesItem');
-            var notesValue = target.attr('data-id');
-            var currentItem = $('.puzzleItem.active'); // todo make global
+            var notesValue = +target.attr('data-id');
+            var x = activePuzzleItem.indexX;
+            var y = activePuzzleItem.indexY;
+            var wrongValArray;
+            var stringResult;
 
+            notesArray[notesValue-1] = !notesArray[notesValue-1];
+            target.toggleClass('active');
+            stringResult = booleanArrayToSting(notesArray);
+            currentItem.find('.itemNotes').text(stringResult);
         });
     };
 
