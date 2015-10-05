@@ -40,7 +40,7 @@
     };
     // *************************************
 
-    var currentStateObject = new CurrentStateConstructor(testObject2);
+    var currentStateObject = new CurrentStateConstructor(testObject);
 
     // function which draw out HTML version of flash puzzle
     function drawOurForm(puzzleData){
@@ -253,7 +253,7 @@
     };
 
     function drawOurCircles (){
-        var count = testObject2.size + 2;
+        var count = testObject.size + 2;
         var coordinates = calculateCircleButtons(60, count);
         var arrayCircles = $('.ltlCrcl');
         var top, left;
@@ -299,7 +299,7 @@
 
     // *************************************
 
-    drawOurForm(testObject2);
+    drawOurForm(testObject);
     // *************************************
 </script>
 
