@@ -455,12 +455,12 @@ th {
     float: left;
     border: solid 1px grey;
     cursor: pointer;
-    width: calc(33.3% - 1.8px);
+    width: calc(33.3% - 1.9px);
     height: 100%;
 }
 
 .puzzleContainer4 .puzzleItem{
-    width: calc(25% - 1.9px);
+    width: calc(25% - 2px);
 }
 .puzzleContainer5 .puzzleItem{
     width: calc(20% - 1.9px);
