@@ -308,6 +308,8 @@ var KenKenGame = function () {
         }
     };
 
+    var currentValues = [[1, 0, 0], [0, 2, 0], [0, 0, 3]];
+
     function onReveal() {
         kenken.game.onReveal();
         console.log('onReveal');
@@ -319,7 +321,7 @@ var KenKenGame = function () {
         var size;
         var selector;
         var obj = {};
-        var currentValues = [[1, 0, 0], [0, 2, 0], [0, 0, 3]];
+        //var currentValues = [[1, 0, 0], [0, 2, 0], [0, 0, 3]];
         var keys;
         var randomKey;
 
@@ -343,6 +345,13 @@ var KenKenGame = function () {
         randomKey = keys[Math.floor(Math.random()*keys.length)];
         console.log(keys);
         console.log(randomKey);
+
+        // -----------------------------
+        //TODO: remove;
+        var i_ = parseInt(randomKey.charAt(2));
+        var j_ = parseInt(randomKey.charAt(3));
+        currentValues[i_][j_] = obj[randomKey]
+        // -----------------------------
 
         $(randomKey).text(obj[randomKey]);
         /*var puzzleData = (self.puzzleData) ? self.puzzleData : null;
