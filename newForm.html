@@ -132,7 +132,7 @@
 
     // </editor-fold>
 
-    var testObject = testObject4;
+    var testObject = testObject9;
     // *************************************
 
 
@@ -304,8 +304,9 @@
         var size = puzzleData.size;
         var level = puzzleData.level;
         var notesItem;
-        var i = size*size;
-        var j;
+        var valuesItem;
+        var i = size;
+        var j,k;
 
         this.values = [];
         this.notes = [];
@@ -314,8 +315,20 @@
 
         while (i > 0){
             j = size;
+            valuesItem = [];
+            while (j > 0){
+                valuesItem.push(0);
+                j -= 1;
+            }
+            this.values.push(valuesItem);
+            i -= 1;
+        }
+
+        i = size*size;
+
+        while (i > 0){
+            j = size;
             notesItem = [];
-            this.values.push(0);
             while (j > 0){
                 notesItem.push(false);
                 j -= 1;
@@ -429,7 +442,7 @@
                 stateObject.values[valueIndex-1] = value ? +value : 0;
             }
             circle.hide();
-            prepareStateObjectTo(kenken.game.saveState);
+            //prepareStateObjectTo(kenken.game.saveState);
         });
 
         $('.notesItem').click(function(event){
