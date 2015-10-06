@@ -132,7 +132,7 @@
 
     // </editor-fold>
 
-    var testObject = testObject9;
+    var testObject = testObject4;
     // *************************************
 
 
@@ -375,7 +375,7 @@
         };
 
         var drawActiveNotes = function(){
-            var indexValue = activePuzzleItem.indexValue;
+            var indexValue = (activePuzzleItem.indexX - 1)* currentStateObject.size + activePuzzleItem.indexY;
             var notesArray = currentStateObject.notes[indexValue-1];
             var domArray = $('.notesItem');
             var size = currentStateObject.size;
@@ -418,7 +418,6 @@
             activePuzzleItem.item = target;
             activePuzzleItem.indexX = +targetId[1];
             activePuzzleItem.indexY = +targetId[2];
-            activePuzzleItem.indexValue = (activePuzzleItem.indexX - 1)* currentStateObject.size + activePuzzleItem.indexY;
 
             drawActiveNotes();
 
@@ -434,12 +433,13 @@
             var circle = target.closest('#testCircle');
             var currentItem = activePuzzleItem.item;
             var stateObject = currentStateObject;
-            var valueIndex = activePuzzleItem.indexValue;
+            var valueX = activePuzzleItem.indexX;
+            var valueY = activePuzzleItem.indexY;
 
             if (value !== 'cX') {
                 if (value === 'cC'){value = ''}
                 currentItem.find('.itemValue').text(value);
-                stateObject.values[valueIndex-1] = value ? +value : 0;
+                stateObject.values[valueX-1][valueY-1] = value ? +value : 0;
             }
             circle.hide();
             //prepareStateObjectTo(kenken.game.saveState);
@@ -447,7 +447,7 @@
 
         $('.notesItem').click(function(event){
             var currentItem = activePuzzleItem.item;
-            var currentIndex = activePuzzleItem.indexValue;
+            var currentIndex = (activePuzzleItem.indexX - 1)* currentStateObject.size + activePuzzleItem.indexY;
             var notesArray = currentStateObject.notes[currentIndex-1];
             var valuesArray = currentStateObject.values;
             var target = $(event.target).closest('.notesItem');
@@ -459,10 +459,10 @@
             var i=1;
 
             while (i <= size){
-                if (valuesArray[(x-1)*size+i-1] === notesValue){
+                if (valuesArray[x-1][i-1] === notesValue){
                     return;
                 } else {
-                    if (valuesArray[(i-1)*size+y-1] === notesValue){
+                    if (valuesArray[i-1][y-1] === notesValue){
                         return;
                     }
                 }
