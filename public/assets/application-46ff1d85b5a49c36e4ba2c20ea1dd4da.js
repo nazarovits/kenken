@@ -293,6 +293,78 @@ var KenKenGame = function () {
         popup.show();
     };
 
+    function test() {
+        var currentValues = [[1, 0, 0], [0, 2, 0], [0, 0, 3]];
+        var size = 3;
+        var selector;
+
+        for (var i=0; i<size; i++) {
+            for (var j = 0; j < size; j++) {
+                if (currentValues[i][j]) {
+                    selector = '#p' + (i + 1) + (j + 1) + ' .itemValue';
+                    $(selector).text(currentValues[i][j]);
+                }
+            }
+        }
+    };
+
+    function onReveal() {
+        kenken.game.onReveal();
+        console.log('onReveal');
+
+        test();
+
+        var puzzleData = (self.puzzleData) ? self.puzzleData : null;
+        var solution;
+        var size;
+        var selector;
+        var obj = {};
+        var currentValues = [[1, 0, 0], [0, 2, 0], [0, 0, 3]];
+        var keys;
+        var randomKey;
+
+        if (!puzzleData || !currentValues) {
+            return;
+        }
+
+        solution = puzzleData.dataObj.A;
+        size = puzzleData.size;
+
+        for (var i=0; i<size; i++) {
+            for (var j=0; j<size; j++) {
+                if (!currentValues[i][j]) {
+                    selector = '#p' + (i+1) + (j+1) + ' .itemValue';
+                    obj[selector] = solution[i][j];
+                }
+            }
+        }
+
+        keys = Object.keys(obj);
+        randomKey = keys[Math.floor(Math.random()*keys.length)];
+        console.log(keys);
+        console.log(randomKey);
+
+        $(randomKey).text(obj[randomKey]);
+        /*var puzzleData = (self.puzzleData) ? self.puzzleData : null;
+        var solution;
+        var size;
+        var selector;
+
+        if (!puzzleData) {
+            return;
+        }
+
+        solution = puzzleData.dataObj.A;
+        size = puzzleData.size;
+
+        for (var i=0; i<size; i++) {
+            for (var j=0; j<size; j++) {
+                selector = '#p' + (i+1) + (j+1) + ' .itemValue';
+                $(selector).text(solution[i][j]);
+            }
+        }*/
+    };
+
     function hideOnSolutionPopup(event) {
         $('#onSolution').hide();
     };
@@ -379,7 +451,7 @@ var KenKenGame = function () {
         $('#btnReset').click(kenken.game.puzzleReset);       //Reset
 
         /* --- Reveal | Check | Solution --- */
-        $('#btnReveal').click(kenken.game.onReveal);         //Reveal
+        $('#btnReveal').click(onReveal);         //Reveal
         $('#btnCheck').click(kenken.game.onCheck);           //Check
         $('#btnSolution').click(onSolution);     //Solution
 
