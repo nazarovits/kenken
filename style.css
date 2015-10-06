@@ -193,6 +193,9 @@ th {
     -o-transition: all 0.3s ease-out 0.1s;
     transition: all 0.3s ease-out 0.1s;
 }
+.notesItem.active span{
+    background-color: #b3b3ff;
+}
 .notesItem:nth-child(3n){
     padding-right: 0;
 }
@@ -234,7 +237,6 @@ th {
 #notesAll{
     margin-right: 54px;
 }
-
 
 
 
@@ -503,6 +505,14 @@ th {
 .itemSymbol{
     font: 400 28px/40px Arial;
 }
+.itemNotes{
+    display: block;
+    font: 500 20px Arial;
+    position: absolute;
+    right: 30px;
+    top: 60%;
+}
+
 
 .puzzleRow .bottomLineBorder {
     border-bottom: 1px solid #000000;
