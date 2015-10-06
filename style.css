@@ -465,6 +465,12 @@ th {
     width: 158px;
     height: 158px;
 }
+.pulseGreen{
+    background-color: #b3ffb3;
+}
+.pulseRed{
+    background-color: #ffb3b3;
+}
 
 .puzzleContainer4 .puzzleItem{
     width: 118px;
