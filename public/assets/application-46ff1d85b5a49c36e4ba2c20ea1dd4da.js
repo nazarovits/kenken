@@ -20,6 +20,111 @@ function killFlash() {
     document.head.appendChild(script);
 }
 
+// <editor-fold desc="Timer">
+function Timer() {
+
+    function setTime() {
+        var hours;
+        var minutes;
+        var seconds;
+        var str;
+        var resultObj;
+
+        //console.log('setTime() totalSeconds = %s, isPaused = %s, pausedTime = %s', totalSeconds, isPaused, pausedTime);
+
+        if (!isPaused) {
+            totalSeconds = pausedTime + parseInt((new Date - startedAt) / 1000);
+
+            hours = pad(parseInt(totalSeconds / 3600));
+            minutes = pad(parseInt(totalSeconds / 60));
+            seconds = pad(totalSeconds % 60);
+            str = hours + ":" + minutes + ":" + seconds;
+
+            if (tickCallback && (typeof tickCallback === 'function')) {
+                resultObj = {
+                    totalSeconds: totalSeconds,
+                    str: str,
+                    hours: hours,
+                    minutes: minutes,
+                    seconds: seconds
+                };
+
+                tickCallback(null, resultObj);
+            }
+        }
+    }
+
+    function pad(val) {
+        var valString = val + "";
+
+        if (valString.length < 2) {
+            return "0" + valString;
+        } else {
+            return valString;
+        }
+    }
+
+    var pausedTime = 0;
+    var isPaused = false;
+    var startedAt = new Date;
+    var totalSeconds = 0;
+    var timerInterval;
+    var tickCallback;
+
+    this.start = function () {
+        console.log('start');
+
+        if (timerInterval) {
+            return console.log('timer already was started', timerInterval);
+        } else {
+            console.log('...');
+
+            timerInterval = setInterval(setTime, 500);
+        }
+    };
+
+    this.pause = function () {
+        console.log('pause');
+
+        if (timerInterval) {
+            isPaused = !isPaused;
+        } else {
+            console.log('nothing to pause');
+        }
+
+    };
+
+    this.resume = function () {
+        console.log('resume');
+
+        if (timerInterval) {
+            isPaused = !isPaused;
+            startedAt = new Date;
+            pausedTime = totalSeconds;
+        } else {
+            console.log('nothing to resume');
+        }
+
+    };
+
+    this.stop = function () {
+        console.log('stop');
+
+        if (timerInterval) {
+            console.log('timerInterval', timerInterval);
+            clearInterval(timerInterval);
+        } else {
+            console.log('nothing to stop');
+        }
+    };
+
+    this.onTick = function (callback) {
+        tickCallback = callback;
+    };
+
+};
+// </editor-fold>
+
 // <editor-fold desc="Game">
 var KenKenGame = function () {
     function parse(item) {
@@ -89,6 +194,21 @@ var KenKenGame = function () {
     }
 
     function startTimer() {
+        var timer = new Timer();
+        var puzzleTimer = $('#puzzleTimer');
+
+        timer.onTick(function (err, onTickResult) {
+            if (timerState === 'ON') {
+                puzzleTimer.text(onTickResult.str);
+            }
+        });
+
+        timer.start();
+        self.timer = timer;
+    }
+
+    function startTimer___() {
+
         function setTime(){
             var hours;
             var minutes;
@@ -118,77 +238,254 @@ var KenKenGame = function () {
             }
         }
 
-        var puzzleTimer = $('#puzzleTimer');
+
         var start = new Date;
         var totalSeconds = 0;
+        var timerInterval = setInterval(setTime, 500);
 
-        setInterval(setTime, 500);
+        return timerInterval;
     };
 
     function changeTimerState(e) {
         var target = e.target;
-
-        target.value = timerState;
+        var span = target.closest('span');
+        var puzzleTimer = $('#puzzleTimer');
 
         if (timerState === 'OFF') {
             timerState = 'ON';
-            $('#puzzleTimer').text(defaultTimer);
+            span.innerHTML = 'OFF';
         } else {
+            puzzleTimer.text(defaultTimer);
             timerState = 'OFF';
+            span.innerHTML = 'ON';
         }
     };
 
+    function pauseOrResume(event) {
+        var puzzleContainer = $("#puzzleContainer");
+        var popupContainer = $('.clickToResume');
+        var span = event.target.closest('span');
+        var timer = self.timer;
+
+        $('#testCircle').hide();
+
+        isPaused = !isPaused;
+
+        if (isPaused) {
+            timer.pause();
+            kenken.game.onPause();
+            kenken.game.widgetAdBeforePause();
+            puzzleContainer.hide();
+            popupContainer.show();
+            span.innerHTML = 'RESUME';
+        } else {
+            span.innerHTML = 'PAUSE';
+            timer.resume();
+            popupContainer.hide();
+            puzzleContainer.show();
+        }
+    };
+
+    function onSolution() {
+        var popup = $('#onSolution');
+
+        kenken.game.onSolution();
+        popup.show();
+    };
+
+    function hideOnSolutionPopup(event) {
+        $('#onSolution').hide();
+    };
+
+    function showSolution(event) {
+        //hideOnSolutionPopup();
+        console.log('>>> show solution');
+    };
+
     function handleEvents() {
-        $('#btnOffTimer').click(changeTimerState); // OFF - ON timer
+        var booleanArrayToSting = function(argArray){
+            var currentArray = argArray;
+            var currentLength = currentArray.length;
+            var result='';
+            var i=0;
+
+            while (i<currentLength){
+                if (currentArray[i]){
+                    result += (i+1)+' ';
+                }
+                i+= 1;
+            }
+
+            return result;
+        };
+
+        var drawActiveNotes = function(){
+            var indexValue = activePuzzleItem.indexValue;
+            var notesArray = currentStateObject.notes[indexValue-1];
+            var domArray = $('.notesItem');
+            var size = currentStateObject.size;
+            var i=1;
+            var currentNote;
+
+            while (i<= size){
+                currentNote = $(domArray[i-1]);
+                if (notesArray[i-1]){
+                    currentNote.addClass('active');
+                } else {
+                    currentNote.removeClass('active');
+                }
+                i += 1;
+            }
+        };
+
+        var prepareStateObjectTo = function(callback) {
+            var resultObject = currentStateObject;
+            var valuesString = resultObject.values.join(',');
+            var notesArray = resultObject.notes;
+            var stateObject = {
+                values : valuesString,
+                notes  : notesArray
+            };
+            var result = {
+                id       : '',
+                state    : stateObject,
+                autosave : ''
+            };
+
+            callback(result);
+        };
+
+
+        /* --- Undo | Redo | Reset --- */
+        $('#btnUndo').click(function () {console.log('Undo is not implemented yet');});       //Undo
+        $('#btnRendo').click(function () {console.log('Redo is not implemented yet');});       //Redo
+        $('#btnReset').click(kenken.game.puzzleReset);       //Reset
+
+        /* --- Reveal | Check | Solution --- */
+        $('#btnReveal').click(kenken.game.onReveal);         //Reveal
+        $('#btnCheck').click(kenken.game.onCheck);           //Check
+        $('#btnSolution').click(onSolution);     //Solution
+
+        /* --- Timer --- */
+        $('#btnOffTimer').click(changeTimerState);           // OFF - ON timer
+        $('#btnPause').click(pauseOrResume);                 // Pause
+
+        $('#onSolution .closeButton').click(hideOnSolutionPopup);
+        $('#onSolution #showSolution').click(showSolution);
+
+        $('.puzzleItem').click(function(event) {
+            var target = $(event.target).closest('.puzzleItem');
+            var targetId = target.attr('id');
+            var container = target.closest('#puzzleContainer');
+
+            activePuzzleItem.item = target;
+            activePuzzleItem.indexX = +targetId[1];
+            activePuzzleItem.indexY = +targetId[2];
+            activePuzzleItem.indexValue = (activePuzzleItem.indexX - 1)* currentStateObject.size + activePuzzleItem.indexY;
+
+            drawActiveNotes();
+
+            container.find('.active').removeClass('active');
+            target.addClass('active');
+
+            circle.changeCirclePosition ();
+        });
+
+        $('.ltlCrcl').click( function(event){
+            var target = $(event.target).closest('.ltlCrcl');
+            var value = target.attr('data-id');
+            var circle = target.closest('#testCircle');
+            var currentItem = activePuzzleItem.item;
+            var stateObject = currentStateObject;
+            var valueIndex = activePuzzleItem.indexValue;
+
+            if (value !== 'cX') {
+                if (value === 'cC'){value = ''}
+                currentItem.find('.itemValue').text(value);
+                stateObject.values[valueIndex-1] = value ? +value : 0;
+            }
+            circle.hide();
+            //prepareStateObjectTo(kenken.game.saveState);
+        });
+
+        $('.notesItem').click(function(event){
+            var currentItem = activePuzzleItem.item;
+            var currentIndex = activePuzzleItem.indexValue;
+            var notesArray = currentStateObject.notes[currentIndex-1];
+            var valuesArray = currentStateObject.values;
+            var target = $(event.target).closest('.notesItem');
+            var notesValue = +target.attr('data-id');
+            var x = activePuzzleItem.indexX;
+            var y = activePuzzleItem.indexY;
+            var size = currentStateObject.size;
+            var stringResult;
+            var i=1;
+
+            while (i <= size){
+                if (valuesArray[(x-1)*size+i-1] === notesValue){
+                    return;
+                } else {
+                    if (valuesArray[(i-1)*size+y-1] === notesValue){
+                        return;
+                    }
+                }
+                i += 1;
+            }
+
+            notesArray[notesValue-1] = !notesArray[notesValue-1];
+            target.toggleClass('active');
+            stringResult = booleanArrayToSting(notesArray);
+            currentItem.find('.itemNotes').text(stringResult);
+        });
     };
 
     function drawOurForm(puzzleData){
-        console.log('drawOurForm');
-        console.log(puzzleData);
-        var data = puzzleData ? puzzleData : {};
+        var data = (puzzleData && puzzleData.dataObj) ? puzzleData.dataObj : {};
         var row = [];
         var puzzleId = puzzleData.id || '000000';
         var puzzleSize = puzzleData.size;
-        var values = puzzleData.dataObj.A;
-        var results = puzzleData.dataObj.T;
-        var symbols = puzzleData.dataObj.S;
-        var rightLines = puzzleData.dataObj.V;
-        var bottomLines = puzzleData.dataObj.H;
+        var puzzleLevel = puzzleData.level;
+        var values = data.A;
+        var results = data.T;
+        var symbols = data.S;
+        var rightLines = data.V;
+        var bottomLines = data.H;
         var lineClass;
         var result;
         var i,j;
 
         // ******* left panel begin
         row.push('<div>');
+
         // ******* notes box
         row.push('<div id="notesContainer">');
 
         for (i=1; i<=puzzleSize; i+=1){
-            row.push('<div class="notesItem" data-id="'+i+'">'+i+'<\/div>');
+            row.push('<div class="notesItem" data-id="'+i+'"><span>'+i+'<\/span><\/div>');
         }
-        row.push('<div id="notesAll">OK<\/div>');
-        row.push('<div id="notesDel">DEL<\/div>');
+        row.push('<div id="notesAll"><span><img src="/img/icn_check.png"><\/span><\/div>');
+        row.push('<div id="notesDel"><span><img src="/img/ic_close_.png"><\/span><\/div>');
 
         row.push('<\/div>');
 
         // ******* first buttons box
         row.push('<div class="firstBtnBox">');
-        row.push('<input type="button" id="btnSolve" value="Solve Another" onclick="kenken.game.solveAnother()">');
-        row.push('<input type="button" id="btnResumeSaved" value="Resume Saved Puzzle" onclick="kenken.game.resumeSavedPuzzle()">');
+        row.push('<button id="btnSolve"><span>Solve Another<\/span><\/button>');
+        row.push('<button id="btnResumeSaved"><span>Resume Saved Puzzle<\/span><\/button>');
         row.push('<\/div>');
 
         // ******* second buttons box
         row.push('<div class="secondBtnBox">');
-        row.push('<input type="button" id="btnUndo" value="Undo">');
-        row.push('<input type="button" id="btnRendo" value="Rendo">');
-        row.push('<input type="button" id="btnReset" value="Reset" onclick="kenken.game.puzzleReset()">');
+        row.push('<button id="btnUndo"><span>Undo<\/span><\/button>');
+        row.push('<button id="btnRedo"><span>Redo<\/span><\/button>');
+        row.push('<button id="btnReset"><span>Reset<\/span><\/button>');
         row.push('<\/div>');
 
         // ******* third buttons box
         row.push('<div class="thirdBtnBox">');
-        row.push('<input type="button" id="btnReveal" value="Reveal" onclick="kenken.game.onReveal()">');
-        row.push('<input type="button" id="btnCheck" value="Check" onclick="kenken.game.onCheck()">');
-        row.push('<input type="button" id="btnSolution" value="Solution" onclick="kenken.game.onSolution()">');
+        row.push('<button id="btnReveal"><span>Reveal<\/span><\/button>');
+        row.push('<button id="btnCheck"><span>Check<\/span><\/button>');
+        row.push('<button id="btnSolution"><span>Solution<\/span><\/button>');
         row.push('<\/div>');
 
         // ******* left panel end
@@ -200,15 +497,17 @@ var KenKenGame = function () {
         // ******* top buttons
         row.push('<div id="topInfoBox">');
 
-        row.push('<span id="puzzleInfo">Puzzle No. <\/span><span class="puzzleNo">' + puzzleId + ' </span>');
-        row.push('<span id="puzzleTimer">' + defaultTimer + '<\/span>');
-        row.push('<input type="button" id="btnOffTimer" value="OFF">');
-        row.push('<input type="button" id="btnPause" value="PAUSE">');
+        row.push('<span id="puzzleInfo">Puzzle No. '+puzzleId+', '+puzzleSize+'X'+puzzleSize+', '+puzzleLevel+'<\/span>');
+        row.push('<button id="btnPause"><span>PAUSE<\/span><\/button>');
+        row.push('<div class="timerBox">');
+        row.push('<span id="puzzleTimer">00:00:00<\/span>');
+        row.push('<button id="btnOffTimer"><span>OFF<\/span><\/button>');
+        row.push('<\/div>');
 
         row.push('<\/div>');
 
         // ******* main container
-        row.push('<div id="puzzleContainer">');
+        row.push('<div id="puzzleContainer" class="puzzleContainer'+puzzleSize+'">');
 
         for (i=1; i<=puzzleSize; i+=1){
             row.push('<div class="puzzleRow">');
@@ -229,11 +528,15 @@ var KenKenGame = function () {
 
                 //draw symbol and expected result
                 if (+results[i-1][j-1]){
-                    row.push('<div class="itemResult">'+results[i-1][j-1]+'<\/div>');
-                    if (symbols[i-1][j-1] !== '0'){
-                        row.push('<div class="itemSymbol">'+symbols[i-1][j-1]+'<\/div>');
+                    row.push('<span class="itemResult">'+results[i-1][j-1]+'<\/span>');
+                    if (symbols[i-1][j-1] !== '0' && symbols[i-1][j-1] !== '1'){
+                        row.push('<span class="itemSymbol">'+symbols[i-1][j-1]+'<\/span>');
                     }
                 }
+
+                row.push('<span class="itemValue"><\/span>');
+
+                row.push('<span class="itemNotes"><\/span>');
 
                 row.push('<\/div>');
             }
@@ -242,19 +545,48 @@ var KenKenGame = function () {
 
         row.push('<\/div>');
 
+        row.push('<div><a class="clickToResume" style="display: none;">Click to resume</a></div>');
+
         // ******* bottom container
         row.push('<div id="bottomInfoBox">');
-
+        row.push('<div class="autoNotesBox">');
         row.push('<span>AutoNotes</span>');
-        row.push('<input type="button" id="btnOnNotes" value="ON">');
-        row.push('<input type="button" id="btnOffNotes" value="OFF">');
+        row.push('<button data-id="1" class="btnNote active"><span>ON<\/span><\/button>');
+        row.push('<button data-id="0" class="btnNote"><span>OFF<\/span><\/button>');
+        row.push('<\/div>');
 
-        row.push('<input type="button" id="btnSave" value="SAVE">');
-        row.push('<input type="button" id="btnPrint" value="PRINT">');
+        row.push('<div class="savePrintBox">');
+        row.push('<button id="btnSave"><span>SAVE<\/span><\/button>');
+        row.push('<button id="btnPrint"><span>PRINT<\/span><\/button>');
+        row.push('<\/div>');
 
         row.push('<\/div>');
 
         // ******* main panel end
+        row.push('<\/div>');
+
+        // +++++++ test circle
+
+        row.push('<div id="testCircle">');
+
+        for (i=1; i<=puzzleSize; i+=1){
+            row.push('<div data-id="'+i+'" class="ltlCrcl">');
+            row.push('<span>'+i+'<\/span>');
+            row.push('<\/div>');
+        }
+
+        row.push('<div data-id="cC" class="ltlCrcl"><span><img src="/img/icn_eraser_.png"><\/span><\/div>');
+        row.push('<div data-id="cX" class="ltlCrcl"><span><img src="/img/ic_close_.png"><\/span><\/div>');
+
+        row.push('<\/div>');
+
+        // +++++++ test circle
+
+        // +++++++ onSolution popup
+        row.push('<div id="onSolution" style="display: none">');
+        row.push('<span>See solution?</span>');
+        row.push('<div class="closeButton"><span>x</span></div>');
+        row.push('<button id="showSolution"><span>OK</span></button>');
         row.push('<\/div>');
 
         result = document.createElement('div');
@@ -263,23 +595,49 @@ var KenKenGame = function () {
 
         document.querySelector('.box-inner-main').appendChild(result);
 
-        /*$('.puzzleItem').on('click', function(event) {
-         var target = $(event.target).closest('.puzzleItem');
-         var positionInfo = {
-         top   : target.get('offsetTop'),
-         left  : target.offsetLeft,
-         width : target.offsetWidth
-         };
-
-         console.dir(target);
-         })*/
-
-
+        circle.drawOurCircles();
     }
+
+    function CurrentStateConstructor(puzzleData) {
+        var size = puzzleData.size;
+        var level = puzzleData.level;
+        var notesItem;
+        var i = size*size;
+        var j;
+
+        this.values = [];
+        this.notes = [];
+        this.size = size;
+        this.level = level;
+
+        while (i > 0){
+            j = size;
+            notesItem = [];
+            this.values.push(0);
+            while (j > 0){
+                notesItem.push(false);
+                j -= 1;
+            }
+            this.notes.push(notesItem);
+            i -= 1;
+        }
+
+        return this;
+    };
+
+    var currentStateObject;// = new CurrentStateConstructor(puzzleData);
+    var activePuzzleItem = {};
+
+    var circle;
+
+
 
     var defaultTimer = '00:00:00';
     var timerState = 'ON';
+    var isPaused = false;
     var self = this;
+
+    this.timer = null;
 
     this.loadPuzzleState = function (state) {
         console.log('KenKen.loadPuzzleState');
@@ -290,6 +648,65 @@ var KenKenGame = function () {
         var e = JSON.parse(puzzleData);
         var data = normalizeData(e);
         var dataObj = data.dataObj;
+
+        currentStateObject = new CurrentStateConstructor(data); //TODO: fix;
+        circle = {                                              //TODO: fix;
+
+            changeCirclePosition : function() {
+                var circleDiv = $('#testCircle');
+                var circlePos = this.findCirclePosition(60);
+
+                circleDiv.css('top', circlePos.y);
+                circleDiv.css('left', circlePos.x);
+                circleDiv.css('display', 'block');
+            },
+
+
+            drawOurCircles: function() {
+                //var count = puzzleData.size + 2;
+                var count = data.size + 2;
+                var coordinates = this.calculateCircleButtons(60, count);
+                var arrayCircles = $('.ltlCrcl');
+                var top, left;
+
+                for (var i = 1; i <= count; i += 1) {
+                    top = coordinates[i - 1].y - 15;
+                    left = coordinates[i - 1].x - 15;
+                    $(arrayCircles[i - 1]).css({top: top, left: left})
+                }
+            },
+
+
+            calculateCircleButtons: function(argRadius, argCount) {
+                var radius = argRadius;
+                var count = argCount;
+                var coordinatesArray = [];
+                var x;
+                var y;
+
+                for (var i = 0; i < count; i++) {
+                    x = radius + radius * Math.sin(2 / count * Math.PI * i);
+                    y = radius - radius * Math.cos(2 / count * Math.PI * i);
+
+                    coordinatesArray.push({x: x, y: y});
+                }
+
+                return coordinatesArray;
+            },
+
+
+            findCirclePosition: function(circleRadius) {
+                var activeSquare = $('.puzzleItem.active')[0];
+                var squareWidth = activeSquare.offsetWidth;
+                var squareLeft = activeSquare.offsetLeft;
+                var squareTop = activeSquare.offsetTop;
+
+                return {
+                    x: squareLeft + (squareWidth / 2) - circleRadius,
+                    y: squareTop + (squareWidth / 2) - circleRadius
+                };
+            }
+        };
 
         console.log('KenKenGame.sendPuzzleData');
         console.log(dataObj);
@@ -606,7 +1023,8 @@ kenken.Game = function (e, t, n) {
         },
 
         this.widgetAdBeforePause = function () {
-            $.get("/game/widget_ad_before_pause", null, a)
+            $.get("http://www.kenkenpuzzle.com/game/widget_ad_before_pause", null, a)
+            //$.get("/game/widget_ad_before_pause", null, a) //TODO: ...
         },
 
         this.widgetAdBeforePrint = function () {
@@ -675,7 +1093,8 @@ kenken.Game = function (e, t, n) {
         },
 
         this.onPause = function () {
-            $.get("/show_ad_on_pause", {}, v), $.get("/request_check", {
+            $.get("http://www.kenkenpuzzle.com/show_ad_on_pause", {}, v), $.get("http://www.kenkenpuzzle.com/request_check", {
+            //$.get("/show_ad_on_pause", {}, v), $.get("/request_check", { //TODO: ...
                 id: e.id
             })
         },
