@@ -17,6 +17,74 @@
 <script type="text/javascript">
 
     // *************************************
+
+    function parse(item) {
+        var result = [];
+        var len = item.length;
+        var last = len - 1;
+        var it = '';
+
+        for(var i=0; i<len; i++) {
+            if (item[i] !== ' ') {
+                it += item[i];
+                if (i === last) {
+                    result.push(it);
+                }
+
+            } else {
+                if (it) {
+                    result.push(it);
+                    it = '';
+                }
+            }
+        }
+
+        return result;
+    }
+
+    function normalizeData(e) {
+        var str = e.data;
+        var newline = '\r\n';
+        var arr = str.split(newline);
+        var arrLength = arr.length - 2; // without /r/n/r/n
+        var keys = ['A', 'T', 'S', 'V', 'H'];
+        var obj = {};
+        var arrOfArr;
+        var row;
+        var item;
+        var key;
+
+        for (var i = 0; i < arrLength; i++) {
+            item = arr[i];
+
+            if (keys.indexOf(item) !== -1) {
+                key = item;
+                continue; // there was find a new key, nothing to parse
+            }
+
+            if (key === 'T') {
+                row = parse(item);
+            } else { //optimization (without parse)
+                item = item.replace(/ /g, '');
+                row = item.split('');
+            }
+
+            arrOfArr = obj[key];
+
+            if (!arrOfArr) {
+                arrOfArr = [];
+                obj[key] = arrOfArr;
+            }
+
+            arrOfArr.push(row);
+        }
+
+        e.dataObj = obj;
+
+        return e;
+    }
+
+
     var testObject = {
         id      : 000001,
         level   : 'easy',
@@ -42,11 +110,21 @@
             H: [['1', '0', '1'],      ['0', '1', '1'],      ['1', '0', '1']     , ['0', '1', '0']]
         }
     };
+
+    var testObject5 = normalizeData({"id":9921,"data":"A\r\n4 1 2 5 3 \r\n5 3 1 2 4 \r\n3 5 4 1 2 \r\n1 2 3 4 5 \r\n2 4 5 3 1 \r\nT\r\n 60   0   2  15   0\r\n  0   0   0   2   2\r\n  3  40  12   0   0\r\n  2   0   0  20   0\r\n  0   0  15   0   0\r\nS\r\n* 0 / * 0\r\n0 0 0 * /\r\n1 * * 0 0\r\n/ 0 0 * 0\r\n0 0 * 0 0\r\nV\r\n0 1 1 0\r\n0 1 1 1\r\n1 1 1 1\r\n1 1 1 0\r\n1 1 0 1\r\nH\r\n0 1 1 0\r\n0 1 0 0\r\n0 1 0 1\r\n1 0 1 1\r\n1 0 1 0\r\n\r\n","size":5,"level":"easy","operations":"dm","no":9921,"guest":false,"daily":false,"state":null,"u_level":"B"});
+
+    var testObject6 = normalizeData({"id":15714,"data":"A\r\n3 5 1 4 2 6 \r\n5 4 2 1 6 3 \r\n6 3 4 2 5 1 \r\n4 6 3 5 1 2 \r\n1 2 5 6 3 4 \r\n2 1 6 3 4 5 \r\nT\r\n180   5   0   2   0  18\r\n  0   0   2   0  30   0\r\n 24   0  60  10   0   0\r\n  0   3   0   0   2   0\r\n  2   0   0 108  12  20\r\n  0   0   0   0   0   0\r\nS\r\n* * 0 / 0 *\r\n0 0 / 0 * 0\r\n* 0 * * 0 0\r\n0 / 0 0 * 0\r\n/ 0 0 * * *\r\n0 0 0 0 0 0\r\nV\r\n1 0 1 0 1\r\n0 1 0 1 1\r\n1 1 1 1 0\r\n1 1 1 1 0\r\n1 1 1 1 1\r\n1 0 0 1 1\r\nH\r\n0 1 0 1 0\r\n1 0 1 0 1\r\n1 1 0 0 1\r\n1 1 0 1 0\r\n1 0 1 1 0\r\n0 1 1 1 0\r\n\r\n","size":6,"level":"easy","operations":"dm","no":15714,"guest":false,"daily":false,"state":null,"u_level":"B"});
+
+    var testObject7 = normalizeData({"id":21726,"data":"A\r\n3 6 4 1 7 2 5 \r\n7 1 5 6 2 3 4 \r\n5 2 1 7 4 6 3 \r\n6 5 2 3 1 4 7 \r\n1 3 6 4 5 7 2 \r\n4 7 3 2 6 5 1 \r\n2 4 7 5 3 1 6 \r\nT\r\n  2   0   4  14   0   0 420\r\n210   2   5   3   0   2   0\r\n  0   0   0  28   0   0   0\r\n  0 180   0   3   0  56   0\r\n  0   0   0 120   0   0   0\r\n672   0   0  70   0   5   0\r\n  0   0   0   0  18   0   0\r\nS\r\n/ 0 1 * 0 0 *\r\n* / * / 0 / 0\r\n0 0 0 * 0 0 0\r\n0 * 0 / 0 * 0\r\n0 0 0 * 0 0 0\r\n* 0 0 * 0 1 0\r\n0 0 0 0 * 0 0\r\nV\r\n0 1 1 0 0 1\r\n1 1 1 0 1 1\r\n1 1 1 0 1 1\r\n1 0 1 0 1 1\r\n1 0 1 0 1 0\r\n0 0 1 1 1 1\r\n0 1 0 1 0 0\r\nH\r\n1 0 0 0 1 0\r\n1 0 1 0 1 0\r\n1 0 1 0 1 1\r\n1 1 1 1 1 0\r\n1 1 1 1 0 1\r\n1 0 1 0 1 1\r\n0 0 0 1 0 1\r\n\r\n","size":7,"level":"medium","operations":"dm","no":21726,"guest":false,"daily":false,"state":null,"u_level":"B"});
+
+    var testObject8 = normalizeData({"id":82420,"data":"A\r\n2 3 8 7 6 4 1 5 \r\n4 7 3 6 8 5 2 1 \r\n7 8 1 3 4 6 5 2 \r\n1 6 5 4 2 3 8 7 \r\n5 1 2 8 3 7 6 4 \r\n6 4 7 5 1 2 3 8 \r\n8 5 6 2 7 1 4 3 \r\n3 2 4 1 5 8 7 6 \r\nT\r\n  2  63  56   0  18   4   0   8\r\n  0   0   0   2   0   1   0   0\r\n 42   7   0   0   0   0  80   0\r\n  0   0   1   0  12   0   0  25\r\n  1   4   5  16   0   0   0   0\r\n  0   0   0   0   1   1   0   0\r\n120   0  48  70   0   7   3   2\r\n  0   0   0   0   0   0   0   0\r\nS\r\n/ * * 0 + / 0 +\r\n0 0 0 / 0 - 0 0\r\n* - 0 0 0 0 * 0\r\n0 0 - 0 + 0 0 +\r\n- / - + 0 0 0 0\r\n0 0 0 0 1 - 0 0\r\n* 0 * * 0 - - /\r\n0 0 0 0 0 0 0 0\r\nV\r\n1 1 0 1 1 0 1\r\n1 0 1 1 1 1 0\r\n1 0 1 1 1 1 0\r\n0 1 0 1 0 1 1\r\n1 1 1 0 1 1 0\r\n1 1 1 1 1 0 1\r\n0 1 1 0 1 1 1\r\n1 0 1 0 1 1 1\r\nH\r\n0 1 0 1 0 1 0\r\n0 1 1 1 0 1 1\r\n1 1 1 1 0 1 0\r\n1 0 1 1 0 1 0\r\n0 0 1 1 1 1 0\r\n1 0 1 0 1 1 0\r\n1 1 0 1 1 1 0\r\n0 1 1 0 0 1 0\r\n\r\n","size":8,"level":"medium","operations":"adms","no":82420,"guest":false,"daily":false,"state":null,"u_level":"B"});
+
+    var testObject9 = normalizeData({"id":37453,"data":"A\r\n2 4 6 9 5 8 1 7 3 \r\n5 1 2 8 9 3 7 4 6 \r\n8 3 1 2 4 5 6 9 7 \r\n9 5 7 3 8 1 2 6 4 \r\n3 8 5 6 2 7 4 1 9 \r\n4 6 3 7 1 2 9 8 5 \r\n6 9 8 1 7 4 3 5 2 \r\n1 7 9 4 3 6 5 2 8 \r\n7 2 4 5 6 9 8 3 1 \r\nT\r\n  3   4   3  45   0  24   0   4   0\r\n  0   0   0   1   0   0   3   0  13\r\n 17   6   0   0   2   6   3  15   0\r\n  0  35 105   0   0   0   0   0  13\r\n  1   0   0  14  14   0   3   0   0\r\n  0   0  20   0   0  11   0  80   0\r\n  5   0   0   4   3   0   2   0   0\r\n  0   0   0   0   2  19   0   6   0\r\n  5   0   1   0   0   9   0   3   0\r\nS\r\n- / / * 0 * 0 - 0\r\n0 0 0 - 0 0 - 0 +\r\n+ * 0 0 / + / + 0\r\n0 + * 0 0 0 0 0 +\r\n- 0 0 + * 0 - 0 0\r\n0 0 + 0 0 + 0 * 0\r\n- 0 0 / - 0 - 0 0\r\n0 0 0 0 / + 0 - 0\r\n- 0 - 0 0 1 0 / 0\r\nV\r\n1 1 1 0 1 0 1 0\r\n1 1 1 0 1 1 0 1\r\n1 0 0 1 1 1 1 1\r\n1 1 0 1 1 1 1 1\r\n1 1 1 1 0 1 0 1\r\n1 1 1 0 1 0 1 0\r\n1 1 1 1 0 1 0 1\r\n1 1 1 1 1 0 1 0\r\n0 1 0 1 1 1 1 0\r\nH\r\n0 1 0 1 0 1 0 1\r\n0 1 1 0 0 0 0 1\r\n0 1 1 0 1 0 0 1\r\n1 1 1 1 0 1 0 1\r\n1 1 0 1 1 1 1 0\r\n0 1 0 1 1 1 1 1\r\n1 1 0 1 1 1 1 0\r\n1 1 0 1 1 1 1 1\r\n1 0 1 0 1 0 1 1\r\n\r\n","size":9,"level":"hard","operations":"adms","no":37453,"guest":false,"daily":false,"state":null,"u_level":"B"});
     // *************************************
 
 
 
-    var currentStateObject = new CurrentStateConstructor(testObject2);
+    var currentStateObject = new CurrentStateConstructor(testObject9);
     var activePuzzleItem = {};
 
 
@@ -362,7 +440,7 @@
 
 
         drawOurCircles: function() {
-            var count = testObject2.size + 2;
+            var count = testObject9.size + 2;
             var coordinates = this.calculateCircleButtons(60, count);
             var arrayCircles = $('.ltlCrcl');
             var top, left;
@@ -408,7 +486,7 @@
 
     // *************************************
 
-    drawOurForm(testObject2);
+    drawOurForm(testObject9);
     // *************************************
 </script>
 
