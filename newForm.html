@@ -482,17 +482,21 @@
             var resultValues = currentStateObject.resultValues;
             var i,j;
             var activeVal;
-            var active;
+            var activeClass;
 
             for (i=1; i<=size; i+=1){
-                for (j=1; i<=size; j+=1) {
-                    if (values[i][j] !== 0){
-
-                        if (values[i][j] == resultValues[i][j]){
-                            $('#p'+i+j).addClass('greenPulse');
+                for (j=1; j<=size; j+=1) {
+                    if (values[i-1][j-1] !== 0){
+                        activeVal = $('#p'+i+j);
+                        if (values[i-1][j-1] == resultValues[i-1][j-1]){
+                            activeClass = 'pulseGreen';
                         } else {
-
+                            activeClass = 'pulseRed';
                         }
+                        activeVal.addClass(activeClass);
+                        setTimeout(function(){
+                            activeVal.removeClass(activeClass);
+                        },1000)
                     }
                 }
             }
