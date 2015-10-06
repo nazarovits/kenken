@@ -298,8 +298,25 @@ var KenKenGame = function () {
     };
 
     function showSolution(event) {
-        //hideOnSolutionPopup();
-        console.log('>>> show solution');
+        var puzzleData = (self.puzzleData) ? self.puzzleData : null;
+        var solution;
+        var size;
+        var selector;
+
+        if (!puzzleData) {
+            return;
+        }
+
+        solution = puzzleData.dataObj.A;
+        size = puzzleData.size;
+
+        for (var i=0; i<size; i++) {
+            for (var j=0; j<size; j++) {
+                selector = '#p' + (i+1) + (j+1) + ' .itemValue';
+                $(selector).text(solution[i][j]);
+            }
+        }
+        hideOnSolutionPopup();
     };
 
     function handleEvents() {
@@ -629,15 +646,13 @@ var KenKenGame = function () {
     var activePuzzleItem = {};
 
     var circle;
-
-
-
     var defaultTimer = '00:00:00';
     var timerState = 'ON';
     var isPaused = false;
-    var self = this;
 
     this.timer = null;
+    this.puzzleData = null;
+    var self = this;
 
     this.loadPuzzleState = function (state) {
         console.log('KenKen.loadPuzzleState');
@@ -648,6 +663,8 @@ var KenKenGame = function () {
         var e = JSON.parse(puzzleData);
         var data = normalizeData(e);
         var dataObj = data.dataObj;
+
+        self.puzzleData = data;
 
         currentStateObject = new CurrentStateConstructor(data); //TODO: fix;
         circle = {                                              //TODO: fix;
