@@ -85,7 +85,7 @@
     }
 
 
-    var testObject = {
+    var testObject3 = {
         id      : 000001,
         level   : 'easy',
         size    : 3,
@@ -98,7 +98,7 @@
         }
     };
 
-    var testObject2 = {
+    var testObject4 = {
         id      : 000001,
         level   : 'easy',
         size    : 4,
@@ -120,11 +120,13 @@
     var testObject8 = normalizeData({"id":82420,"data":"A\r\n2 3 8 7 6 4 1 5 \r\n4 7 3 6 8 5 2 1 \r\n7 8 1 3 4 6 5 2 \r\n1 6 5 4 2 3 8 7 \r\n5 1 2 8 3 7 6 4 \r\n6 4 7 5 1 2 3 8 \r\n8 5 6 2 7 1 4 3 \r\n3 2 4 1 5 8 7 6 \r\nT\r\n  2  63  56   0  18   4   0   8\r\n  0   0   0   2   0   1   0   0\r\n 42   7   0   0   0   0  80   0\r\n  0   0   1   0  12   0   0  25\r\n  1   4   5  16   0   0   0   0\r\n  0   0   0   0   1   1   0   0\r\n120   0  48  70   0   7   3   2\r\n  0   0   0   0   0   0   0   0\r\nS\r\n/ * * 0 + / 0 +\r\n0 0 0 / 0 - 0 0\r\n* - 0 0 0 0 * 0\r\n0 0 - 0 + 0 0 +\r\n- / - + 0 0 0 0\r\n0 0 0 0 1 - 0 0\r\n* 0 * * 0 - - /\r\n0 0 0 0 0 0 0 0\r\nV\r\n1 1 0 1 1 0 1\r\n1 0 1 1 1 1 0\r\n1 0 1 1 1 1 0\r\n0 1 0 1 0 1 1\r\n1 1 1 0 1 1 0\r\n1 1 1 1 1 0 1\r\n0 1 1 0 1 1 1\r\n1 0 1 0 1 1 1\r\nH\r\n0 1 0 1 0 1 0\r\n0 1 1 1 0 1 1\r\n1 1 1 1 0 1 0\r\n1 0 1 1 0 1 0\r\n0 0 1 1 1 1 0\r\n1 0 1 0 1 1 0\r\n1 1 0 1 1 1 0\r\n0 1 1 0 0 1 0\r\n\r\n","size":8,"level":"medium","operations":"adms","no":82420,"guest":false,"daily":false,"state":null,"u_level":"B"});
 
     var testObject9 = normalizeData({"id":37453,"data":"A\r\n2 4 6 9 5 8 1 7 3 \r\n5 1 2 8 9 3 7 4 6 \r\n8 3 1 2 4 5 6 9 7 \r\n9 5 7 3 8 1 2 6 4 \r\n3 8 5 6 2 7 4 1 9 \r\n4 6 3 7 1 2 9 8 5 \r\n6 9 8 1 7 4 3 5 2 \r\n1 7 9 4 3 6 5 2 8 \r\n7 2 4 5 6 9 8 3 1 \r\nT\r\n  3   4   3  45   0  24   0   4   0\r\n  0   0   0   1   0   0   3   0  13\r\n 17   6   0   0   2   6   3  15   0\r\n  0  35 105   0   0   0   0   0  13\r\n  1   0   0  14  14   0   3   0   0\r\n  0   0  20   0   0  11   0  80   0\r\n  5   0   0   4   3   0   2   0   0\r\n  0   0   0   0   2  19   0   6   0\r\n  5   0   1   0   0   9   0   3   0\r\nS\r\n- / / * 0 * 0 - 0\r\n0 0 0 - 0 0 - 0 +\r\n+ * 0 0 / + / + 0\r\n0 + * 0 0 0 0 0 +\r\n- 0 0 + * 0 - 0 0\r\n0 0 + 0 0 + 0 * 0\r\n- 0 0 / - 0 - 0 0\r\n0 0 0 0 / + 0 - 0\r\n- 0 - 0 0 1 0 / 0\r\nV\r\n1 1 1 0 1 0 1 0\r\n1 1 1 0 1 1 0 1\r\n1 0 0 1 1 1 1 1\r\n1 1 0 1 1 1 1 1\r\n1 1 1 1 0 1 0 1\r\n1 1 1 0 1 0 1 0\r\n1 1 1 1 0 1 0 1\r\n1 1 1 1 1 0 1 0\r\n0 1 0 1 1 1 1 0\r\nH\r\n0 1 0 1 0 1 0 1\r\n0 1 1 0 0 0 0 1\r\n0 1 1 0 1 0 0 1\r\n1 1 1 1 0 1 0 1\r\n1 1 0 1 1 1 1 0\r\n0 1 0 1 1 1 1 1\r\n1 1 0 1 1 1 1 0\r\n1 1 0 1 1 1 1 1\r\n1 0 1 0 1 0 1 1\r\n\r\n","size":9,"level":"hard","operations":"adms","no":37453,"guest":false,"daily":false,"state":null,"u_level":"B"});
+
+    var testObject = testObject7;
     // *************************************
 
 
 
-    var currentStateObject = new CurrentStateConstructor(testObject9);
+    var currentStateObject = new CurrentStateConstructor(testObject);
     var activePuzzleItem = {};
 
 
@@ -427,20 +429,20 @@
         });
     };
 
-    var circle = {
+    function Circle() {
 
-        changeCirclePosition : function() {
+        this.changeCirclePosition = function() {
             var circleDiv = $('#testCircle');
             var circlePos = this.findCirclePosition(60);
 
             circleDiv.css('top', circlePos.y);
             circleDiv.css('left', circlePos.x);
             circleDiv.css('display', 'block');
-        },
+        };
 
 
-        drawOurCircles: function() {
-            var count = testObject9.size + 2;
+        this.drawOurCircles = function() {
+            var count = testObject.size + 2;
             var coordinates = this.calculateCircleButtons(60, count);
             var arrayCircles = $('.ltlCrcl');
             var top, left;
@@ -450,10 +452,10 @@
                 left = coordinates[i - 1].x - 15;
                 $(arrayCircles[i - 1]).css({top: top, left: left})
             }
-        },
+        };
 
 
-        calculateCircleButtons: function(argRadius, argCount) {
+        this.calculateCircleButtons = function(argRadius, argCount) {
             var radius = argRadius;
             var count = argCount;
             var coordinatesArray = [];
@@ -468,10 +470,10 @@
             }
 
             return coordinatesArray;
-        },
+        };
 
 
-        findCirclePosition: function(circleRadius) {
+        this.findCirclePosition = function(circleRadius) {
             var activeSquare = $('.puzzleItem.active')[0];
             var squareWidth = activeSquare.offsetWidth;
             var squareLeft = activeSquare.offsetLeft;
@@ -481,12 +483,16 @@
                 x: squareLeft + (squareWidth / 2) - circleRadius,
                 y: squareTop + (squareWidth / 2) - circleRadius
             };
-        }
+        };
+
+        return this;
     };
+
+    var circle = new Circle();
 
     // *************************************
 
-    drawOurForm(testObject9);
+    drawOurForm(testObject);
     // *************************************
 </script>
 
