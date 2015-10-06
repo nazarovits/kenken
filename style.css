@@ -578,6 +578,23 @@ th {
     font-size: 11px;
 }
 
+.puzzleContainer6 .puzzleItem .itemValue,
+.puzzleContainer7 .puzzleItem .itemValue{
+    font-size: 35px;
+    margin-top: -19px;
+    margin-left: -11px;
+}
+.puzzleContainer8 .puzzleItem .itemValue,
+.puzzleContainer9 .puzzleItem .itemValue{
+    font-size: 27px;
+    margin-top: -16px;
+    margin-left: -7px;
+}
+.puzzleContainer9 .puzzleItem .itemValue{
+    margin-top: -13px;
+    margin-left: -10px;
+}
+
 
 
 .puzzleRow .bottomLineBorder {
