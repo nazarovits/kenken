@@ -18,6 +18,8 @@
 
     // *************************************
     var testObject = {
+        id      : 000001,
+        level   : 'easy',
         size    : 3,
         dataObj : {
             A: [['1', '2', '3'], ['2', '3', '1'], ['3', '1', '2']],
@@ -29,6 +31,8 @@
     };
 
     var testObject2 = {
+        id      : 000001,
+        level   : 'easy',
         size    : 4,
         dataObj : {
             A: [['4', '2', '1', '3'], ['2', '3', '4', '1'], ['1', '4', '3', '2'], ['3', '1', '2', '4']],
@@ -40,14 +44,19 @@
     };
     // *************************************
 
+
+
     var currentStateObject = new CurrentStateConstructor(testObject2);
     var activePuzzleItem = {};
+
 
     // function which draw out HTML version of flash puzzle
     function drawOurForm(puzzleData){
         var data = (puzzleData && puzzleData.dataObj) ? puzzleData.dataObj : {};
         var row = [];
+        var puzzleId = puzzleData.id || '000000';
         var puzzleSize = puzzleData.size;
+        var puzzleLevel = puzzleData.level;
         var values = data.A;
         var results = data.T;
         var symbols = data.S;
@@ -100,7 +109,7 @@
             // ******* top buttons
             row.push('<div id="topInfoBox">');
 
-            row.push('<span id="puzzleInfo">Puzzle No. 000000<\/span>');
+            row.push('<span id="puzzleInfo">Puzzle No. '+puzzleId+', '+puzzleSize+'X'+puzzleSize+', '+puzzleLevel+'<\/span>');
             row.push('<button id="btnPause"><span>PAUSE<\/span><\/button>');
             row.push('<div class="timerBox">');
             row.push('<span id="puzzleTimer">00:00:00<\/span>');
@@ -152,8 +161,8 @@
             row.push('<div id="bottomInfoBox">');
             row.push('<div class="autoNotesBox">');
             row.push('<span>AutoNotes</span>');
-            row.push('<button id="btnOnNotes"><span>ON<\/span><\/button>');
-            row.push('<button id="btnOffNotes"><span>OFF<\/span><\/button>');
+            row.push('<button data-id="1" class="btnNote active"><span>ON<\/span><\/button>');
+            row.push('<button data-id="0" class="btnNote"><span>OFF<\/span><\/button>');
             row.push('<\/div>');
 
             row.push('<div class="savePrintBox">');
@@ -189,12 +198,13 @@
 
         document.querySelector('.box-inner-main').appendChild(result);
 
-        drawOurCircles();
+        circle.drawOurCircles();
         puzzleEvents();
     }
 
     function CurrentStateConstructor(puzzleData) {
         var size = puzzleData.size;
+        var level = puzzleData.level;
         var notesItem;
         var i = size*size;
         var j;
@@ -202,6 +212,7 @@
         this.values = [];
         this.notes = [];
         this.size = size;
+        this.level = level;
 
         while (i > 0){
             j = size;
@@ -255,6 +266,23 @@
             }
         };
 
+        var prepareStateObjectTo = function(callback) {
+            var resultObject = currentStateObject;
+            var valuesString = resultObject.values.join(',');
+            var notesArray = resultObject.notes;
+            var stateObject = {
+                values : valuesString,
+                notes  : notesArray
+            };
+            var result = {
+                id       : '',
+                state    : stateObject,
+                autosave : ''
+            };
+
+            callback(result);
+        };
+
         $('.puzzleItem').click(function(event) {
             var target = $(event.target).closest('.puzzleItem');
             var targetId = target.attr('id');
@@ -270,7 +298,7 @@
             container.find('.active').removeClass('active');
             target.addClass('active');
 
-            changeCirclePosition ();
+            circle.changeCirclePosition ();
         });
 
         $('.ltlCrcl').click( function(event){
@@ -287,6 +315,7 @@
                 stateObject.values[valueIndex-1] = value ? +value : 0;
             }
             circle.hide();
+            prepareStateObjectTo(kenken.game.saveState);
         });
 
         $('.notesItem').click(function(event){
@@ -320,58 +349,62 @@
         });
     };
 
-    function changeCirclePosition (){
-        var circleDiv = $('#testCircle');
-        var circlePos = findCirclePosition(60);
+    var circle = {
 
-        circleDiv.css('top', circlePos.y);
-        circleDiv.css('left', circlePos.x);
-        circleDiv.css('display', 'block');
-    };
+        changeCirclePosition : function() {
+            var circleDiv = $('#testCircle');
+            var circlePos = this.findCirclePosition(60);
 
-    function drawOurCircles (){
-        var count = testObject2.size + 2;
-        var coordinates = calculateCircleButtons(60, count);
-        var arrayCircles = $('.ltlCrcl');
-        var top, left;
+            circleDiv.css('top', circlePos.y);
+            circleDiv.css('left', circlePos.x);
+            circleDiv.css('display', 'block');
+        },
 
-        for (var i=1; i<=count; i+=1){
-            top = coordinates[i-1].y - 15;
-            left = coordinates[i-1].x - 15;
-            $(arrayCircles[i-1]).css({top: top, left: left})
+
+        drawOurCircles: function() {
+            var count = testObject2.size + 2;
+            var coordinates = this.calculateCircleButtons(60, count);
+            var arrayCircles = $('.ltlCrcl');
+            var top, left;
+
+            for (var i = 1; i <= count; i += 1) {
+                top = coordinates[i - 1].y - 15;
+                left = coordinates[i - 1].x - 15;
+                $(arrayCircles[i - 1]).css({top: top, left: left})
+            }
+        },
+
+
+        calculateCircleButtons: function(argRadius, argCount) {
+            var radius = argRadius;
+            var count = argCount;
+            var coordinatesArray = [];
+            var x;
+            var y;
+
+            for (var i = 0; i < count; i++) {
+                x = radius + radius * Math.sin(2 / count * Math.PI * i);
+                y = radius - radius * Math.cos(2 / count * Math.PI * i);
+
+                coordinatesArray.push({x: x, y: y});
+            }
+
+            return coordinatesArray;
+        },
+
+
+        findCirclePosition: function(circleRadius) {
+            var activeSquare = $('.puzzleItem.active')[0];
+            var squareWidth = activeSquare.offsetWidth;
+            var squareLeft = activeSquare.offsetLeft;
+            var squareTop = activeSquare.offsetTop;
+
+            return {
+                x: squareLeft + (squareWidth / 2) - circleRadius,
+                y: squareTop + (squareWidth / 2) - circleRadius
+            };
         }
-
     };
-
-    function calculateCircleButtons(argRadius, argCount) {
-        var radius = argRadius;
-        var count = argCount;
-        var coordinatesArray = [];
-        var x;
-        var y;
-
-        for (var i = 0; i < count; i++){
-            x = radius + radius * Math.sin(2 / count * Math.PI * i);
-            y = radius - radius * Math.cos(2 / count * Math.PI * i);
-
-            coordinatesArray.push({x: x, y : y});
-        }
-
-        return coordinatesArray;
-
-    };
-
-    function findCirclePosition (circleRadius) {
-        var activeSquare = $('.puzzleItem.active')[0];
-        var squareWidth = activeSquare.offsetWidth;
-        var squareLeft = activeSquare.offsetLeft;
-        var squareTop = activeSquare.offsetTop;
-
-        return {
-            x: squareLeft + (squareWidth/2) - circleRadius,
-            y: squareTop + (squareWidth/2) - circleRadius
-        };
-    }
 
     // *************************************
 
