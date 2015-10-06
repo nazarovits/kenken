@@ -162,6 +162,7 @@ th {
 .mainContainer{
     overflow: hidden;
     position: relative;
+    margin-top: 30px;
 }
 .mainContainer > div:first-child{
     width: 150px;
@@ -486,7 +487,7 @@ th {
     height: 58px;
 }
 .puzzleContainer9 .puzzleItem{
-    width: 51.3px;
+    width: 51.5px;
     height: 51.5px;
 }
 
