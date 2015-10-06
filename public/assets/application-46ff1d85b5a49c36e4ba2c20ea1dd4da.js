@@ -298,7 +298,7 @@ var KenKenGame = function () {
     };
 
     function showSolution(event) {
-        hideOnSolutionPopup();
+        //hideOnSolutionPopup();
         console.log('>>> show solution');
     };
 
