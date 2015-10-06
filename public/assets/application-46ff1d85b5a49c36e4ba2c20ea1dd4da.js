@@ -125,6 +125,67 @@ function Timer() {
 };
 // </editor-fold>
 
+// <editor-fold desc="Circle">
+function Circle(puzzleData) {
+
+    this.changeCirclePosition = function() {
+        var circleDiv = $('#testCircle');
+        var circlePos = this.findCirclePosition(60);
+
+        circleDiv.css('top', circlePos.y);
+        circleDiv.css('left', circlePos.x);
+        circleDiv.css('display', 'block');
+    };
+
+
+    this.drawOurCircles = function() {
+        var count = puzzleData.size + 2;
+        var coordinates = this.calculateCircleButtons(60, count);
+        var arrayCircles = $('.ltlCrcl');
+        var top, left;
+
+        for (var i = 1; i <= count; i += 1) {
+            top = coordinates[i - 1].y - 15;
+            left = coordinates[i - 1].x - 15;
+            $(arrayCircles[i - 1]).css({top: top, left: left})
+        }
+    };
+
+
+    this.calculateCircleButtons = function(argRadius, argCount) {
+        var radius = argRadius;
+        var count = argCount;
+        var coordinatesArray = [];
+        var x;
+        var y;
+
+        for (var i = 0; i < count; i++) {
+            x = radius + radius * Math.sin(2 / count * Math.PI * i);
+            y = radius - radius * Math.cos(2 / count * Math.PI * i);
+
+            coordinatesArray.push({x: x, y: y});
+        }
+
+        return coordinatesArray;
+    };
+
+
+    this.findCirclePosition = function(circleRadius) {
+        var activeSquare = $('.puzzleItem.active')[0];
+        var squareWidth = activeSquare.offsetWidth;
+        var squareLeft = activeSquare.offsetLeft;
+        var squareTop = activeSquare.offsetTop;
+
+        return {
+            x: squareLeft + (squareWidth / 2) - circleRadius,
+            y: squareTop + (squareWidth / 2) - circleRadius
+        };
+    };
+
+    return this;
+};
+// </editor-fold>
+
 // <editor-fold desc="Game">
 var KenKenGame = function () {
     function parse(item) {
@@ -308,22 +369,17 @@ var KenKenGame = function () {
         }
     };
 
-    var currentValues = [[1, 0, 0], [0, 2, 0], [0, 0, 3]];
-
     function onReveal() {
-        kenken.game.onReveal();
-        console.log('onReveal');
-
-        test();
-
         var puzzleData = (self.puzzleData) ? self.puzzleData : null;
         var solution;
         var size;
         var selector;
         var obj = {};
-        //var currentValues = [[1, 0, 0], [0, 2, 0], [0, 0, 3]];
+        var currentValues = currentStateObject.values;
         var keys;
         var randomKey;
+
+        kenken.game.onReveal();
 
         if (!puzzleData || !currentValues) {
             return;
@@ -342,36 +398,20 @@ var KenKenGame = function () {
         }
 
         keys = Object.keys(obj);
-        randomKey = keys[Math.floor(Math.random()*keys.length)];
-        console.log(keys);
-        console.log(randomKey);
 
-        // -----------------------------
-        //TODO: remove;
-        var i_ = parseInt(randomKey.charAt(2));
-        var j_ = parseInt(randomKey.charAt(3));
-        currentValues[i_][j_] = obj[randomKey]
-        // -----------------------------
-
-        $(randomKey).text(obj[randomKey]);
-        /*var puzzleData = (self.puzzleData) ? self.puzzleData : null;
-        var solution;
-        var size;
-        var selector;
-
-        if (!puzzleData) {
+        if (!keys.length) {
             return;
         }
 
-        solution = puzzleData.dataObj.A;
-        size = puzzleData.size;
+        randomKey = keys[Math.floor(Math.random()*keys.length)];
 
-        for (var i=0; i<size; i++) {
-            for (var j=0; j<size; j++) {
-                selector = '#p' + (i+1) + (j+1) + ' .itemValue';
-                $(selector).text(solution[i][j]);
-            }
-        }*/
+        //save the current state:
+        var i_ = randomKey.charAt(2) - 1;
+        var j_ = randomKey.charAt(3) - 1;
+
+        currentValues[i_][j_] = obj[randomKey];
+
+        $(randomKey).text(obj[randomKey]);
     };
 
     function hideOnSolutionPopup(event) {
@@ -418,7 +458,7 @@ var KenKenGame = function () {
         };
 
         var drawActiveNotes = function(){
-            var indexValue = activePuzzleItem.indexValue;
+            var indexValue = (activePuzzleItem.indexX - 1)* currentStateObject.size + activePuzzleItem.indexY;
             var notesArray = currentStateObject.notes[indexValue-1];
             var domArray = $('.notesItem');
             var size = currentStateObject.size;
@@ -479,14 +519,13 @@ var KenKenGame = function () {
             activePuzzleItem.item = target;
             activePuzzleItem.indexX = +targetId[1];
             activePuzzleItem.indexY = +targetId[2];
-            activePuzzleItem.indexValue = (activePuzzleItem.indexX - 1)* currentStateObject.size + activePuzzleItem.indexY;
 
             drawActiveNotes();
 
             container.find('.active').removeClass('active');
             target.addClass('active');
 
-            circle.changeCirclePosition ();
+            self.circle.changeCirclePosition();
         });
 
         $('.ltlCrcl').click( function(event){
@@ -495,12 +534,13 @@ var KenKenGame = function () {
             var circle = target.closest('#testCircle');
             var currentItem = activePuzzleItem.item;
             var stateObject = currentStateObject;
-            var valueIndex = activePuzzleItem.indexValue;
+            var valueX = activePuzzleItem.indexX;
+            var valueY = activePuzzleItem.indexY;
 
             if (value !== 'cX') {
                 if (value === 'cC'){value = ''}
                 currentItem.find('.itemValue').text(value);
-                stateObject.values[valueIndex-1] = value ? +value : 0;
+                stateObject.values[valueX-1][valueY-1] = value ? +value : 0;
             }
             circle.hide();
             //prepareStateObjectTo(kenken.game.saveState);
@@ -508,7 +548,7 @@ var KenKenGame = function () {
 
         $('.notesItem').click(function(event){
             var currentItem = activePuzzleItem.item;
-            var currentIndex = activePuzzleItem.indexValue;
+            var currentIndex = (activePuzzleItem.indexX - 1)* currentStateObject.size + activePuzzleItem.indexY;
             var notesArray = currentStateObject.notes[currentIndex-1];
             var valuesArray = currentStateObject.values;
             var target = $(event.target).closest('.notesItem');
@@ -520,10 +560,10 @@ var KenKenGame = function () {
             var i=1;
 
             while (i <= size){
-                if (valuesArray[(x-1)*size+i-1] === notesValue){
+                if (valuesArray[x-1][i-1] === notesValue){
                     return;
                 } else {
-                    if (valuesArray[(i-1)*size+y-1] === notesValue){
+                    if (valuesArray[i-1][y-1] === notesValue){
                         return;
                     }
                 }
@@ -693,15 +733,18 @@ var KenKenGame = function () {
 
         document.querySelector('.box-inner-main').appendChild(result);
 
+        var circle = new Circle(puzzleData);
         circle.drawOurCircles();
+        self.circle = circle;
     }
 
     function CurrentStateConstructor(puzzleData) {
         var size = puzzleData.size;
         var level = puzzleData.level;
         var notesItem;
-        var i = size*size;
-        var j;
+        var valuesItem;
+        var i = size;
+        var j,k;
 
         this.values = [];
         this.notes = [];
@@ -710,8 +753,20 @@ var KenKenGame = function () {
 
         while (i > 0){
             j = size;
+            valuesItem = [];
+            while (j > 0){
+                valuesItem.push(0);
+                j -= 1;
+            }
+            this.values.push(valuesItem);
+            i -= 1;
+        }
+
+        i = size*size;
+
+        while (i > 0){
+            j = size;
             notesItem = [];
-            this.values.push(0);
             while (j > 0){
                 notesItem.push(false);
                 j -= 1;
@@ -726,11 +781,12 @@ var KenKenGame = function () {
     var currentStateObject;// = new CurrentStateConstructor(puzzleData);
     var activePuzzleItem = {};
 
-    var circle;
+    var circle;// = new Circle();
     var defaultTimer = '00:00:00';
     var timerState = 'ON';
     var isPaused = false;
 
+    this.circle = null;
     this.timer = null;
     this.puzzleData = null;
     var self = this;
@@ -748,63 +804,6 @@ var KenKenGame = function () {
         self.puzzleData = data;
 
         currentStateObject = new CurrentStateConstructor(data); //TODO: fix;
-        circle = {                                              //TODO: fix;
-
-            changeCirclePosition : function() {
-                var circleDiv = $('#testCircle');
-                var circlePos = this.findCirclePosition(60);
-
-                circleDiv.css('top', circlePos.y);
-                circleDiv.css('left', circlePos.x);
-                circleDiv.css('display', 'block');
-            },
-
-
-            drawOurCircles: function() {
-                //var count = puzzleData.size + 2;
-                var count = data.size + 2;
-                var coordinates = this.calculateCircleButtons(60, count);
-                var arrayCircles = $('.ltlCrcl');
-                var top, left;
-
-                for (var i = 1; i <= count; i += 1) {
-                    top = coordinates[i - 1].y - 15;
-                    left = coordinates[i - 1].x - 15;
-                    $(arrayCircles[i - 1]).css({top: top, left: left})
-                }
-            },
-
-
-            calculateCircleButtons: function(argRadius, argCount) {
-                var radius = argRadius;
-                var count = argCount;
-                var coordinatesArray = [];
-                var x;
-                var y;
-
-                for (var i = 0; i < count; i++) {
-                    x = radius + radius * Math.sin(2 / count * Math.PI * i);
-                    y = radius - radius * Math.cos(2 / count * Math.PI * i);
-
-                    coordinatesArray.push({x: x, y: y});
-                }
-
-                return coordinatesArray;
-            },
-
-
-            findCirclePosition: function(circleRadius) {
-                var activeSquare = $('.puzzleItem.active')[0];
-                var squareWidth = activeSquare.offsetWidth;
-                var squareLeft = activeSquare.offsetLeft;
-                var squareTop = activeSquare.offsetTop;
-
-                return {
-                    x: squareLeft + (squareWidth / 2) - circleRadius,
-                    y: squareTop + (squareWidth / 2) - circleRadius
-                };
-            }
-        };
 
         console.log('KenKenGame.sendPuzzleData');
         console.log(dataObj);
