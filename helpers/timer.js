@@ -75,7 +75,7 @@ function Timer() {
         if (timerInterval) {
             isPaused = !isPaused;
             startedAt = new Date;
-            pausedTime += totalSeconds;
+            pausedTime = totalSeconds;
         } else {
             console.log('nothing to resume');
         }

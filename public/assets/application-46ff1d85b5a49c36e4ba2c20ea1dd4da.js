@@ -100,7 +100,7 @@ function Timer() {
         if (timerInterval) {
             isPaused = !isPaused;
             startedAt = new Date;
-            pausedTime += totalSeconds;
+            pausedTime = totalSeconds;
         } else {
             console.log('nothing to resume');
         }
@@ -194,16 +194,17 @@ var KenKenGame = function () {
     }
 
     function startTimer() {
-        var puzzleTimer = $('#puzzleTimer');
         var timer = new Timer();
+        var puzzleTimer = $('#puzzleTimer');
 
         timer.onTick(function (err, onTickResult) {
-            //console.log(onTickResult.str);
-            puzzleTimer.text(onTickResult.str);
+            if (timerState === 'ON') {
+                puzzleTimer.text(onTickResult.str);
+            }
         });
 
         timer.start();
-
+        self.timer = timer;
     }
 
     function startTimer___() {
@@ -247,34 +248,59 @@ var KenKenGame = function () {
 
     function changeTimerState(e) {
         var target = e.target;
-
-        target.value = timerState;
+        var span = target.closest('span');
+        var puzzleTimer = $('#puzzleTimer');
 
         if (timerState === 'OFF') {
             timerState = 'ON';
-            $('#puzzleTimer').text(defaultTimer);
+            span.innerHTML = 'OFF';
         } else {
+            puzzleTimer.text(defaultTimer);
             timerState = 'OFF';
+            span.innerHTML = 'ON';
         }
     };
 
     function pauseOrResume(event) {
-        console.log('pauseOrResume');
         var puzzleContainer = $("#puzzleContainer");
         var popupContainer = $('.clickToResume');
+        var span = event.target.closest('span');
+        var timer = self.timer;
+
+        $('#testCircle').hide();
 
         isPaused = !isPaused;
 
         if (isPaused) {
+            timer.pause();
             kenken.game.onPause();
             kenken.game.widgetAdBeforePause();
             puzzleContainer.hide();
             popupContainer.show();
+            span.innerHTML = 'RESUME';
         } else {
+            span.innerHTML = 'PAUSE';
+            timer.resume();
             popupContainer.hide();
             puzzleContainer.show();
         }
-    }
+    };
+
+    function onSolution() {
+        var popup = $('#onSolution');
+
+        kenken.game.onSolution();
+        popup.show();
+    };
+
+    function hideOnSolutionPopup(event) {
+        $('#onSolution').hide();
+    };
+
+    function showSolution(event) {
+        hideOnSolutionPopup();
+        console.log('>>> show solution');
+    };
 
     function handleEvents() {
         var booleanArrayToSting = function(argArray){
@@ -338,12 +364,14 @@ var KenKenGame = function () {
         /* --- Reveal | Check | Solution --- */
         $('#btnReveal').click(kenken.game.onReveal);         //Reveal
         $('#btnCheck').click(kenken.game.onCheck);           //Check
-        $('#btnSolution').click(kenken.game.onSolution);     //Solution
+        $('#btnSolution').click(onSolution);     //Solution
 
         /* --- Timer --- */
         $('#btnOffTimer').click(changeTimerState);           // OFF - ON timer
         $('#btnPause').click(pauseOrResume);                 // Pause
 
+        $('#onSolution .closeButton').click(hideOnSolutionPopup);
+        $('#onSolution #showSolution').click(showSolution);
 
         $('.puzzleItem').click(function(event) {
             var target = $(event.target).closest('.puzzleItem');
@@ -554,6 +582,13 @@ var KenKenGame = function () {
 
         // +++++++ test circle
 
+        // +++++++ onSolution popup
+        row.push('<div id="onSolution" style="display: none">');
+        row.push('<span>See solution?</span>');
+        row.push('<div class="closeButton"><span>x</span></div>');
+        row.push('<button id="showSolution"><span>OK</span></button>');
+        row.push('<\/div>');
+
         result = document.createElement('div');
         result.className = 'mainContainer';
         result.innerHTML = row.join('');
@@ -596,10 +631,13 @@ var KenKenGame = function () {
     var circle;
 
 
+
     var defaultTimer = '00:00:00';
     var timerState = 'ON';
     var isPaused = false;
     var self = this;
+
+    this.timer = null;
 
     this.loadPuzzleState = function (state) {
         console.log('KenKen.loadPuzzleState');
