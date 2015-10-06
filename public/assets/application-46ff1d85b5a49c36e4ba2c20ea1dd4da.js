@@ -20,6 +20,111 @@ function killFlash() {
     document.head.appendChild(script);
 }
 
+// <editor-fold desc="Timer">
+function Timer() {
+
+    function setTime() {
+        var hours;
+        var minutes;
+        var seconds;
+        var str;
+        var resultObj;
+
+        //console.log('setTime() totalSeconds = %s, isPaused = %s, pausedTime = %s', totalSeconds, isPaused, pausedTime);
+
+        if (!isPaused) {
+            totalSeconds = pausedTime + parseInt((new Date - startedAt) / 1000);
+
+            hours = pad(parseInt(totalSeconds / 3600));
+            minutes = pad(parseInt(totalSeconds / 60));
+            seconds = pad(totalSeconds % 60);
+            str = hours + ":" + minutes + ":" + seconds;
+
+            if (tickCallback && (typeof tickCallback === 'function')) {
+                resultObj = {
+                    totalSeconds: totalSeconds,
+                    str: str,
+                    hours: hours,
+                    minutes: minutes,
+                    seconds: seconds
+                };
+
+                tickCallback(null, resultObj);
+            }
+        }
+    }
+
+    function pad(val) {
+        var valString = val + "";
+
+        if (valString.length < 2) {
+            return "0" + valString;
+        } else {
+            return valString;
+        }
+    }
+
+    var pausedTime = 0;
+    var isPaused = false;
+    var startedAt = new Date;
+    var totalSeconds = 0;
+    var timerInterval;
+    var tickCallback;
+
+    this.start = function () {
+        console.log('start');
+
+        if (timerInterval) {
+            return console.log('timer already was started', timerInterval);
+        } else {
+            console.log('...');
+
+            timerInterval = setInterval(setTime, 500);
+        }
+    };
+
+    this.pause = function () {
+        console.log('pause');
+
+        if (timerInterval) {
+            isPaused = !isPaused;
+        } else {
+            console.log('nothing to pause');
+        }
+
+    };
+
+    this.resume = function () {
+        console.log('resume');
+
+        if (timerInterval) {
+            isPaused = !isPaused;
+            startedAt = new Date;
+            pausedTime += totalSeconds;
+        } else {
+            console.log('nothing to resume');
+        }
+
+    };
+
+    this.stop = function () {
+        console.log('stop');
+
+        if (timerInterval) {
+            console.log('timerInterval', timerInterval);
+            clearInterval(timerInterval);
+        } else {
+            console.log('nothing to stop');
+        }
+    };
+
+    this.onTick = function (callback) {
+        tickCallback = callback;
+    };
+
+};
+// </editor-fold>
+
 // <editor-fold desc="Game">
 var KenKenGame = function () {
     function parse(item) {
@@ -89,6 +194,20 @@ var KenKenGame = function () {
     }
 
     function startTimer() {
+        var puzzleTimer = $('#puzzleTimer');
+        var timer = new Timer();
+
+        timer.onTick(function (err, onTickResult) {
+            //console.log(onTickResult.str);
+            puzzleTimer.text(onTickResult.str);
+        });
+
+        timer.start();
+
+    }
+
+    function startTimer___() {
+
         function setTime(){
             var hours;
             var minutes;
@@ -118,11 +237,12 @@ var KenKenGame = function () {
             }
         }
 
-        var puzzleTimer = $('#puzzleTimer');
+
         var start = new Date;
         var totalSeconds = 0;
+        var timerInterval = setInterval(setTime, 500);
 
-        setInterval(setTime, 500);
+        return timerInterval;
     };
 
     function changeTimerState(e) {
@@ -191,18 +311,20 @@ var KenKenGame = function () {
     }
 
     function pauseOrResume(event) {
+        console.log('pauseOrResume');
         var puzzleContainer = $("#puzzleContainer");
-
-        kenken.game.onPause();
-        kenken.game.widgetAdBeforePause();
+        var popupContainer = $('.clickToResume');
 
         isPaused = !isPaused;
-        puzzleContainer.toggleClass('paused');
 
         if (isPaused) {
-            puzzleContainer.click(pauseOrResume);
+            kenken.game.onPause();
+            kenken.game.widgetAdBeforePause();
+            puzzleContainer.hide();
+            popupContainer.show();
         } else {
-            puzzleContainer.unbind('click');
+            popupContainer.hide();
+            puzzleContainer.show();
         }
     }
 
@@ -347,6 +469,8 @@ var KenKenGame = function () {
         }
 
         row.push('<\/div>');
+
+        row.push('<div><a class="clickToResume" style="display: none;">Click to resume</a></div>');
 
         // ******* bottom container
         row.push('<div id="bottomInfoBox">');
