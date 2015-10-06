@@ -368,17 +368,15 @@ var KenKenGame = function () {
     };
 
     function drawOurForm(puzzleData){
-        console.log('drawOurForm');
-        console.log(puzzleData);
-        var data = puzzleData ? puzzleData : {};
+        var data = (puzzleData && puzzleData.dataObj) ? puzzleData.dataObj : {};
         var row = [];
-        var puzzleId = puzzleData.id || '000000';
         var puzzleSize = puzzleData.size;
-        var values = puzzleData.dataObj.A;
-        var results = puzzleData.dataObj.T;
-        var symbols = puzzleData.dataObj.S;
-        var rightLines = puzzleData.dataObj.V;
-        var bottomLines = puzzleData.dataObj.H;
+        var puzzleId = puzzleData.id || '000000';
+        var values = data.A;
+        var results = data.T;
+        var symbols = data.S;
+        var rightLines = data.V;
+        var bottomLines = data.H;
         var lineClass;
         var result;
         var i,j;
@@ -392,29 +390,29 @@ var KenKenGame = function () {
         for (i=1; i<=puzzleSize; i+=1){
             row.push('<div class="notesItem" data-id="'+i+'"><span>'+i+'<\/span><\/div>');
         }
-        row.push('<div id="notesAll">OK<\/div>');
-        row.push('<div id="notesDel">DEL<\/div>');
+        row.push('<div id="notesAll"><span><img src="./public/img/icn_check.png"><\/span><\/div>');
+        row.push('<div id="notesDel"><span><img src="./public/img/ic_close_.png"><\/span><\/div>');
 
         row.push('<\/div>');
 
         // ******* first buttons box
         row.push('<div class="firstBtnBox">');
-            row.push('<button id="btnSolve"><span>Solve Another<\/span><\/button>');
-            row.push('<button id="btnResumeSaved"><span>Resume Saved Puzzle<\/span><\/button>');
+        row.push('<button id="btnSolve"><span>Solve Another<\/span><\/button>');
+        row.push('<button id="btnResumeSaved"><span>Resume Saved Puzzle<\/span><\/button>');
         row.push('<\/div>');
 
         // ******* second buttons box
         row.push('<div class="secondBtnBox">');
-            row.push('<button id="btnUndo"><span>Undo<\/span><\/button>');
-            row.push('<button id="btnRedo"><span>Redo<\/span><\/button>');
-            row.push('<button id="btnReset"><span>Reset<\/span><\/button>');
+        row.push('<button id="btnUndo"><span>Undo<\/span><\/button>');
+        row.push('<button id="btnRedo"><span>Redo<\/span><\/button>');
+        row.push('<button id="btnReset"><span>Reset<\/span><\/button>');
         row.push('<\/div>');
 
         // ******* third buttons box
         row.push('<div class="thirdBtnBox">');
-            row.push('<button id="btnReveal"><span>Reveal<\/span><\/button>');
-            row.push('<button id="btnCheck"><span>Check<\/span><\/button>');
-            row.push('<button id="btnSolution"><span>Solution<\/span><\/button>');
+        row.push('<button id="btnReveal"><span>Reveal<\/span><\/button>');
+        row.push('<button id="btnCheck"><span>Check<\/span><\/button>');
+        row.push('<button id="btnSolution"><span>Solution<\/span><\/button>');
         row.push('<\/div>');
 
         // ******* left panel end
