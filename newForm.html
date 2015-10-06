@@ -308,6 +308,7 @@
         var i = size;
         var j,k;
 
+        this.resultValues = puzzleData.dataObj.A;
         this.values = [];
         this.notes = [];
         this.size = size;
@@ -473,6 +474,28 @@
             target.toggleClass('active');
             stringResult = booleanArrayToSting(notesArray);
             currentItem.find('.itemNotes').text(stringResult);
+        });
+
+        $('#btnCheck').click(function(){
+            var size = currentStateObject.size;
+            var values = currentStateObject.values;
+            var resultValues = currentStateObject.resultValues;
+            var i,j;
+            var activeVal;
+            var active;
+
+            for (i=1; i<=size; i+=1){
+                for (j=1; i<=size; j+=1) {
+                    if (values[i][j] !== 0){
+
+                        if (values[i][j] == resultValues[i][j]){
+                            $('#p'+i+j).addClass('greenPulse');
+                        } else {
+
+                        }
+                    }
+                }
+            }
         });
 
         // <editor-fold desc="Show Solution">
