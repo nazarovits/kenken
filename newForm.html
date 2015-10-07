@@ -480,6 +480,7 @@
             var size = currentStateObject.size;
             var values = currentStateObject.values;
             var resultValues = currentStateObject.resultValues;
+            var allItems = $('.puzzleItem');
             var i,j;
             var activeVal;
             var activeClass;
@@ -494,12 +495,13 @@
                             activeClass = 'pulseRed';
                         }
                         activeVal.addClass(activeClass);
-                        setTimeout(function(){
-                            activeVal.removeClass(activeClass);
-                        },1000)
                     }
                 }
             }
+            setTimeout(function(){
+                allItems.removeClass('pulseGreen');
+                allItems.removeClass('pulseRed');
+            },400)
         });
 
         // <editor-fold desc="Show Solution">
