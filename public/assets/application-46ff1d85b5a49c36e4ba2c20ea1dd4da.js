@@ -125,6 +125,49 @@ function Timer() {
 };
 // </editor-fold>
 
+// <editor-fold desc="Steps">
+var Steps = function (puzzleData) {
+    var history = [];
+    var index = -1; //empty history
+
+    this.save = function (data, options) {
+        console.log('Steps.saveStep()');
+        index++;
+        history[index] = data;
+    };
+
+    this.undo = function () {
+        console.log('Steps.undo();');
+        if (index !== -1) {
+            index--;
+        }
+    };
+
+    this.redo = function () {
+        console.log('Steps.redo()');
+        if (index < (history.length - 1)) {
+            index++;
+        }
+    };
+
+    this.currentState = function () {
+        console.log('Steps.currentState()');
+        return history[index];
+    };
+
+    this.getCurrentIndex = function () {
+        console.log('Steps.currentIndex()');
+        return index;
+    };
+
+    this.getHistory = function () {
+        console.log('Steps.getHistory()');
+        return history;
+    };
+};
+
+// </editor-fold>
+
 // <editor-fold desc="Circle">
 function Circle(puzzleData) {
 
@@ -788,6 +831,7 @@ var KenKenGame = function () {
 
     this.circle = null;
     this.timer = null;
+    this.steps = null;
     this.puzzleData = null;
     var self = this;
 
@@ -802,6 +846,7 @@ var KenKenGame = function () {
         var dataObj = data.dataObj;
 
         self.puzzleData = data;
+        self.steps = new Steps(data);
 
         currentStateObject = new CurrentStateConstructor(data); //TODO: fix;
 
