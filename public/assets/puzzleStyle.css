@@ -465,30 +465,30 @@ th {
     width: 158px;
     height: 158px;
 }
+.pulseGreen{
+    background-color: #b3ffb3;
+}
+.pulseRed{
+    background-color: #ffb3b3;
+}
 
 .puzzleContainer4 .puzzleItem{
-    width: 118px;
-    height: 118px;
+    width: calc(25% - 2px);
 }
 .puzzleContainer5 .puzzleItem{
-    width: 94px;
-    height: 94px;
+    width: calc(20% - 1.9px);
 }
 .puzzleContainer6 .puzzleItem{
-    width: 78px;
-    height: 78px;
+    width: calc(16% - 1.9px);
 }
 .puzzleContainer7 .puzzleItem{
-    width: 66.5px;
-    height: 66.5px;
+    width: calc(14% - 1.9px);
 }
 .puzzleContainer8 .puzzleItem{
-    width: 58px;
-    height: 58px;
+    width: calc(12.5% - 1.9px);
 }
 .puzzleContainer9 .puzzleItem{
-    width: 51.5px;
-    height: 51.5px;
+    width: calc(11% - 1.9px);
 }
 
 
@@ -523,82 +523,6 @@ th {
     right: 30px;
     top: 60%;
 }
-
-/*.puzzleContainer4 .puzzleItem .itemResult,*/
-/*.puzzleContainer4 .puzzleItem .itemSymbol{*/
-/*font: 400 28px/40px Arial;*/
-/*}*/
-.puzzleContainer5 .puzzleItem .itemResult,
-.puzzleContainer5 .puzzleItem .itemSymbol{
-    font: 400 24px/35px Arial;
-}
-.puzzleContainer6 .puzzleItem .itemResult,
-.puzzleContainer6 .puzzleItem .itemSymbol{
-    font: 400 22px/30px Arial;
-}
-.puzzleContainer7 .puzzleItem .itemResult,
-.puzzleContainer7 .puzzleItem .itemSymbol{
-    font: 400 20px/25px Arial;
-}
-.puzzleContainer8 .puzzleItem .itemResult,
-.puzzleContainer8 .puzzleItem .itemSymbol{
-    font: 400 17px/23px Arial;
-}
-.puzzleContainer9 .puzzleItem .itemResult,
-.puzzleContainer9 .puzzleItem .itemSymbol{
-    font: 400 15px/20px Arial;
-}
-
-.puzzleContainer4 .puzzleItem .itemResult{
-    margin-left: 15px;
-}
-.puzzleContainer5 .puzzleItem .itemResult{
-    margin-left: 10px;
-}
-.puzzleContainer6 .puzzleItem .itemResult,
-.puzzleContainer7 .puzzleItem .itemResult,
-.puzzleContainer8 .puzzleItem .itemResult,
-.puzzleContainer9 .puzzleItem .itemResult{
-    margin-left: 5px;
-}
-
-.puzzleContainer5 .puzzleItem .itemNotes{
-    font-size: 17px;
-    right: 10px;
-}
-.puzzleContainer6 .puzzleItem .itemNotes{
-    font-size: 13px;
-    right: 10px;
-}
-.puzzleContainer7 .puzzleItem .itemNotes,
-.puzzleContainer8 .puzzleItem .itemNotes,
-.puzzleContainer9 .puzzleItem .itemNotes{
-    font-size: 14px;
-    right: 5px;
-    top: 40%;
-    text-align: right;
-}
-.puzzleContainer9 .puzzleItem .itemNotes{
-    font-size: 11px;
-}
-
-.puzzleContainer6 .puzzleItem .itemValue,
-.puzzleContainer7 .puzzleItem .itemValue{
-    font-size: 35px;
-    margin-top: -19px;
-    margin-left: -11px;
-}
-.puzzleContainer8 .puzzleItem .itemValue,
-.puzzleContainer9 .puzzleItem .itemValue{
-    font-size: 27px;
-    margin-top: -16px;
-    margin-left: -7px;
-}
-.puzzleContainer9 .puzzleItem .itemValue{
-    margin-top: -13px;
-    margin-left: -10px;
-}
-
 
 
 .puzzleRow .bottomLineBorder {
@@ -659,43 +583,3 @@ th {
     background-color: #fff;
 }
 
-
-#onSolution{
-    background: #fff;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 300px;
-    height: 100px;
-    margin-left: -150px;
-    margin-top: -50px;
-    -webkit-box-shadow: 0 0 10px #000;
-    -moz-box-shadow:  0 0 10px #000;
-    box-shadow:  0 0 10px #000;
-    text-align: center;
-}
-#onSolution .closeButton{
-    position: absolute;
-    right: -12px;
-    top: -12px;
-    width: 24px;
-    height: 24px;
-    font: 600 20px/16px "Comic Sans MS", cursive, sans-serif;
-    border-radius: 50%;
-    background: #2141a9;
-    color: #ccc;
-    cursor: pointer;
-}
-#onSolution > span{
-    display: block;
-    font: 400 30px/30px Arial;
-    margin-top: 10px;
-    color: #2141a9;
-}
-#onSolution button{
-    margin-top: 20px;
-    background: #2142a9;
-    padding: 5px 10px;
-    border: none;
-    color: #fff;
-}
