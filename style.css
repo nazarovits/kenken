@@ -162,6 +162,7 @@ th {
 .mainContainer{
     overflow: hidden;
     position: relative;
+    margin-top: 30px;
 }
 .mainContainer > div:first-child{
     width: 150px;
@@ -464,6 +465,12 @@ th {
     width: 158px;
     height: 158px;
 }
+.pulseGreen{
+    background-color: #b3ffb3;
+}
+.pulseRed{
+    background-color: #ffb3b3;
+}
 
 .puzzleContainer4 .puzzleItem{
     width: 118px;
@@ -486,7 +493,7 @@ th {
     height: 58px;
 }
 .puzzleContainer9 .puzzleItem{
-    width: 51.3px;
+    width: 51.5px;
     height: 51.5px;
 }
 
