@@ -424,7 +424,8 @@ th {
     border: 1px solid #000;
     background: #fff;
 }
-.autoNotesBox > button:hover{
+.autoNotesBox > button:hover,
+.autoNotesBox > button.active{
     background-color: beige;
 }
 .savePrintBox{
@@ -466,10 +467,14 @@ th {
     height: 158px;
 }
 .pulseGreen{
-    background-color: #b3ffb3;
+    background-color: #b3ffb3 !important;
 }
 .pulseRed{
-    background-color: #ffb3b3;
+    background-color: #ffb3b3 !important;
+}
+
+.withValue .itemNotes{
+    display: none !important;
 }
 
 .puzzleContainer4 .puzzleItem{
