@@ -585,7 +585,7 @@ var KenKenGame = function () {
 
     };
 
-    function onReset() {
+    function letsReset() {
 
         $('.itemValue, .itemNotes').text('');
         $('#p11').click();
@@ -596,12 +596,25 @@ var KenKenGame = function () {
         self.steps.reset();
         self.timer.stop();
         self.timer.start();
+
+        hidePopup();
     }
 
-    function onSolution() {
-        var popup = $('#onSolution');
+    function onSolutionClick() {
+        var popup = $('#onPopup');
+        popup.find('.popupMessage').text('See solution?');
+        popup.find('#showSolution').attr('data-val','solution');
 
         kenken.game.onSolution();
+        popup.show();
+    };
+
+    function onResetClick(){
+        var popup = $('#onPopup');
+        popup.find('.popupMessage').text('Reset puzzle?');
+        popup.find('#showSolution').attr('data-val','reset');
+
+        //kenken.game.onSolution();
         popup.show();
     };
 
@@ -663,11 +676,11 @@ var KenKenGame = function () {
         el.closest('.puzzleItem').addClass('withValue');
     };
 
-    function hideOnSolutionPopup(event) {
-        $('#onSolution').hide();
+    function hidePopup() {
+        $('#onPopup').hide();
     };
 
-    function showSolution(event) {
+    function showSolution() {
         var puzzleData = (self.puzzleData) ? self.puzzleData : null;
         var solution;
         var size;
@@ -686,8 +699,12 @@ var KenKenGame = function () {
                 $(selector).text(solution[i][j]);
             }
         }
-        hideOnSolutionPopup();
+        hidePopup();
     };
+
+    //function letsReset(){
+    //
+    //};
 
     var booleanArrayToSting = function (argArray) {
         var currentArray = argArray;
@@ -776,19 +793,29 @@ var KenKenGame = function () {
         $('#btnRendo').click(function () {
             console.log('Redo is not implemented yet');
         }); //Redo
-        $('#btnReset').click(onReset); //Reset
+        $('#btnReset').click(onResetClick); //Reset
 
         /* --- Reveal | Check | Solution --- */
         $('#btnReveal').click(onReveal); //Reveal
         //$('#btnCheck').click(kenken.game.onCheck); //Check
-        $('#btnSolution').click(onSolution); //Solution
+        $('#btnSolution').click(onSolutionClick); //Solution
 
         /* --- Timer --- */
         $('#btnOffTimer').click(changeTimerState); // OFF - ON timer
         $('#btnPause').click(pauseOrResume); // Pause
 
-        $('#onSolution .closeButton').click(hideOnSolutionPopup);
-        $('#onSolution #showSolution').click(showSolution);
+        $('#onPopup .closeButton').click(hidePopup);
+        $('#onPopup #showSolution').click(function(event){
+            var targetType = $(event.target).closest('#showSolution').attr('data-val');
+
+            if (targetType === 'solution'){
+                showSolution();
+            };
+
+            if (targetType === 'reset'){
+                letsReset();
+            };
+        });
 
         $('.puzzleItem').click(function (event) {
             var target = $(event.target).closest('.puzzleItem');
@@ -808,16 +835,9 @@ var KenKenGame = function () {
             var value = target.attr('data-id');
             var circle = target.closest('#testCircle');
             var puzzleContainer = $('#puzzleContainer');
-
-            //var currentItem = activePuzzleItem.item;
             var activeItem = self.steps.getActiveItem(); //activePuzzleItem
             var currentItem = activeItem.content;
-
             var currentState = self.steps.getCurrentState();
-            //var stateObject = currentStateObject;
-            /*var valueX = activePuzzleItem.indexX;
-            var valueY = activePuzzleItem.indexY;*/
-
             var size = currentState.size;
             var valueX = activeItem.indexX;
             var valueY = activeItem.indexY;
@@ -847,7 +867,7 @@ var KenKenGame = function () {
                     circle.hide();
                     return
                 }
-                //newValue = (value) ? +value : 0;
+
                 self.steps.saveStep({
                     type    : 'values',
                     x       : x,
@@ -857,19 +877,6 @@ var KenKenGame = function () {
                 });
                 currentItem.find('.itemValue').text(value);
                 currentItem.addClass('withValue');
-
-                /*stepData = {
-                    type: 'values',
-                    x: valueX - 1,
-                    y: valueY - 1,
-                    oldValue: oldValue,
-                    newValue: newValue
-                };
-
-                self.steps.saveStep(stepData);*/
-                //newState = self.steps.cloneCurrentState();
-                //newState.values[valueX-1][valueY-1] = value ? +value : 0;
-                //self.steps.save(newState);
 
                 while (i > 0) {
                     if (currentState.notes[x * size + i - 1][value - 1]) {
@@ -1055,7 +1062,7 @@ var KenKenGame = function () {
         var puzzleId = puzzleData.id || '000000';
         var puzzleSize = puzzleData.size;
         var puzzleLevel = puzzleData.level;
-        var values = data.A;
+        //var values = data.A;
         var results = data.T;
         var symbols = data.S;
         var rightLines = data.V;
@@ -1155,7 +1162,7 @@ var KenKenGame = function () {
 
         row.push('<\/div>');
 
-        row.push('<div><a class="clickToResume" style="display: none;">Click to resume</a></div>');
+        row.push('<div><a class="clickToResume" style="display: none;">Click to resume<\/a><\/div>');
 
         // ******* bottom container
         row.push('<div id="bottomInfoBox">');
@@ -1192,9 +1199,9 @@ var KenKenGame = function () {
 
         // +++++++ test circle
 
-        // +++++++ onSolution popup
-        row.push('<div id="onSolution" style="display: none">');
-        row.push('<span>See solution?</span>');
+        // +++++++ Popup
+        row.push('<div id="onPopup" style="display: none">');
+        row.push('<span class="popupMessage"><\/span>');
         row.push('<div class="closeButton"><span>x</span></div>');
         row.push('<button id="showSolution"><span>OK</span></button>');
         row.push('<\/div>');
