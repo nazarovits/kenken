@@ -191,6 +191,9 @@ var Steps = function (puzzleData) {
 
         stateObj.notes = notes;
         stateObj.values = values;
+        stateObj.size = size;
+        stateObj.autoNotes = true;
+
 
         currentState = stateObj;
         //save(stateObj);
@@ -640,10 +643,17 @@ var KenKenGame = function () {
         randomKey = keys[Math.floor(Math.random() * keys.length)];
 
         //save the current state:
-        var i_ = randomKey.charAt(2) - 1;
-        var j_ = randomKey.charAt(3) - 1;
+        var x = randomKey.charAt(2) - 1;
+        var y = randomKey.charAt(3) - 1;
 
-        currentValues[i_][j_] = obj[randomKey];
+        //currentValues[i_][j_] = obj[randomKey];
+        self.steps.saveStep({
+            type    : 'values',
+            x       : x,
+            y       : y,
+            oldValue: currentValues[x][y],
+            newValue: +obj[randomKey]
+        });
 
         $(randomKey).text(obj[randomKey]);
     };
@@ -714,6 +724,25 @@ var KenKenGame = function () {
         }
     };
 
+    var clearAllNotes = function(){
+        var currentState = self.steps.getCurrentState();
+        var activeItem = self.steps.getActiveItem();
+        var currentItem = activeItem.content;
+        var size = currentState.size;
+        var x = activeItem.indexX;
+        var y = activeItem.indexY;
+        var currentIndex = (x - 1) * size + y;
+        var notesArray = currentState.notes[currentIndex - 1];
+
+        while (size > 0){
+            notesArray[size-1] = false;
+            size -= 1;
+        }
+
+        currentItem.find('.itemNotes').text('');
+        drawActiveNotes();
+    };
+
     function handleEvents() {
 
 
@@ -746,7 +775,7 @@ var KenKenGame = function () {
 
         /* --- Reveal | Check | Solution --- */
         $('#btnReveal').click(onReveal); //Reveal
-        $('#btnCheck').click(kenken.game.onCheck); //Check
+        //$('#btnCheck').click(kenken.game.onCheck); //Check
         $('#btnSolution').click(onSolution); //Solution
 
         /* --- Timer --- */
@@ -758,15 +787,7 @@ var KenKenGame = function () {
 
         $('.puzzleItem').click(function (event) {
             var target = $(event.target).closest('.puzzleItem');
-            //var targetId = target.attr('id');
             var container = target.closest('#puzzleContainer');
-
-            /*
-            activePuzzleItem.item = target;
-            activePuzzleItem.indexX = +targetId[1];
-            activePuzzleItem.indexY = +targetId[2];
-            */
-
             var activeItem = self.steps.setActiveItem(target);
 
             drawActiveNotes(activeItem);
@@ -781,9 +802,10 @@ var KenKenGame = function () {
             var target = $(event.target).closest('.ltlCrcl');
             var value = target.attr('data-id');
             var circle = target.closest('#testCircle');
+            var puzzleContainer = $('#puzzleContainer');
 
             //var currentItem = activePuzzleItem.item;
-            var activeItem = self.steps.getActiveItem();
+            var activeItem = self.steps.getActiveItem(); //activePuzzleItem
             var currentItem = activeItem.content;
 
             var currentState = self.steps.getCurrentState();
@@ -791,6 +813,7 @@ var KenKenGame = function () {
             /*var valueX = activePuzzleItem.indexX;
             var valueY = activePuzzleItem.indexY;*/
 
+            var size = currentState.size;
             var valueX = activeItem.indexX;
             var valueY = activeItem.indexY;
             var x = valueX - 1;
@@ -798,16 +821,37 @@ var KenKenGame = function () {
             var oldValue = currentState.values[x][y];
             var newValue;
             var stepData;
+            var i = size;
 
             if (value !== 'cX') {
                 if (value === 'cC') {
-                    value = ''
+                    //value = ''
+                    if (currentState.values[x][y]){
+                        self.steps.saveStep({
+                            type    : 'values',
+                            x       : x,
+                            y       : y,
+                            oldValue: oldValue,
+                            newValue: 0
+                        });
+                        currentItem.find('.itemValue').text('');
+                    } else {
+                        clearAllNotes();
+                    }
+                    circle.hide();
+                    return
                 }
+                //newValue = (value) ? +value : 0;
+                self.steps.saveStep({
+                    type    : 'values',
+                    x       : x,
+                    y       : y,
+                    oldValue: oldValue,
+                    newValue: +value
+                });
                 currentItem.find('.itemValue').text(value);
-                newValue = (value) ? +value : 0;
-                //stateObject.values[valueX-1][valueY-1] = newValue;
 
-                stepData = {
+                /*stepData = {
                     type: 'values',
                     x: valueX - 1,
                     y: valueY - 1,
@@ -815,10 +859,23 @@ var KenKenGame = function () {
                     newValue: newValue
                 };
 
-                self.steps.saveStep(stepData);
+                self.steps.saveStep(stepData);*/
                 //newState = self.steps.cloneCurrentState();
                 //newState.values[valueX-1][valueY-1] = value ? +value : 0;
                 //self.steps.save(newState);
+
+                while (i > 0) {
+                    if (currentState.notes[x * size + i - 1][value - 1]) {
+                        currentState.notes[x * size + i - 1][value - 1] = !currentState.notes[x * size + i - 1][value - 1];
+                        puzzleContainer.find('#p' + valueX + i + ' .itemNotes').text(booleanArrayToSting(currentState.notes[x * size + i - 1]));
+                    }
+                    if (currentState.notes[(i - 1) * size + valueY - 1][value - 1]) {
+                        currentState.notes[(i - 1) * size + valueY - 1][value - 1] = !currentState.notes[(i - 1) * size + valueY - 1][value - 1];
+                        puzzleContainer.find('#p' + i + valueY + ' .itemNotes').text(booleanArrayToSting(currentState.notes[(i - 1) * size + valueY - 1]));
+                    }
+                    i -= 1;
+                }
+
                 self.steps.getInfo(); //TODO: ...
             }
             circle.hide();
@@ -826,75 +883,162 @@ var KenKenGame = function () {
         });
 
         $('.notesItem').click(function (event) {
-            //var currentItem = activePuzzleItem.item;
+
             var size = self.puzzleData.size;
             var activeItem = self.steps.getActiveItem();
             var currentItem = activeItem.content;
             var x = activeItem.indexX;
             var y = activeItem.indexY;
-
-            //var currentIndex = (activePuzzleItem.indexX - 1)* currentStateObject.size + activePuzzleItem.indexY;
-
             var currentIndex = (activeItem.indexX - 1) * size + activeItem.indexY;
-
-            //var notesArray = currentStateObject.notes[currentIndex-1];
-            //var valuesArray = currentStateObject.values;
 
             if (!currentIndex) {
                 return;
             }
 
             var currentState = self.steps.getCurrentState();
-            //var newState = self.steps.cloneCurrentState();
             var notesArray = currentState.notes[currentIndex - 1];
             var valuesArray = currentState.values;
             var stepData;
-            //var newArray = notesArray.slice(0);
             var newValue;
             var oldValue;
-
+            var allItems = [];
+            var el;
+            var notActive = false;
             var target = $(event.target).closest('.notesItem');
+            var puzzleContainer = $('#puzzleContainer');
             var notesValue = +target.attr('data-id');
-            /*var x = activePuzzleItem.indexX;
-            var y = activePuzzleItem.indexY;*/
-
-            //var size = currentStateObject.size;
-
             var stringResult;
             var i = 1;
 
             while (i <= size) {
                 if (valuesArray[x - 1][i - 1] === notesValue) {
-                    return;
-                } else {
-                    if (valuesArray[i - 1][y - 1] === notesValue) {
-                        return;
-                    }
+                    el = puzzleContainer.find('#p' + x + i).addClass('pulseRed');
+                    allItems.push(el[0]);
+                    notActive = true;
+                }
+                if (valuesArray[i - 1][y - 1] === notesValue) {
+                    el = puzzleContainer.find('#p' + i + y).addClass('pulseRed');
+                    allItems.push(el[0]);
+                    notActive = true;
                 }
                 i += 1;
             }
 
-            notesArray = notesArray.slice(0); //clone the array
+            setTimeout(function () {
+                $(allItems).removeClass('pulseRed');
+            }, 400);
 
-            oldValue = notesArray[notesValue - 1];
-            newValue = !oldValue;
-            notesArray[notesValue - 1] = newValue;
-            //newArray[notesValue-1] = newValue;//!notesArray[notesValue-1];
+            if (!notActive) {
+                notesArray = notesArray.slice(0); //clone the array
 
-            stepData = {
-                type: 'notes',
-                x: currentIndex - 1,
-                y: notesValue - 1,
-                newValue: newValue,
-                oldValue: oldValue
-            };
+                oldValue = notesArray[notesValue - 1];
+                newValue = !oldValue;
+                notesArray[notesValue - 1] = newValue;
+                //newArray[notesValue-1] = newValue;//!notesArray[notesValue-1];
 
-            self.steps.saveStep(stepData);
-            self.steps.getInfo(); //TODO: ...
+                stepData = {
+                    type: 'notes',
+                    x: currentIndex - 1,
+                    y: notesValue - 1,
+                    newValue: newValue,
+                    oldValue: oldValue
+                };
 
-            target.toggleClass('active');
-            stringResult = booleanArrayToSting(notesArray);
-            currentItem.find('.itemNotes').text(stringResult);
+                self.steps.saveStep(stepData);
+                self.steps.getInfo(); //TODO: ...
+
+                target.toggleClass('active');
+                stringResult = booleanArrayToSting(notesArray);
+                currentItem.find('.itemNotes').text(stringResult);
+            }
+        });
+
+        //event --- check true and false values in our puzzle
+        $('#btnCheck').click(function () {
+            var size = self.puzzleData.size;
+            var currentState = self.steps.getCurrentState();
+            var values = currentState.values;
+            var resultValues = self.puzzleData.dataObj.A;
+            var allItems = $('.puzzleItem');
+            var i, j;
+            var activeVal;
+            var activeClass;
+
+            for (i = 1; i <= size; i += 1) {
+                for (j = 1; j <= size; j += 1) {
+                    if (values[i - 1][j - 1] !== 0) {
+                        activeVal = $('#p' + i + j);
+                        if (values[i - 1][j - 1] == resultValues[i - 1][j - 1]) {
+                            activeClass = 'pulseGreen';
+                        } else {
+                            activeClass = 'pulseRed';
+                        }
+                        activeVal.addClass(activeClass);
+                    }
+                }
+            }
+            setTimeout(function () {
+                allItems.removeClass('pulseGreen');
+                allItems.removeClass('pulseRed');
+            }, 400)
+        });
+
+        //event --- clear notes in currentStateObject, notes box and puzzle square
+        $('#notesDel').click(function(){
+            clearAllNotes();
+        });
+
+        //event --- change autoNotes state
+        $('.btnNote').click(function(event){
+            var currentState = self.steps.getCurrentState();
+            var target = $(event.target).closest('.btnNote');
+            var notesContainer = target.closest('.autoNotesBox');
+            var targetId = target.attr('data-id');
+
+            notesContainer.find('.active').removeClass('active');
+            target.addClass('active');
+
+            currentState.autoNotes = +targetId ? true : false; // todo
+        });
+
+        //event --- write all valid values of notes to puzzle item
+        $('#notesAll').click(function(){
+            var currentState = self.steps.getCurrentState();
+            var activeItem = self.steps.getActiveItem();
+
+            if (currentState.autoNotes) {
+
+                var currentItem = activeItem.content;
+                var size = self.puzzleData.size;
+                var x = activeItem.indexX;
+                var y = activeItem.indexY;
+                var currentIndex = (x - 1) * size + y;
+                var notesArray = currentState.notes[currentIndex - 1];
+                var valuesArray = currentState.values;
+                var i = size;
+                var stringResult;
+
+                while (i > 0) {
+                    notesArray[i - 1] = true;
+                    i -= 1;
+                }
+
+                i = size;
+                while (i > 0) {
+                    if (valuesArray[x - 1][i - 1]) {
+                        notesArray[valuesArray[x - 1][i - 1] - 1] = false
+                    }
+                    if (valuesArray[i - 1][y - 1]) {
+                        notesArray[valuesArray[i - 1][y - 1] - 1] = false
+                    }
+                    i -= 1;
+                }
+
+                stringResult = booleanArrayToSting(notesArray);
+                currentItem.find('.itemNotes').text(stringResult);
+
+                drawActiveNotes();
+            }
         });
     };
 

@@ -475,19 +475,21 @@
                 var target = $(event.target).closest('.ltlCrcl');
                 var value = target.attr('data-id');
                 var circle = target.closest('#testCircle');
+
                 var puzzleContainer = $('#puzzleContainer');
                 var currentItem = activePuzzleItem.item;
-                var stateObject = currentStateObject;
 
-                var size = stateObject.size;
+                var currentState = currentStateObject;
+
+                var size = currentState.size;
                 var valueX = activePuzzleItem.indexX;
                 var valueY = activePuzzleItem.indexY;
                 var i = size;
 
                 if (value !== 'cX') {
                     if (value === 'cC') {
-                        if (stateObject.values[valueX - 1][valueY - 1]){
-                            stateObject.values[valueX - 1][valueY - 1] = 0;
+                        if (currentState.values[valueX - 1][valueY - 1]){
+                            currentState.values[valueX - 1][valueY - 1] = 0;
                             currentItem.find('.itemValue').text('');
                         } else {
                             clearAllNotes();
@@ -496,16 +498,16 @@
                         return
                     }
                     currentItem.find('.itemValue').text(value);
-                    stateObject.values[valueX - 1][valueY - 1] = +value;
+                    currentState.values[valueX - 1][valueY - 1] = +value;
 
                     while (i > 0) {
-                        if (stateObject.notes[(valueX - 1) * size + i - 1][value - 1]) {
-                            stateObject.notes[(valueX - 1) * size + i - 1][value - 1] = !stateObject.notes[(valueX - 1) * size + i - 1][value - 1];
-                            puzzleContainer.find('#p' + valueX + i + ' .itemNotes').text(booleanArrayToSting(stateObject.notes[(valueX - 1) * size + i - 1]));
+                        if (currentState.notes[(valueX - 1) * size + i - 1][value - 1]) {
+                            currentState.notes[(valueX - 1) * size + i - 1][value - 1] = !currentState.notes[(valueX - 1) * size + i - 1][value - 1];
+                            puzzleContainer.find('#p' + valueX + i + ' .itemNotes').text(booleanArrayToSting(currentState.notes[(valueX - 1) * size + i - 1]));
                         }
-                        if (stateObject.notes[(i - 1) * size + valueY - 1][value - 1]) {
-                            stateObject.notes[(i - 1) * size + valueY - 1][value - 1] = !stateObject.notes[(i - 1) * size + valueY - 1][value - 1];
-                            puzzleContainer.find('#p' + i + valueY + ' .itemNotes').text(booleanArrayToSting(stateObject.notes[(i - 1) * size + valueY - 1]));
+                        if (currentState.notes[(i - 1) * size + valueY - 1][value - 1]) {
+                            currentState.notes[(i - 1) * size + valueY - 1][value - 1] = !currentState.notes[(i - 1) * size + valueY - 1][value - 1];
+                            puzzleContainer.find('#p' + i + valueY + ' .itemNotes').text(booleanArrayToSting(currentState.notes[(i - 1) * size + valueY - 1]));
                         }
                         i -= 1;
                     }
@@ -517,18 +519,18 @@
 
             //event --- click on button in note`s box
             $('.notesItem').click(function (event) {
-                var currentItem = activePuzzleItem.item;
-                var currentIndex = (activePuzzleItem.indexX - 1) * currentStateObject.size + activePuzzleItem.indexY;
-                var notesArray = currentStateObject.notes[currentIndex - 1];
-                var valuesArray = currentStateObject.values;
-                var target = $(event.target).closest('.notesItem');
-                var notesValue = +target.attr('data-id');
-                var x = activePuzzleItem.indexX;
-                var y = activePuzzleItem.indexY;
-                var size = currentStateObject.size;
+                    var activeItem = activePuzzleItem.item;
+                    var currentIndex = (activePuzzleItem.indexX - 1) * currentStateObject.size + activePuzzleItem.indexY;
+                    var notesArray = currentStateObject.notes[currentIndex - 1];
+                    var valuesArray = currentStateObject.values;
+                    var target = $(event.target).closest('.notesItem');
+                    var notesValue = +target.attr('data-id');
+                    var x = activePuzzleItem.indexX;
+                    var y = activePuzzleItem.indexY;
+                    var size = currentStateObject.size;
                 var puzzleContainer = $('#puzzleContainer');
-                var stringResult;
-                var i = 1;
+                    var stringResult;
+                    var i = 1;
                 var allItems = [];
                 var el;
                 var notActive = false;
@@ -555,7 +557,7 @@
                     notesArray[notesValue - 1] = !notesArray[notesValue - 1];
                     target.toggleClass('active');
                     stringResult = booleanArrayToSting(notesArray);
-                    currentItem.find('.itemNotes').text(stringResult);
+                    activeItem.find('.itemNotes').text(stringResult);
                 }
             });
 
