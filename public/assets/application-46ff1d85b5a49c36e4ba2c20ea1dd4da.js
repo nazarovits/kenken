@@ -615,6 +615,8 @@ var KenKenGame = function () {
         var selector;
         var keys;
         var randomKey;
+        var x,y;
+        var el;
 
         kenken.game.onReveal();
 
@@ -643,8 +645,8 @@ var KenKenGame = function () {
         randomKey = keys[Math.floor(Math.random() * keys.length)];
 
         //save the current state:
-        var x = randomKey.charAt(2) - 1;
-        var y = randomKey.charAt(3) - 1;
+        x = randomKey.charAt(2) - 1;
+        y = randomKey.charAt(3) - 1;
 
         //currentValues[i_][j_] = obj[randomKey];
         self.steps.saveStep({
@@ -655,7 +657,10 @@ var KenKenGame = function () {
             newValue: +obj[randomKey]
         });
 
-        $(randomKey).text(obj[randomKey]);
+        el = $(randomKey);
+
+        el.text(obj[randomKey]);
+        el.closest('.puzzleItem').addClass('withValue');
     };
 
     function hideOnSolutionPopup(event) {
@@ -835,6 +840,7 @@ var KenKenGame = function () {
                             newValue: 0
                         });
                         currentItem.find('.itemValue').text('');
+                        currentItem.removeClass('withValue');
                     } else {
                         clearAllNotes();
                     }
@@ -850,6 +856,7 @@ var KenKenGame = function () {
                     newValue: +value
                 });
                 currentItem.find('.itemValue').text(value);
+                currentItem.addClass('withValue');
 
                 /*stepData = {
                     type: 'values',
