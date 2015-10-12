@@ -70,3 +70,48 @@ function checkIsFinished() {
 
  congratulation();
 }
+
+/*function onRedo() {
+ var steps = self.steps;
+ var history = steps.redo();
+ var type;
+ var selector;
+ var value;
+
+ if (!history) {
+ return;
+ }
+
+ type = history.type;
+
+ if (type === 'values') {
+ selector = "#p" + (history.x + 1) + (history.y + 1) + ' .itemValue';
+ value = (history.newValue) ? history.newValue : ''; //number or ""
+ $(selector).text(value);
+ } else if (type === 'notes') {
+
+ } else {
+ //invalid
+ }
+
+ console.log(history);
+ };*/
+
+this.redo = function () {
+    console.log('Steps.redo()');
+    var data;
+    var type;
+    var target;
+
+    if (index < (history.length - 1)) {
+        index++;
+
+        data = history[index];
+        type = data.type;
+
+        target = currentState[type];
+        target[data.x][data.y] = data.newValue;
+    }
+
+    return data;
+};
