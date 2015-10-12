@@ -585,6 +585,10 @@ var KenKenGame = function () {
 
     };
 
+    function onResume(){
+        kenken.game.resumeSavedPuzzle();
+    };
+
     function letsReset() {
 
         $('.itemValue, .itemNotes').text('');
@@ -596,6 +600,12 @@ var KenKenGame = function () {
         self.steps.reset();
         self.timer.stop();
         self.timer.start();
+
+        hidePopup();
+    }
+
+    function letsSolve(){
+        kenken.game.solveAnother();
 
         hidePopup();
     }
@@ -614,7 +624,14 @@ var KenKenGame = function () {
         popup.find('.popupMessage').text('Reset puzzle?');
         popup.find('#showSolution').attr('data-val','reset');
 
-        //kenken.game.onSolution();
+        popup.show();
+    };
+
+    function onSolveClick (){
+        var popup = $('#onPopup');
+        popup.find('.popupMessage').text('Solve another puzzle?');
+        popup.find('#showSolution').attr('data-val','solve');
+
         popup.show();
     };
 
@@ -676,6 +693,20 @@ var KenKenGame = function () {
         el.closest('.puzzleItem').addClass('withValue');
     };
 
+    function onPrintClick(){
+
+        kenken.game.widgetAdBeforePrint();
+
+        kenken.game.onPrint();
+
+        window.print() ;
+
+    };
+
+    function onSave(){
+        prepareStateObjectTo(kenken.game.saveState);
+    };
+
     function hidePopup() {
         $('#onPopup').hide();
     };
@@ -685,26 +716,77 @@ var KenKenGame = function () {
         var solution;
         var size;
         var selector;
+        var puzzleContainer;
+        //var el;
 
         if (!puzzleData) {
             return;
         }
 
+        //kenken.game.widgetAdBeforeSolution(); // todo
+
         solution = puzzleData.dataObj.A;
         size = puzzleData.size;
+
+        puzzleContainer = $('#puzzleContainer');
+        puzzleContainer.find('.puzzleItem').addClass('withValue');
+        //var allValus = $('puzzleItem');
 
         for (var i = 0; i < size; i++) {
             for (var j = 0; j < size; j++) {
                 selector = '#p' + (i + 1) + (j + 1) + ' .itemValue';
-                $(selector).text(solution[i][j]);
+                //el = $(selector);
+                puzzleContainer.find(selector).text(solution[i][j]);
+                //$(selector).text(solution[i][j]);
             }
         }
         hidePopup();
     };
 
-    //function letsReset(){
-    //
-    //};
+    function areYouWinner () {
+
+        var resultValues = self.puzzleData.dataObj.A;
+        var currentState = self.steps.getCurrentState();
+        var currentValues = currentState.values;
+        var size = currentState.size;
+        var i=size;
+        var j;
+
+        while (i > 0) {
+            j = size;
+            while (j > 0){
+                if (currentValues[i-1][j-1] !== +resultValues[i-1][j-1]){
+                    return false
+                }
+                j -= 1;
+            }
+            i -= 1;
+        }
+
+        return true
+    };
+
+    function prepareStateObjectTo(callback) {
+        var currentState = self.steps.getCurrentState();
+        var valuesArray = currentState.values;
+        var size = currentState.size;
+        var i=1;
+        var valuesString=valuesArray[0].join(',');
+        var notesArray = currentState.notes;
+        var result;
+
+        while (i<size){
+            valuesString += ','+valuesArray[i].join(',');
+            i += 1;
+        }
+
+        result = {
+            values : valuesString,
+            notes  : notesArray
+        };
+
+        callback(JSON.stringify(result));
+    };
 
     var booleanArrayToSting = function (argArray) {
         var currentArray = argArray;
@@ -765,27 +847,33 @@ var KenKenGame = function () {
         drawActiveNotes();
     };
 
+
     function handleEvents() {
 
+        /*var prepareStateObjectTo = function (callback) {
+            var currentState = self.steps.getCurrentState();
+            var valuesArray = currentState.values;
+            var size = currentState.size;
+            var i=1;
+            var valuesString=valuesArray[0].join(',');
+            var notesArray = currentState.notes;
+            var result;
 
+            while (i<size){
+                valuesString += valuesArray[i].join(',');
+                i += 1;
+            }
 
-        var prepareStateObjectTo = function (callback) {
-            var resultObject = currentStateObject;
-            var valuesString = resultObject.values.join(',');
-            var notesArray = resultObject.notes;
-            var stateObject = {
-                values: valuesString,
-                notes: notesArray
-            };
-            var result = {
-                id: '',
-                state: stateObject,
-                autosave: ''
+            result = {
+                values : valuesString,
+                notes  : notesArray
             };
 
             callback(result);
-        };
+        };*/
 
+        $('#btnResumeSaved').click(onResume); //Resume
+        $('#btnSolve').click(onSolveClick); // Solve
 
         /* --- Undo | Redo | Reset --- */
         //$('#btnUndo').click(function () {console.log('Undo is not implemented yet');});       //Undo
@@ -804,6 +892,9 @@ var KenKenGame = function () {
         $('#btnOffTimer').click(changeTimerState); // OFF - ON timer
         $('#btnPause').click(pauseOrResume); // Pause
 
+        $('#btnSave').click(onSave); //Save
+        $('#btnPrint').click(onPrintClick);  //Print
+
         $('#onPopup .closeButton').click(hidePopup);
         $('#onPopup #showSolution').click(function(event){
             var targetType = $(event.target).closest('#showSolution').attr('data-val');
@@ -814,6 +905,10 @@ var KenKenGame = function () {
 
             if (targetType === 'reset'){
                 letsReset();
+            };
+
+            if (targetType === 'solve'){
+                letsSolve();
             };
         });
 
@@ -850,7 +945,6 @@ var KenKenGame = function () {
 
             if (value !== 'cX') {
                 if (value === 'cC') {
-                    //value = ''
                     if (currentState.values[x][y]){
                         self.steps.saveStep({
                             type    : 'values',
@@ -891,6 +985,14 @@ var KenKenGame = function () {
                 }
 
                 self.steps.getInfo(); //TODO: ...
+
+                prepareStateObjectTo(kenken.game.autoSave);
+
+                if (areYouWinner()){
+                    circle.hide();
+                    winnerAction();
+                    return
+                }
             }
             circle.hide();
             //prepareStateObjectTo(kenken.game.saveState);
@@ -948,12 +1050,11 @@ var KenKenGame = function () {
                 oldValue = notesArray[notesValue - 1];
                 newValue = !oldValue;
                 notesArray[notesValue - 1] = newValue;
-                //newArray[notesValue-1] = newValue;//!notesArray[notesValue-1];
 
                 stepData = {
-                    type: 'notes',
-                    x: currentIndex - 1,
-                    y: notesValue - 1,
+                    type    : 'notes',
+                    x       : currentIndex - 1,
+                    y       : notesValue - 1,
                     newValue: newValue,
                     oldValue: oldValue
                 };
@@ -1072,7 +1173,7 @@ var KenKenGame = function () {
         var i, j;
 
         // ******* left panel begin
-        row.push('<div>');
+        row.push('<div id="leftPanel">');
 
         // ******* notes box
         row.push('<div id="notesContainer">');
@@ -1215,6 +1316,47 @@ var KenKenGame = function () {
         var circle = new Circle(puzzleData);
         circle.drawOurCircles();
         self.circle = circle;
+
+    }
+
+    function winnerAction() {
+        var mainContainer = $('.mainContainer');
+        var leftContainer = mainContainer.find('#leftPanel');
+        var topContainer = mainContainer.find('#topInfoBox');
+        var bottomContainer = mainContainer.find('#bottomInfoBox');
+        var rowL = [];
+        var rowT = [];
+        var rowB = [];
+        var puzzleTime = mainContainer.find('#puzzleTimer').text();
+        var puzzleInfo = mainContainer.find('#puzzleInfo').text();
+
+        mainContainer.hide();
+        mainContainer.addClass('winnerState');
+        kenken.game.puzzleFinished(puzzleTime);
+
+        //>>>>>  Congratulating TOP panel |BEGIN|
+        rowT.push('<img src="">');
+        rowT.push('<span>You solved this puzzle in '+puzzleTime+'<\/span>');
+
+        topContainer.html(rowT.join(''));
+        //>>>>>  Congratulating TOP panel |END|
+
+        //>>>>>  Congratulating LEFT panel |BEGIN|
+        rowL.push('<img width="300" height="300" id="winImage" src="/assets/get-kenken-Add-widget.jpg">');
+        rowL.push('<span>Want KenKen Ad-Free?<\/span>');
+        rowL.push('<a href="/membership">FIND OUT MORE<\/a>');
+
+        leftContainer.html(rowL.join(''));
+        //>>>>>  Congratulating LEFT panel |END|
+
+        //>>>>>  Congratulating BOTTOM panel |BEGIN|
+        rowB.push('<span>'+puzzleInfo+'<\/span>');
+        rowB.push('<button onclick="function(){kenken.game.solveAnother()}"><span>Solve another puzzle<\/span><\/button>'); //todo
+
+        bottomContainer.html(rowB.join(''));
+        //>>>>>  Congratulating BOTTOM panel |END|
+
+        mainContainer.show();
     }
 
     function CurrentStateConstructor(puzzleData) {
@@ -1255,7 +1397,7 @@ var KenKenGame = function () {
         }
 
         return this;
-    };
+    }
 
     //var currentStateObject;// = new CurrentStateConstructor(puzzleData);
     var activePuzzleItem = {};
@@ -1299,6 +1441,21 @@ var KenKenGame = function () {
 
     this.sendWidgetAdBeforeGame = function (puzzleData) {
         console.log('KenKenGame.sendWidgetAdBeforeGame');
+        console.log(puzzleData);
+    };
+
+    this.sendWidgetAdBeforeSolution = function (puzzleData) {
+        console.log('KenKenGame.sendWidgetAdBeforeSolution');
+        console.log(puzzleData);
+    };
+
+    this.sendWidgetAdOnKengratulations = function (puzzleData) {
+        console.log('KenKenGame.sendWidgetAdOnKengratulations');
+        console.log(puzzleData);
+    };
+
+    this.sendWidgetAdBeforePrint = function (puzzleData) {
+        console.log('KenKenGame.sendWidgetAdBeforePrint');
         console.log(puzzleData);
     };
 
