@@ -266,9 +266,21 @@ var Steps = function (puzzleData) {
 
     this.redo = function () {
         console.log('Steps.redo()');
+        var data;
+        var type;
+        var target;
+
         if (index < (history.length - 1)) {
             index++;
+
+            data = history[index];
+            type = data.type;
+
+            target = currentState[type];
+            target[data.x][data.y] = data.newValue;
         }
+
+        return data;
     };
 
     this.reset = function () {
@@ -561,12 +573,11 @@ var KenKenGame = function () {
         type = history.type;
 
         if (type === 'values') {
-            console.log(history);
             selector = "#p" + (history.x + 1) + (history.y + 1) + ' .itemValue';
             value = (history.oldValue) ? history.oldValue : ''; //number or ""
             $(selector).text(value);
         } else if (type === 'notes') {
-            currentState = self.steps.getCurrentState();
+            currentState = steps.getCurrentState();
             console.log(currentState);
             size = self.puzzleData.size;
             index = history.x;
@@ -583,6 +594,46 @@ var KenKenGame = function () {
 
         steps.getInfo(); //TODO: ...
 
+    };
+
+    function onRedo() {
+        var steps = self.steps;
+        var history = steps.redo();
+        var type;
+        var selector;
+        var value;
+        var currentState;
+        var size;
+        var index;
+        var notesArray;
+        var stringResult;
+
+        if (!history) {
+            return;
+        }
+
+        type = history.type;
+
+        if (type === 'values') {
+            selector = "#p" + (history.x + 1) + (history.y + 1) + ' .itemValue';
+            value = (history.newValue) ? history.newValue : ''; //number or ""
+            $(selector).text(value);
+        } else if (type === 'notes') {
+            currentState = steps.getCurrentState();
+            console.log(currentState);
+            size = self.puzzleData.size;
+            index = history.x;
+            notesArray = currentState.notes[index];
+            stringResult = booleanArrayToSting(notesArray);
+            selector = "#p" + (Math.trunc(index / size) + 1) + (index % size + 1) + ' .itemNotes';
+            $(selector).text(stringResult);
+            drawActiveNotes();
+
+        } else {
+            console.log('incorrect type');
+        }
+
+        console.log(history);
     };
 
     function onResume(){
@@ -699,7 +750,8 @@ var KenKenGame = function () {
 
         kenken.game.onPrint();
 
-        window.print() ;
+        //window.print() ;
+        $('#puzzleContainer').print();
 
     };
 
@@ -878,9 +930,7 @@ var KenKenGame = function () {
         /* --- Undo | Redo | Reset --- */
         //$('#btnUndo').click(function () {console.log('Undo is not implemented yet');});       //Undo
         $('#btnUndo').click(onUndo); //Undo
-        $('#btnRendo').click(function () {
-            console.log('Redo is not implemented yet');
-        }); //Redo
+        $('#btnRedo').click(onRedo); //Redo
         $('#btnReset').click(onResetClick); //Reset
 
         /* --- Reveal | Check | Solution --- */

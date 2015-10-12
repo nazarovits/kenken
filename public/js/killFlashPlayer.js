@@ -97,6 +97,7 @@ function checkIsFinished() {
  console.log(history);
  };*/
 
+/*
 this.redo = function () {
     console.log('Steps.redo()');
     var data;
@@ -114,4 +115,4 @@ this.redo = function () {
     }
 
     return data;
-};
+};*/
